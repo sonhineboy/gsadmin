@@ -1,0 +1,17 @@
+db:
+  type: 'mysql'
+  host: '127.0.0.1'
+  port: '3306'
+  max-idle-conns: 10
+  max-open-conns: 100
+  name: 'root'
+  password: ''
+  database: 'gin_scuiadmin'
+  table_prefix: 'gc_'
+
+myjwt:
+  secret: '1212121213131'
+app:
+  host: "http://localhost:8080"
+  port: ":8080"
+  uploadFile: "/upload"
