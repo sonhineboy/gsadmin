@@ -1,4 +1,4 @@
-package controllers
+package system
 
 import (
 	"ginedu2/service/global"
