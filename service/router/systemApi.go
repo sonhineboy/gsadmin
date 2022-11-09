@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func ApiInit(r *gin.RouterGroup) {
+func SystemApiInit(r *gin.RouterGroup) {
 	r.Use(middelware.JWTAuth(), middelware.Permission())
 	rUser := r.Group("/user")
 	{

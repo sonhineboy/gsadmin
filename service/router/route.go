@@ -22,6 +22,6 @@ func RouteInit() {
 
 	r := global.GAD_R.Group("api")
 	{
-		ApiInit(r)
+		SystemApiInit(r)
 	}
 }
