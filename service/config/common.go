@@ -9,6 +9,8 @@ type Config struct {
 		Host         string `yaml:"host"`
 		TablePrefix  string `yaml:"table_prefix"`
 		Database     string `yaml:"database"`
+		User         string `yaml:"name"`
+		PassWord     string `yaml:"password"`
 	}
 	MyJwt struct {
 		Secret string `yaml:"secret"`
