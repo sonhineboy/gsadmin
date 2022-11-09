@@ -43,7 +43,6 @@ func loadObject() {
 }
 
 func initMysql() {
-	fmt.Println(global.Config)
 	dsn := global.Config.Db.User + ":" + global.Config.Db.PassWord + "@tcp(" + global.Config.Db.Host + ":" + global.Config.Db.Port + ")/" + global.Config.Db.Database + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
