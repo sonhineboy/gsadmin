@@ -79,8 +79,8 @@ export default {
     return {
       userType: "admin",
       form: {
-        user: "admin",
-        password: "admin",
+        user: "",
+        password: "",
         autologin: false,
         captchaId: "",
         captchaValue: "",
