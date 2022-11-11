@@ -5,6 +5,9 @@
 			<a href='https://gitee.com/kevn/gsadmin' target="_blank">
 				<img src='https://gitee.com/kevn/gsadmin/badge/star.svg?theme=dark' alt='star' style="vertical-align: middle">
 			</a>
+			<a href='https://github.com/sonhineboy/gsadmin' target="_blank">
+				<img src='https://img.shields.io/github/stars/sonhineboy/gsadmin.svg?logo=GitHub' alt='star' style="vertical-align: middle">
+			</a>
 		</p>
 	</el-card>
 </template>

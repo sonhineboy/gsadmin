@@ -6,8 +6,9 @@
 			<p style="margin-top: 5px;">最新版本 {{ver}}</p>
 		</div>
 		<div style="margin-top: 20px;">
-			<el-button type="primary" plain round @click="golog">更新日志</el-button>
+			<el-button type="primary" plain round @click="golog">日志</el-button>
 			<el-button type="primary" plain round @click="gogit">gitee</el-button>
+			<el-button type="primary" plain round @click="gogithub">github</el-button>
 		</div>
 	</el-card>
 </template>
@@ -35,6 +36,9 @@
 			},
 			gogit(){
 				window.open("https://gitee.com/kevn/gsadmin")
+			},
+			gogithub(){
+				window.open("https://github.com/sonhineboy/gsadmin")
 			}
 		}
 	}
