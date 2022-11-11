@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"ginedu2/service/app/controllers/system"
 	"ginedu2/service/global"
 )
@@ -9,8 +8,6 @@ import (
 func RouteInit() {
 
 	commonController := system.NewCommonController()
-
-	fmt.Println(commonController.GetFileBasePath())
 
 	global.GAD_R.GET("sss", system.Demo)
 	global.GAD_R.GET("/api/common/captcha/img/:id/:w/:h", commonController.CaptchaImage)
