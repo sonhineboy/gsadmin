@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"io/ioutil"
+	"net/http"
+	"sync"
 	"time"
 )
 
@@ -35,10 +37,28 @@ func main() {
 	//c.a = c.a.New(1,2)
 	//c.Cell()
 
-	path := "./upload/" + time.Now().Format(string("20060102"))
+	//path := "./upload/" + time.Now().Format(string("20060102"))
+	//
+	//err := os.MkdirAll(path, os.ModePerm)
+	//
+	//fmt.Println(err)
 
-	err := os.MkdirAll(path, os.ModePerm)
+	var wait sync.WaitGroup
+	wait.Add(50)
 
-	fmt.Println(err)
+	for i := 0; i < 50; i++ {
+		time.Sleep(time.Millisecond * 10)
+		go func() {
+
+			r, _ := http.Get("http://gsadmin.api.suiyidian.cn/api/common/captcha/info")
+			b, _ := ioutil.ReadAll(r.Body)
+			fmt.Println(string(b))
+
+			wait.Done()
+		}()
+
+	}
+
+	wait.Wait()
 
 }
