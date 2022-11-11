@@ -7,6 +7,12 @@
 				<p>{{ $t('login.describe') }}</p>
 				<div>
 					<span>
+						<el-icon style="background-color: #fff;border-radius: 14px"><img src="https://simpleicons.org/icons/go.svg"/> </el-icon>
+					</span>
+					<span>
+						<el-icon class="add"><el-icon-plus /></el-icon>
+					</span>
+					<span>
 						<el-icon><sc-icon-vue /></el-icon>
 					</span>
 					<span>
@@ -15,6 +21,8 @@
 					<span>
 						<el-icon><el-icon-eleme-filled /></el-icon>
 					</span>
+
+
 				</div>
 			</div>
 			<div class="login_adv__mask"></div>
@@ -74,9 +82,11 @@
 <script>
 	import passwordForm from './components/passwordForm'
 	import phoneForm from './components/phoneForm'
+	import Space from "@/views/userCenter/user/space";
 
 	export default {
 		components: {
+			Space,
 			passwordForm,
 			phoneForm
 		},
