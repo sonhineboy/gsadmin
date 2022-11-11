@@ -2,12 +2,15 @@ package router
 
 import (
 	"ginedu2/service/app/controllers/system"
+	"ginedu2/service/app/middelware"
 	"ginedu2/service/global"
 )
 
 func RouteInit() {
 
 	commonController := system.NewCommonController()
+
+	global.GAD_R.Use(middelware.Limiter())
 
 	global.GAD_R.GET("sss", system.Demo)
 	global.GAD_R.GET("/api/common/captcha/img/:id/:w/:h", commonController.CaptchaImage)

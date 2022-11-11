@@ -1,5 +1,7 @@
 package config
 
+import "golang.org/x/time/rate"
+
 type Config struct {
 	Db struct {
 		Type         string `yaml:"type"`
@@ -19,5 +21,9 @@ type Config struct {
 		Host       string `yaml:"host"`
 		Port       string `yaml:"port"`
 		UploadFile string `yaml:"uploadFile"`
+	}
+	Rate struct {
+		Limit rate.Limit `yaml:"limit"`
+		Burst int        `yaml:"burst"`
 	}
 }

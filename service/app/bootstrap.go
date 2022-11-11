@@ -8,6 +8,7 @@ import (
 	"ginedu2/service/router"
 	"ginedu2/service/src"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/time/rate"
 	"gopkg.in/yaml.v3"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -19,10 +20,10 @@ import (
 func Start() {
 	global.SuperAdmin = "administrator"
 	global.GAD_R = gin.Default()
-
 	loadConfig()
 	loadObject()
 	global.EventDispatcher = InitEvent()
+	global.Limiter = rate.NewLimiter(global.Config.Rate.Limit, global.Config.Rate.Burst)
 	router.RouteInit()
 }
 
@@ -31,6 +32,7 @@ func loadConfig() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+
 	err2 := yaml.Unmarshal(configFile, &global.Config)
 	if err2 != nil {
 		fmt.Println(err2.Error())

@@ -47,7 +47,6 @@ func ParseToken(tokenString string) (*MyClaims, error) {
 }
 
 func main() {
-
 	//secret :="1212121213131"
 	//token,_:=models.GenToken(models.AdminUser{
 	//	Name: "nihao",
@@ -61,7 +60,6 @@ func main() {
 	//if err !=nil {
 	//	fmt.Println(err.Error())
 	//}
-
 	//fmt.Println(ss)
-
+	//rate.NewLimiter()
 }

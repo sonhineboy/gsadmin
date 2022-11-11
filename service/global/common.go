@@ -7,6 +7,7 @@ import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"golang.org/x/time/rate"
 	"gorm.io/gorm"
 	"net/http"
 	"reflect"
@@ -20,6 +21,7 @@ var (
 	Db              *gorm.DB
 	SuperAdmin      string
 	EventDispatcher *src.EventDispatcher
+	Limiter         *rate.Limiter
 )
 
 func GetError(errs validator.ValidationErrors, r interface{}) string {

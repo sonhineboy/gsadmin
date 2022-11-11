@@ -3,19 +3,20 @@ module ginedu2/service
 go 1.17
 
 require (
+	github.com/dchest/captcha v1.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/satori/go.uuid v1.2.0
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be
+	golang.org/x/time v0.2.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.4.1
 	gorm.io/gorm v1.23.10
 )
 
 require (
-	github.com/dchest/captcha v1.0.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
