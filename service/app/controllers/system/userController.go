@@ -40,12 +40,7 @@ func (u UserController) Login(c *gin.Context) {
 		for _, role := range user.Roles {
 			roles = append(roles, role.Alias)
 		}
-		token, _ := models.GenToken(models.JwtUser{
-			Id:    user.ID,
-			Name:  user.Name,
-			Roles: roles,
-		}, global.Config.MyJwt.Secret)
-
+		token, _ := models.GenToken(models.JwtUser{}.NewJwtUser(user.ID, user.Name, roles), global.Config.MyJwt.Secret)
 		u.res.Success(c, "登陆成功", gin.H{
 			"token":    token,
 			"userInfo": user,

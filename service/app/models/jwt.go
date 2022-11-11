@@ -18,6 +18,14 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
+func (c JwtUser) NewJwtUser(id uint, name string, roles []string) JwtUser {
+	return JwtUser{
+		Id:    id,
+		Name:  name,
+		Roles: roles,
+	}
+}
+
 func GenToken(user JwtUser, Secret string) (string, error) {
 	MySecret := []byte(Secret)
 	claim := CustomClaims{
