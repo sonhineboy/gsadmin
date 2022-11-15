@@ -19,6 +19,39 @@
 
 GS Admin=gin+scui 它是golang 开发的一个企业级后台。遵循MIT开源协议。前端框架是scui,SCUI基于 Vue3、elementPlus 持续性的提供独家组件和丰富的业务模板帮助你快速搭建企业级中后台前端任务。后端框架是gin,Gin是一个golang的微框架，封装比较优雅，具有快速灵活，容错方便等特点。内置了权限管理、用户管理等基础模块儿，还支持了事件服务，方便业务解耦。后续会根据用户的反馈更新内容！
 
+## 快速开始
+
+<b>一共分三步</b>：   
+1、 拉代码  
+2、 部署后端服务  
+3、 部署前端代码
+
+```sh
+#第一步
+git clone https://gitee.com/kevn/gsadmin.git
+
+#第二步
+#服务端
+
+cd {项目目录}/service && go mod tidy
+
+#配置配置文件，config.yaml
+#初始化数据 {项目目录}/service/databases/*.sql 执行里面的sql
+go run main.go
+
+#第三步
+#web端
+cd {项目目录}/web/scui && npm install
+
+# 启动项目(开发模式)
+npm run serve
+
+```
+
+> 演示账号密码：test/123456  
+> 注意：goland 的环境必须配置好，数据不要忘记初始化
+
+
 ## 交流方式
 <b>QQ交流群</b>：584407821 (1群)
 
