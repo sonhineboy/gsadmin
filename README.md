@@ -2,6 +2,8 @@
 
 <div align=center>
 <img src="https://kevn.gitee.io/gsadmindoc/img/gslogo.png" width=20%><br/>
+<div style="padding: 20px 0"><a href="https://kevn.gitee.io/gsadmindoc">文档</a> | <a href="https://gsadmin.suiyidian.cn/">演示</a></div>
+
    <a href='https://gitee.com/kevn/gsadmin' target="_blank">
 				<img src='https://gitee.com/kevn/gsadmin/badge/star.svg?theme=dark' alt='star' style="vertical-align: middle">
 			</a>
@@ -14,7 +16,6 @@
    <a href='https://lolicode.gitee.io/scui-doc/' target="_blank">
 				<img src='https://img.shields.io/badge/vue-scui-yellow' alt='star' style="vertical-align: middle">
 			</a>
-<div style="padding-top: 20px"><a href="https://kevn.gitee.io/gsadmindoc">文档</a> | <a href="https://gsadmin.suiyidian.cn/">演示</a></div>
 </div>
 
 
