@@ -14,6 +14,7 @@
    <a href='https://lolicode.gitee.io/scui-doc/' target="_blank">
 				<img src='https://img.shields.io/badge/vue-scui-yellow' alt='star' style="vertical-align: middle">
 			</a>
+<div style="padding-top: 20px"><a href="https://kevn.gitee.io/gsadmindoc">文档</a> | <a href="https://gsadmin.suiyidian.cn/">演示</a></div>
 </div>
 
 
@@ -51,16 +52,6 @@ npm run serve
 > 演示账号密码：test/123456  
 > 注意：goland 的环境必须配置好，数据不要忘记初始化
 
-
-## 交流方式
-<b>QQ交流群</b>：584407821 (1群)
-
-<b>微信群</b>：加个人微信后，拉入  
-备注：<u>gsadmin 无备注不通过</u>
-
-<img src="https://kevn.gitee.io/gsadmindoc/img/wx.jpg" width="50%">
-
-
 ## 加入贡献
 
 GS Admin 是一个开源项目，一个开源项目的发展离不开开源社区的力量支持，如果您希望参与 GS Admin 的开发，可以先从 [issues](https://gitee.com/kevn/gsadmin/issues) 开始，通常来说会有以下的一些步骤：
@@ -70,4 +61,12 @@ GS Admin 是一个开源项目，一个开源项目的发展离不开开源社�
 - 3.关注自己提交 Pull Request 的进度和状态，以推动您的 Pull Request 尽快合入主仓库；
 - 4.对其他人提交的 Pull Request 进行 Code Review，并给出您的建议和看法。
 - 5.坚持并持续进行上述步骤。  
+
+## 交流方式
+<b>QQ交流群</b>：584407821 (1群)
+
+<b>微信群</b>：加个人微信后，拉入  
+备注：<u>gsadmin 无备注不通过</u>
+
+<img src="https://kevn.gitee.io/gsadmindoc/img/wx.jpg" width="50%">
 
