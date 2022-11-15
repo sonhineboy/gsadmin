@@ -1,7 +1,7 @@
 ## 介绍
 
 <div align=center>
-<img :src="$withBase('https://kevn.gitee.io/gsadmindoc/img/gslogo.png')" width=20%><br/>
+<img src="https://kevn.gitee.io/gsadmindoc/img/gslogo.png" width=20%><br/>
    <a href='https://gitee.com/kevn/gsadmin' target="_blank">
 				<img src='https://gitee.com/kevn/gsadmin/badge/star.svg?theme=dark' alt='star' style="vertical-align: middle">
 			</a>
@@ -25,7 +25,7 @@ GS Admin=gin+scui 它是golang 开发的一个企业级后台。遵循MIT开源�
 <b>微信群</b>：加个人微信后，拉入  
 备注：<u>gsadmin 无备注不通过</u>
 
-<img :src="$withBase('/img/wx.jpg')" width="50%">
+<img src="https://kevn.gitee.io/gsadmindoc/img/wx.jpg" width="50%">
 
 
 ## 加入贡献
