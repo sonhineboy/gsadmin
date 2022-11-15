@@ -61,7 +61,7 @@ npm run serve
 > 注意：goland 的环境必须配置好，数据不要忘记初始化
 
 ## 特别鸣谢
-SCUI [https://img.shields.io/badge/vue-scui-yellow](https://img.shields.io/badge/vue-scui-yellow)  
+SCUI [https://lolicode.gitee.io/scui-doc/](https://lolicode.gitee.io/scui-doc/)  
 GIN  [https://gin-gonic.com](https://gin-gonic.com)  
 GITEE [https://gitee.com/](https://gitee.com/)
 
