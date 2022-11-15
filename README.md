@@ -53,6 +53,11 @@ npm run serve
 > 演示账号密码：test/123456  
 > 注意：goland 的环境必须配置好，数据不要忘记初始化
 
+## 特别鸣谢
+SCUI [https://img.shields.io/badge/vue-scui-yellow](https://img.shields.io/badge/vue-scui-yellow)  
+GIN  [https://gin-gonic.com](https://gin-gonic.com)  
+GITEE [https://gitee.com/](https://gitee.com/)
+
 ## 加入贡献
 
 GS Admin 是一个开源项目，一个开源项目的发展离不开开源社区的力量支持，如果您希望参与 GS Admin 的开发，可以先从 [issues](https://gitee.com/kevn/gsadmin/issues) 开始，通常来说会有以下的一些步骤：
@@ -71,3 +76,8 @@ GS Admin 是一个开源项目，一个开源项目的发展离不开开源社�
 
 <img src="https://kevn.gitee.io/gsadmindoc/img/wx.jpg" width="50%">
 
+## ☕ 捐赠
+> <b>提示</b>  
+> 除了贡献代码，「捐赠]」也是一种开源的参与形式。 非常感谢每一位对开源项目作出捐赠的朋友;您的捐赠将统一公示，主要用于本项目的推动
+
+<img src="https://kevn.gitee.io/gsadmindoc/img/ds.jpg" alt="赏杯咖啡">
