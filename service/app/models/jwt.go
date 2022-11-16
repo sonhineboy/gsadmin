@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"ginedu2/service/global"
 	"github.com/dgrijalva/jwt-go/v4"
 	"time"
 )
@@ -31,8 +32,8 @@ func GenToken(user JwtUser, Secret string) (string, error) {
 	claim := CustomClaims{
 		user,
 		jwt.StandardClaims{
-			ExpiresAt: jwt.At(time.Now().Add(time.Hour * 3)), //3小时过期
-			Issuer:    "ginScuiadmin",                        //签发人
+			ExpiresAt: jwt.At(time.Now().Add(time.Second * time.Duration(global.Config.MyJwt.ExpiresAt))),
+			Issuer:    "ginScuiadmin",
 		},
 	}
 
@@ -72,7 +73,7 @@ func RefreshToken(tokenStr string, Secret string) (string, error) {
 	}
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		jwt.TimeFunc = time.Now
-		claims.StandardClaims.ExpiresAt = jwt.At(time.Now().Add(time.Minute * 10))
+		claims.StandardClaims.ExpiresAt = jwt.At(time.Now().Add(time.Second * time.Duration(global.Config.MyJwt.ExpiresAt)))
 		return GenToken(claims.JwtUser, Secret)
 	}
 	return "", errors.New("cloud handle this token")

@@ -1,6 +1,8 @@
 package config
 
-import "golang.org/x/time/rate"
+import (
+	"golang.org/x/time/rate"
+)
 
 type Config struct {
 	Db struct {
@@ -15,7 +17,8 @@ type Config struct {
 		PassWord     string `yaml:"password"`
 	}
 	MyJwt struct {
-		Secret string `yaml:"secret"`
+		Secret    string `yaml:"secret"`
+		ExpiresAt int64  `yaml:"expires_at"`
 	}
 	App struct {
 		Host       string `yaml:"host"`

@@ -11,6 +11,7 @@ db:
 
 myjwt:
   secret: '1212121213131'
+  expires_at: 36000
 app:
   host: "http://localhost:8080"
   port: ":8080"
