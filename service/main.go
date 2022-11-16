@@ -18,7 +18,7 @@ func main() {
 
 	//自动迁移开始
 	db, _ := global.Db.DB()
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 	amErr := global.Db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
 		&models.AdminUser{},
 		&models.AdminMenu{},
