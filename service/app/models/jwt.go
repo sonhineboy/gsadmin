@@ -9,9 +9,11 @@ import (
 )
 
 type JwtUser struct {
-	Id    uint
-	Name  string
-	Roles []string
+	Id         uint
+	Name       string
+	Roles      []string
+	ApiList    map[string]string
+	Permission []string
 }
 
 type CustomClaims struct {
@@ -19,11 +21,13 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-func (c JwtUser) NewJwtUser(id uint, name string, roles []string) JwtUser {
+func (c JwtUser) NewJwtUser(id uint, name string, roles []string, apiList map[string]string, permission []string) JwtUser {
 	return JwtUser{
-		Id:    id,
-		Name:  name,
-		Roles: roles,
+		Id:         id,
+		Name:       name,
+		Roles:      roles,
+		ApiList:    apiList,
+		Permission: permission,
 	}
 }
 

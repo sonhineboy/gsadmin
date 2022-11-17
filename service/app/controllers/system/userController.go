@@ -14,11 +14,18 @@ import (
 type UserController struct {
 	res            global.Response
 	userRepository repositorys.UserRepository
+	menuRepository repositorys.SystemMenuRepository
 }
 
 //登陆
 func (u UserController) Login(c *gin.Context) {
-	var LoginForm requests.Login
+	var (
+		LoginForm  requests.Login
+		roles      []string
+		permission []string
+	)
+	apiList := make(map[string]string)
+
 	err := c.ShouldBind(&LoginForm)
 
 	if !captcha.VerifyString(LoginForm.CaptchaId, LoginForm.CaptchaValue) {
@@ -34,13 +41,23 @@ func (u UserController) Login(c *gin.Context) {
 		return
 	}
 	isLogin, user := u.userRepository.Login(LoginForm.PassWord, LoginForm.Name)
-	var roles []string
 
 	if isLogin {
+
 		for _, role := range user.Roles {
 			roles = append(roles, role.Alias)
 		}
-		token, _ := models.GenToken(models.JwtUser{}.NewJwtUser(user.ID, user.Name, roles), global.Config.MyJwt.Secret)
+
+		_ = u.menuRepository.GetApiListToMapByUser(user, &apiList)
+		_ = u.menuRepository.GetPermissionByUser(user, &permission)
+
+		token, _ := models.GenToken(models.JwtUser{}.NewJwtUser(
+			user.ID,
+			user.Name,
+			roles,
+			apiList,
+			permission,
+		), global.Config.MyJwt.Secret)
 		u.res.Success(c, "登陆成功", gin.H{
 			"token":    token,
 			"userInfo": user,

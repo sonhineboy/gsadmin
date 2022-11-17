@@ -56,6 +56,7 @@ func Pages(page int, pageSize int, total int, rows interface{}) map[string]inter
 	return data
 }
 
+//即将废弃，请勿使用
 func IsSuperAdmin(roles []string, role string) bool {
 	for _, v := range roles {
 		if v == role {

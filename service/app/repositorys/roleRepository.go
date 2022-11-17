@@ -1,7 +1,6 @@
 package repositorys
 
 import (
-	"fmt"
 	"ginedu2/service/app/models"
 	"ginedu2/service/app/requests"
 	"ginedu2/service/global"
@@ -50,8 +49,6 @@ func (r RoleRepository) Add(post requests.Role) error {
 添加角色
 */
 func (r RoleRepository) Update(post requests.Role) error {
-	fmt.Println(post.Status)
-
 	db := global.Db.Debug().Where("id = ?", post.Id).Updates(&models.Role{
 		Alias:  post.Alias,
 		Label:  post.Label,

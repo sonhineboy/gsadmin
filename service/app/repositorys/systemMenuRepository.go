@@ -2,7 +2,6 @@ package repositorys
 
 import (
 	"errors"
-	"fmt"
 	"ginedu2/service/app/models"
 	"ginedu2/service/app/requests"
 	"ginedu2/service/global"
@@ -74,7 +73,6 @@ func (menu SystemMenuRepository) Update(post requests.MenuPost) (*gorm.DB, model
 
 	//同步，自动删除不存在的id
 	if len(notDelIds) > 0 {
-		fmt.Println(notDelIds)
 		global.Db.Debug().Not(notDelIds).Where("menu_id = ?", id).Delete(&models.MenuApiList{})
 	}
 
@@ -140,4 +138,48 @@ func (menu SystemMenuRepository) GetApiList(c *gin.Context, apiList *[]models.Me
 	} else {
 		return errors.New("无法处理")
 	}
+}
+
+//根据传递用户对象
+func (menu SystemMenuRepository) GetApiListByUser(adminUser models.AdminUser, apiList *[]models.MenuApiList) error {
+	for _, role := range adminUser.Roles {
+		for _, menu := range role.Menus {
+			*apiList = append(*apiList, menu.ApiList...)
+		}
+	}
+	return nil
+}
+
+//根据传递用户对象
+func (menu SystemMenuRepository) GetPermissionByUser(adminUser models.AdminUser, permission *[]string) error {
+	for _, role := range adminUser.Roles {
+		for _, menu := range role.Menus {
+			*permission = append(*permission, menu.Name)
+		}
+	}
+	return nil
+}
+
+//获取map apiList
+func (menu SystemMenuRepository) GetApiListToMap(c *gin.Context, apiListMap *map[string]string) error {
+	var apiList []models.MenuApiList
+	err := menu.GetApiList(c, &apiList)
+	if err != nil {
+		return err
+	} else {
+		for _, v := range apiList {
+			(*apiListMap)[v.Url] = v.Code
+		}
+		return nil
+	}
+}
+
+//获取map apiList 根据用户
+func (menu SystemMenuRepository) GetApiListToMapByUser(adminUser models.AdminUser, apiListMap *map[string]string) error {
+	var apiList []models.MenuApiList
+	_ = menu.GetApiListByUser(adminUser, &apiList)
+	for _, v := range apiList {
+		(*apiListMap)[v.Url] = v.Code
+	}
+	return nil
 }

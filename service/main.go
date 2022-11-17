@@ -29,8 +29,6 @@ func main() {
 	}
 	//自动迁移结束
 
-	fmt.Println(global.Config.MyJwt.ExpiresAt)
-
 	err = global.GAD_R.Run(global.Config.App.Port)
 	if err != nil {
 		panic(err)
