@@ -4,25 +4,19 @@ import (
 	"errors"
 	"ginedu2/service/app/models"
 	"github.com/gin-gonic/gin"
-	"sync"
 )
 
 type PermissionRepository struct {
 	CustomClaims *models.CustomClaims
 }
 
-var (
-	permission *PermissionRepository
-	once       = &sync.Once{}
-)
-
-func newPermissionRepository(customClaims *models.CustomClaims) *PermissionRepository {
+func NewPermissionRepository(customClaims *models.CustomClaims) *PermissionRepository {
 	return &PermissionRepository{
 		CustomClaims: customClaims,
 	}
 }
 
-func newDefaultPermissionRepository(c *gin.Context) (*PermissionRepository, error) {
+func NewDefaultPermissionRepository(c *gin.Context) (*PermissionRepository, error) {
 	custom, ok := GetCustomClaims(c)
 	if ok {
 		return &PermissionRepository{
@@ -44,16 +38,13 @@ func GetCustomClaims(c *gin.Context) (*models.CustomClaims, bool) {
 }
 
 func GetPermission(c *gin.Context) *PermissionRepository {
-	if permission == nil {
-		once.Do(func() {
-			customClaims, ok := GetCustomClaims(c)
-			if ok == false {
-				panic("无法获取授权信息")
-			}
-			permission = newPermissionRepository(customClaims)
-		})
+	v, ok := c.Get("permission")
+	permission, err := v.(*PermissionRepository)
+	if ok && err {
+		return permission
+	} else {
+		return nil
 	}
-	return permission
 }
 
 //判断是否某个用户组
