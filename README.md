@@ -16,6 +16,10 @@
    <a href='https://lolicode.gitee.io/scui-doc/' target="_blank">
 				<img src='https://img.shields.io/badge/vue-scui-yellow' alt='star' style="vertical-align: middle">
 			</a>
+
+<a href='https://img.shields.io/badge/licenses-MIT-green' target="_blank">
+				<img src='https://img.shields.io/badge/licenses-MIT-green' alt='star' style="vertical-align: middle">
+			</a>
 </div>
 
 
