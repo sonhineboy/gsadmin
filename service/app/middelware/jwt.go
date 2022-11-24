@@ -2,6 +2,7 @@ package middelware
 
 import (
 	"ginedu2/service/app/models"
+	"ginedu2/service/app/repositorys"
 	"ginedu2/service/global"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -43,6 +44,7 @@ func JWTAuth() gin.HandlerFunc {
 
 		// 将当前请求的claims信息保存到请求的上下文c上
 		ctx.Set("claims", claims)
+		ctx.Set("permission", repositorys.NewPermissionRepository(claims))
 		ctx.Next() // 后续的处理函数可以用过ctx.Get("claims")来获取当前请求的用户信息
 
 	}
