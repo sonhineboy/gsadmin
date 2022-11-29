@@ -36,32 +36,36 @@ func (u UserRepository) Add(password string, name string, data requests.UserAdd)
 
 //更新用户
 func (u UserRepository) Update(data requests.UserUpdate) error {
-	var model models.AdminUser
-	model.ID = data.Id
-	if len(data.PassWord) > 0 {
-		pwd, err := bcrypt.GenerateFromPassword([]byte(data.PassWord), bcrypt.MinCost)
-		if err != nil {
-			fmt.Println(err)
-		}
-		u.AdminUserModel.Password = string(pwd)
-	}
-	u.AdminUserModel.Name = data.Name
-	u.AdminUserModel.RealName = data.RealName
-	u.AdminUserModel.Avatar = data.Avatar
 
-	db := global.Db.Where("id = ?", data.Id).Updates(&u.AdminUserModel)
-	if db.Error == nil {
-		var replace []models.Role
-		for _, v := range data.Roles {
-			var role models.Role
-			role.ID = v
-			replace = append(replace, role)
+	return global.Db.Transaction(func(sessionDb *gorm.DB) error {
+		var model models.AdminUser
+		model.ID = data.Id
+		if len(data.PassWord) > 0 {
+			pwd, err := bcrypt.GenerateFromPassword([]byte(data.PassWord), bcrypt.MinCost)
+			if err != nil {
+				fmt.Println(err)
+			}
+			u.AdminUserModel.Password = string(pwd)
 		}
-		return global.Db.Model(&model).Omit("Roles.*").Association("Roles").Replace(replace)
+		u.AdminUserModel.Name = data.Name
+		u.AdminUserModel.RealName = data.RealName
+		u.AdminUserModel.Avatar = data.Avatar
 
-	} else {
-		return db.Error
-	}
+		db := sessionDb.Where("id = ?", data.Id).Updates(&u.AdminUserModel)
+		if db.Error == nil {
+			var replace []models.Role
+			for _, v := range data.Roles {
+				var role models.Role
+				role.ID = v
+				replace = append(replace, role)
+			}
+			return sessionDb.Model(&model).Omit("Roles.*").Association("Roles").Replace(replace)
+
+		} else {
+			return db.Error
+		}
+	})
+
 }
 
 //登陆用户

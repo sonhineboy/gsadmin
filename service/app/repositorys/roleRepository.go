@@ -4,6 +4,7 @@ import (
 	"ginedu2/service/app/models"
 	"ginedu2/service/app/requests"
 	"ginedu2/service/global"
+	"gorm.io/gorm"
 )
 
 type RoleRepository struct {
@@ -46,17 +47,20 @@ func (r RoleRepository) Add(post requests.Role) error {
 }
 
 /*
-添加角色
+更新角色
 */
 func (r RoleRepository) Update(post requests.Role) error {
-	db := global.Db.Debug().Where("id = ?", post.Id).Updates(&models.Role{
-		Alias:  post.Alias,
-		Label:  post.Label,
-		Sort:   post.Sort,
-		Remark: post.Remark,
-		Status: &post.Status,
+
+	return global.Db.Transaction(func(sessionDb *gorm.DB) error {
+		return sessionDb.Debug().Where("id = ?", post.Id).Updates(&models.Role{
+			Alias:  post.Alias,
+			Label:  post.Label,
+			Sort:   post.Sort,
+			Remark: post.Remark,
+			Status: &post.Status,
+		}).Error
 	})
-	return db.Error
+
 }
 
 func (r RoleRepository) UpMenus(post requests.RoleUpMenus) error {
@@ -74,7 +78,6 @@ func (r RoleRepository) UpMenus(post requests.RoleUpMenus) error {
 
 		}
 		return global.Db.Model(&role).Omit("Menus.*").Association("Menus").Replace(replace)
-
 	} else {
 		return global.Db.Model(&role).Association("Menus").Clear()
 	}
