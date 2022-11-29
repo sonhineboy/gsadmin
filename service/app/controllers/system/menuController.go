@@ -29,11 +29,11 @@ func (m MenuController) Add(c *gin.Context) {
 func (m MenuController) Update(c *gin.Context) {
 	var postData requests.MenuPost
 	_ = c.ShouldBind(&postData)
-	result, model := m.MenuRepository.Update(postData)
-	if result.Error == nil {
+	err, model := m.MenuRepository.Update(postData)
+	if err == nil {
 		m.res.Success(c, "ok", model)
 	} else {
-		m.res.Failed(c, result.Error.Error())
+		m.res.Failed(c, err.Error())
 	}
 }
 

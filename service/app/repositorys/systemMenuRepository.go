@@ -32,8 +32,8 @@ func (menu SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.A
 	return global.Db.Create(&menu.MenuModel), menu.MenuModel
 }
 
-//添加菜单
-func (menu SystemMenuRepository) Update(post requests.MenuPost) (*gorm.DB, models.AdminMenu) {
+//更新菜单
+func (menu SystemMenuRepository) Update(post requests.MenuPost) (error, models.AdminMenu) {
 	var updateData models.AdminMenu
 	updateData.Name = post.Name
 	updateData.Component = post.Component
@@ -45,38 +45,47 @@ func (menu SystemMenuRepository) Update(post requests.MenuPost) (*gorm.DB, model
 	id, _ := strconv.Atoi(post.Id)
 	menu.MenuModel.ID = uint(id)
 
-	var notDelIds []uint
-	for _, v := range post.ApiList {
-		var apiList models.MenuApiList
-		if len(v["id"]) > 0 {
-			//更新业务逻辑
-			id, _ := strconv.Atoi(v["id"])
-			apiList.ID = uint(id)
-			delete(v, "id")
-			global.Db.Model(&apiList).Updates(models.MenuApiList{
-				Code: v["code"],
-				Url:  v["url"],
-			})
-			notDelIds = append(notDelIds, apiList.ID)
-		} else {
-			//新增业务逻辑
-			var addModel = models.MenuApiList{
-				MenuId: menu.MenuModel.ID,
-				Code:   v["code"],
-				Url:    v["url"],
+	return global.Db.Transaction(func(sessionDb *gorm.DB) error {
+		var notDelIds []uint
+		for _, v := range post.ApiList {
+			var apiList models.MenuApiList
+			if len(v["id"]) > 0 {
+				//更新业务逻辑
+				id, _ := strconv.Atoi(v["id"])
+				apiList.ID = uint(id)
+				delete(v, "id")
+				upDb := sessionDb.Model(&apiList).Updates(models.MenuApiList{
+					Code: v["code"],
+					Url:  v["url"],
+				})
+
+				if upDb.Error != nil {
+					return upDb.Error
+				}
+				notDelIds = append(notDelIds, apiList.ID)
+			} else {
+				//新增业务逻辑
+				var addModel = models.MenuApiList{
+					MenuId: menu.MenuModel.ID,
+					Code:   v["code"],
+					Url:    v["url"],
+				}
+				if adDb := sessionDb.Create(&addModel); adDb.Error != nil {
+					return adDb.Error
+				}
+				notDelIds = append(notDelIds, addModel.ID)
+
 			}
-			global.Db.Debug().Create(&addModel)
-			notDelIds = append(notDelIds, addModel.ID)
-
 		}
-	}
 
-	//同步，自动删除不存在的id
-	if len(notDelIds) > 0 {
-		global.Db.Debug().Not(notDelIds).Where("menu_id = ?", id).Delete(&models.MenuApiList{})
-	}
-
-	return global.Db.Model(&menu.MenuModel).Updates(updateData), menu.MenuModel
+		//同步，自动删除不存在的id
+		if len(notDelIds) > 0 {
+			if syncDb := sessionDb.Not(notDelIds).Where("menu_id = ?", id).Delete(&models.MenuApiList{}); syncDb.Error != nil {
+				return syncDb.Error
+			}
+		}
+		return sessionDb.Model(&menu.MenuModel).Updates(updateData).Error
+	}), menu.MenuModel
 }
 
 func (menu SystemMenuRepository) ArrayToTree(arr []models.AdminMenu, pid uint) []map[string]interface{} {
