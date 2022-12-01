@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"ginedu2/service/src"
+	"github.com/sonhineboy/gsadmin/service/src"
 )
 
 type TestEvent struct {

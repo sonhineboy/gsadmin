@@ -12,6 +12,7 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
+//disabled
 func (r Response) Success(c *gin.Context, msg string, data interface{}) {
 	r.Code = 200
 	r.Msg = msg
@@ -20,6 +21,7 @@ func (r Response) Success(c *gin.Context, msg string, data interface{}) {
 	c.JSON(http.StatusOK, r)
 }
 
+//disabled
 func (r Response) Failed(c *gin.Context, err string) {
 	r.Code = 422
 	r.Msg = err

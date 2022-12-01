@@ -1,4 +1,4 @@
-module ginedu2/service
+module github.com/sonhineboy/gsadmin/service
 
 go 1.17
 

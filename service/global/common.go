@@ -2,11 +2,11 @@ package global
 
 import (
 	"bytes"
-	"ginedu2/service/config"
-	"ginedu2/service/src"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/sonhineboy/gsadmin/service/config"
+	"github.com/sonhineboy/gsadmin/service/src"
 	"golang.org/x/time/rate"
 	"gorm.io/gorm"
 	"net/http"

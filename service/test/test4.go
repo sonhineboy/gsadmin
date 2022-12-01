@@ -50,7 +50,7 @@ func main() {
 		time.Sleep(time.Millisecond * 10)
 		go func() {
 
-			r, _ := http.Get("http://gsadmin.api.suiyidian.cn/api/common/captcha/info")
+			r, _ := http.Get("http://github.com/sonhineboy/gsadmin.api.suiyidian.cn/api/common/captcha/info")
 			b, _ := ioutil.ReadAll(r.Body)
 			fmt.Println(string(b))
 

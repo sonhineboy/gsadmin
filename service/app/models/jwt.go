@@ -3,8 +3,8 @@ package models
 import (
 	"errors"
 	"fmt"
-	"ginedu2/service/global"
 	"github.com/dgrijalva/jwt-go/v4"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"time"
 )
 

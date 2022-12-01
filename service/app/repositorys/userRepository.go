@@ -2,10 +2,10 @@ package repositorys
 
 import (
 	"fmt"
-	"ginedu2/service/app/event"
-	"ginedu2/service/app/models"
-	"ginedu2/service/app/requests"
-	"ginedu2/service/global"
+	"github.com/sonhineboy/gsadmin/service/app/event"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/requests"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -16,7 +16,7 @@ type UserRepository struct {
 }
 
 //添加一个用户
-func (u UserRepository) Add(password string, name string, data requests.UserAdd) (*gorm.DB, models.AdminUser) {
+func (u *UserRepository) Add(password string, name string, data requests.UserAdd) (*gorm.DB, models.AdminUser) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
 		fmt.Println(err)
@@ -35,7 +35,7 @@ func (u UserRepository) Add(password string, name string, data requests.UserAdd)
 }
 
 //更新用户
-func (u UserRepository) Update(data requests.UserUpdate) error {
+func (u *UserRepository) Update(data requests.UserUpdate) error {
 
 	return global.Db.Transaction(func(sessionDb *gorm.DB) error {
 		var model models.AdminUser
@@ -69,7 +69,7 @@ func (u UserRepository) Update(data requests.UserUpdate) error {
 }
 
 //登陆用户
-func (u UserRepository) Login(password string, name string) (bool, models.AdminUser) {
+func (u *UserRepository) Login(password string, name string) (bool, models.AdminUser) {
 	re := global.Db.Where("name = ?", name).Preload("Roles").Preload("Roles.Menus").Preload("Roles.Menus.ApiList").First(&u.AdminUserModel)
 
 	_ = global.EventDispatcher.Dispatch(event.NewLoginEvent("login", u.AdminUserModel))
@@ -81,7 +81,7 @@ func (u UserRepository) Login(password string, name string) (bool, models.AdminU
 	}
 }
 
-func (u UserRepository) List(page int, pageSize int, sortField string) map[string]interface{} {
+func (u *UserRepository) List(page int, pageSize int, sortField string) map[string]interface{} {
 	var (
 		total  int64
 		data   []models.AdminUser

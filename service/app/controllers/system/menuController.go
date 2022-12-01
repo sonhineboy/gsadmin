@@ -1,64 +1,75 @@
 package system
 
 import (
-	"ginedu2/service/app/models"
-	"ginedu2/service/app/repositorys"
-	"ginedu2/service/app/requests"
-	"ginedu2/service/global"
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/repositorys"
+	"github.com/sonhineboy/gsadmin/service/app/requests"
+	"github.com/sonhineboy/gsadmin/service/global"
+	"github.com/sonhineboy/gsadmin/service/global/response"
 	"gorm.io/gorm"
 )
 
-type MenuController struct {
-	MenuRepository repositorys.SystemMenuRepository
-	res            global.Response
-}
+type MenuController struct{}
 
-func (m MenuController) Add(c *gin.Context) {
-	var postData requests.MenuPost
+func (m *MenuController) Add(c *gin.Context) {
+
+	var (
+		postData       requests.MenuPost
+		menuRepository repositorys.SystemMenuRepository
+	)
 	_ = c.ShouldBind(&postData)
-	result, model := m.MenuRepository.Add(postData)
+	result, model := menuRepository.Add(postData)
 
 	if result.Error == nil {
-		m.res.Success(c, "ok", model)
+		response.Success(c, "ok", model)
 	} else {
-		m.res.Failed(c, result.Error.Error())
+		response.Failed(c, result.Error.Error())
 	}
 }
 
-func (m MenuController) Update(c *gin.Context) {
-	var postData requests.MenuPost
+func (m *MenuController) Update(c *gin.Context) {
+	var (
+		postData       requests.MenuPost
+		menuRepository repositorys.SystemMenuRepository
+	)
 	_ = c.ShouldBind(&postData)
-	err, model := m.MenuRepository.Update(postData)
+	err, model := menuRepository.Update(postData)
 	if err == nil {
-		m.res.Success(c, "ok", model)
+		response.Success(c, "ok", model)
 	} else {
-		m.res.Failed(c, err.Error())
+		response.Failed(c, err.Error())
 	}
 }
 
-func (m MenuController) All(c *gin.Context) {
-	m.res.Success(c, "ok", m.MenuRepository.MenuTree())
+func (m *MenuController) All(c *gin.Context) {
+	var (
+		menuRepository repositorys.SystemMenuRepository
+	)
+	response.Success(c, "ok", menuRepository.MenuTree())
 }
 
-func (m MenuController) Del(c *gin.Context) {
+func (m *MenuController) Del(c *gin.Context) {
 
-	var delIds requests.MenuDel
+	var (
+		delIds requests.MenuDel
+	)
 	_ = c.ShouldBind(&delIds)
 	result := global.Db.Delete(&models.AdminMenu{}, delIds.Ids)
 
 	if result.Error == nil {
-		m.res.Success(c, "ok", "")
+		response.Success(c, "ok", "")
 	} else {
-		m.res.Failed(c, result.Error.Error())
+		response.Failed(c, result.Error.Error())
 	}
 }
 
-func (m MenuController) MenuPermissions(c *gin.Context) {
+func (m *MenuController) MenuPermissions(c *gin.Context) {
 	var (
-		myMenus   []map[string]interface{}
-		menus     []models.AdminMenu
-		adminUser models.AdminUser
+		myMenus        []map[string]interface{}
+		menus          []models.AdminMenu
+		adminUser      models.AdminUser
+		menuRepository repositorys.SystemMenuRepository
 	)
 
 	v, ok := c.Get("claims")
@@ -78,7 +89,7 @@ func (m MenuController) MenuPermissions(c *gin.Context) {
 					menus = append(menus, v.Menus...)
 				}
 			}
-			myMenus = m.MenuRepository.ArrayToTree(menus, 0)
+			myMenus = menuRepository.ArrayToTree(menus, 0)
 		}
 	}
 
@@ -91,5 +102,5 @@ func (m MenuController) MenuPermissions(c *gin.Context) {
 		}
 	}
 	data["permissions"] = permissions
-	m.res.Success(c, "ok", data)
+	response.Success(c, "ok", data)
 }

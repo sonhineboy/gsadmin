@@ -1,8 +1,8 @@
 package middelware
 
 import (
-	"ginedu2/service/global"
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/global"
 )
 
 func Limiter() gin.HandlerFunc {

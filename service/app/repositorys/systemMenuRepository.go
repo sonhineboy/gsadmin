@@ -2,10 +2,10 @@ package repositorys
 
 import (
 	"errors"
-	"ginedu2/service/app/models"
-	"ginedu2/service/app/requests"
-	"ginedu2/service/global"
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/requests"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"gorm.io/gorm"
 	"strconv"
 )
@@ -15,7 +15,7 @@ type SystemMenuRepository struct {
 }
 
 //添加菜单
-func (menu SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.AdminMenu) {
+func (menu *SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.AdminMenu) {
 	menu.MenuModel.Name = post.Name
 	menu.MenuModel.Component = post.Component
 	menu.MenuModel.Meta = post.Meta
@@ -33,7 +33,7 @@ func (menu SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.A
 }
 
 //更新菜单
-func (menu SystemMenuRepository) Update(post requests.MenuPost) (error, models.AdminMenu) {
+func (menu *SystemMenuRepository) Update(post requests.MenuPost) (error, models.AdminMenu) {
 	var updateData models.AdminMenu
 	updateData.Name = post.Name
 	updateData.Component = post.Component
@@ -88,7 +88,7 @@ func (menu SystemMenuRepository) Update(post requests.MenuPost) (error, models.A
 	}), menu.MenuModel
 }
 
-func (menu SystemMenuRepository) ArrayToTree(arr []models.AdminMenu, pid uint) []map[string]interface{} {
+func (menu *SystemMenuRepository) ArrayToTree(arr []models.AdminMenu, pid uint) []map[string]interface{} {
 	var newArr []map[string]interface{}
 	for _, v := range arr {
 		mapData := make(map[string]interface{})
@@ -115,13 +115,13 @@ func (menu SystemMenuRepository) ArrayToTree(arr []models.AdminMenu, pid uint) [
 	return newArr
 }
 
-func (menu SystemMenuRepository) MenuTree() []map[string]interface{} {
+func (menu *SystemMenuRepository) MenuTree() []map[string]interface{} {
 	var all []models.AdminMenu
 	global.Db.Preload("ApiList").Order("sort desc").Find(&all)
 	return menu.ArrayToTree(all, 0)
 }
 
-func (menu SystemMenuRepository) GetCustomClaims(c *gin.Context) (*models.CustomClaims, bool) {
+func (menu *SystemMenuRepository) GetCustomClaims(c *gin.Context) (*models.CustomClaims, bool) {
 	v, ok := c.Get("claims")
 	claims, err := v.(*models.CustomClaims)
 	if ok && err {
@@ -132,7 +132,7 @@ func (menu SystemMenuRepository) GetCustomClaims(c *gin.Context) (*models.Custom
 }
 
 //根据当前登陆得用户获得api 权限
-func (menu SystemMenuRepository) GetApiList(c *gin.Context, apiList *[]models.MenuApiList) error {
+func (menu *SystemMenuRepository) GetApiList(c *gin.Context, apiList *[]models.MenuApiList) error {
 	claims, ok := menu.GetCustomClaims(c)
 	if ok {
 		var adminUser models.AdminUser
@@ -150,7 +150,7 @@ func (menu SystemMenuRepository) GetApiList(c *gin.Context, apiList *[]models.Me
 }
 
 //根据传递用户对象
-func (menu SystemMenuRepository) GetApiListByUser(adminUser models.AdminUser, apiList *[]models.MenuApiList) error {
+func (menu *SystemMenuRepository) GetApiListByUser(adminUser models.AdminUser, apiList *[]models.MenuApiList) error {
 	for _, role := range adminUser.Roles {
 		for _, menu := range role.Menus {
 			*apiList = append(*apiList, menu.ApiList...)
@@ -160,7 +160,7 @@ func (menu SystemMenuRepository) GetApiListByUser(adminUser models.AdminUser, ap
 }
 
 //根据传递用户对象
-func (menu SystemMenuRepository) GetPermissionByUser(adminUser models.AdminUser, permission *[]string) error {
+func (menu *SystemMenuRepository) GetPermissionByUser(adminUser models.AdminUser, permission *[]string) error {
 	for _, role := range adminUser.Roles {
 		for _, menu := range role.Menus {
 			*permission = append(*permission, menu.Name)
@@ -170,7 +170,7 @@ func (menu SystemMenuRepository) GetPermissionByUser(adminUser models.AdminUser,
 }
 
 //获取map apiList
-func (menu SystemMenuRepository) GetApiListToMap(c *gin.Context, apiListMap *map[string]string) error {
+func (menu *SystemMenuRepository) GetApiListToMap(c *gin.Context, apiListMap *map[string]string) error {
 	var apiList []models.MenuApiList
 	err := menu.GetApiList(c, &apiList)
 	if err != nil {
@@ -184,7 +184,7 @@ func (menu SystemMenuRepository) GetApiListToMap(c *gin.Context, apiListMap *map
 }
 
 //获取map apiList 根据用户
-func (menu SystemMenuRepository) GetApiListToMapByUser(adminUser models.AdminUser, apiListMap *map[string]string) error {
+func (menu *SystemMenuRepository) GetApiListToMapByUser(adminUser models.AdminUser, apiListMap *map[string]string) error {
 	var apiList []models.MenuApiList
 	_ = menu.GetApiListByUser(adminUser, &apiList)
 	for _, v := range apiList {

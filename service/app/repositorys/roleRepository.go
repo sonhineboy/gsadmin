@@ -1,9 +1,9 @@
 package repositorys
 
 import (
-	"ginedu2/service/app/models"
-	"ginedu2/service/app/requests"
-	"ginedu2/service/global"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/requests"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"gorm.io/gorm"
 )
 
@@ -12,7 +12,7 @@ type RoleRepository struct {
 	Where map[string]interface{}
 }
 
-func (r RoleRepository) List(page int, pageSize int, sortField string) map[string]interface{} {
+func (r *RoleRepository) List(page int, pageSize int, sortField string) map[string]interface{} {
 	var (
 		total  int64
 		data   []models.Role
@@ -35,7 +35,7 @@ func (r RoleRepository) List(page int, pageSize int, sortField string) map[strin
 /*
 添加角色
 */
-func (r RoleRepository) Add(post requests.Role) error {
+func (r *RoleRepository) Add(post requests.Role) error {
 	db := global.Db.Create(&models.Role{
 		Alias:  post.Alias,
 		Label:  post.Label,
@@ -49,7 +49,7 @@ func (r RoleRepository) Add(post requests.Role) error {
 /*
 更新角色
 */
-func (r RoleRepository) Update(post requests.Role) error {
+func (r *RoleRepository) Update(post requests.Role) error {
 
 	return global.Db.Transaction(func(sessionDb *gorm.DB) error {
 		return sessionDb.Debug().Where("id = ?", post.Id).Updates(&models.Role{
@@ -63,7 +63,7 @@ func (r RoleRepository) Update(post requests.Role) error {
 
 }
 
-func (r RoleRepository) UpMenus(post requests.RoleUpMenus) error {
+func (r *RoleRepository) UpMenus(post requests.RoleUpMenus) error {
 	var role models.Role
 	role.ID = post.Id
 

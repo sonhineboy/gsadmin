@@ -1,6 +1,6 @@
 package models
 
-import "ginedu2/service/global"
+import "github.com/sonhineboy/gsadmin/service/global"
 
 type Article struct {
 	Title        string `gorm:"column:title;type:varchar(100);NOT NULL" json:"title"`

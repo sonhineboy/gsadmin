@@ -1,7 +1,7 @@
 package models
 
 import (
-	"ginedu2/service/global"
+	"github.com/sonhineboy/gsadmin/service/global"
 )
 
 type MenuApiList struct {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"ginedu2/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/models"
 	"reflect"
 )
 

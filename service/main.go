@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"ginedu2/service/app"
-	"ginedu2/service/app/models"
-	"ginedu2/service/global"
-	_ "ginedu2/service/router"
+	"github.com/sonhineboy/gsadmin/service/app"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/global"
+	_ "github.com/sonhineboy/gsadmin/service/router"
 	"os"
 )
 

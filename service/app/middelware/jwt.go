@@ -1,10 +1,10 @@
 package middelware
 
 import (
-	"ginedu2/service/app/models"
-	"ginedu2/service/app/repositorys"
-	"ginedu2/service/global"
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/repositorys"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"log"
 	"net/http"
 	"strings"

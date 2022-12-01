@@ -2,12 +2,12 @@ package app
 
 import (
 	"fmt"
-	"ginedu2/service/app/event"
-	"ginedu2/service/app/listener"
-	"ginedu2/service/global"
-	"ginedu2/service/router"
-	"ginedu2/service/src"
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/app/event"
+	"github.com/sonhineboy/gsadmin/service/app/listener"
+	"github.com/sonhineboy/gsadmin/service/global"
+	"github.com/sonhineboy/gsadmin/service/router"
+	"github.com/sonhineboy/gsadmin/service/src"
 	"golang.org/x/time/rate"
 	"gopkg.in/yaml.v3"
 	"gorm.io/driver/mysql"
