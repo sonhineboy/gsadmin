@@ -2,6 +2,7 @@ package global
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -20,7 +21,7 @@ var (
 	Config          *config.Config
 	Db              *gorm.DB
 	SuperAdmin      string
-	EventDispatcher *src.EventDispatcher
+	EventDispatcher src.EventDispatcher
 	Limiter         *rate.Limiter
 )
 
@@ -89,4 +90,23 @@ func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, 
 	}
 	http.ServeContent(w, r, id+ext, time.Time{}, bytes.NewReader(content.Bytes()))
 	return nil
+}
+
+func GetEventDispatcher(c *gin.Context) *src.EventDispatcher {
+
+	v, ok := c.Get("e")
+
+	if ok == false {
+		fmt.Print("无法获取对象")
+		return nil
+	}
+
+	e, ok := v.(src.EventDispatcher)
+
+	if ok == false {
+		fmt.Print("类型不正确")
+		return nil
+	}
+
+	return &e
 }

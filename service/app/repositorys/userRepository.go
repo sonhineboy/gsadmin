@@ -2,6 +2,7 @@ package repositorys
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/event"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/requests"
@@ -69,10 +70,10 @@ func (u *UserRepository) Update(data requests.UserUpdate) error {
 }
 
 //登陆用户
-func (u *UserRepository) Login(password string, name string) (bool, models.AdminUser) {
+func (u *UserRepository) Login(password string, name string, c *gin.Context) (bool, models.AdminUser) {
 	re := global.Db.Where("name = ?", name).Preload("Roles").Preload("Roles.Menus").Preload("Roles.Menus.ApiList").First(&u.AdminUserModel)
 
-	_ = global.EventDispatcher.Dispatch(event.NewLoginEvent("login", u.AdminUserModel))
+	_ = global.GetEventDispatcher(c).Dispatch(event.NewLoginEvent("login", u.AdminUserModel))
 
 	if re.Error == nil && bcrypt.CompareHashAndPassword([]byte(u.AdminUserModel.Password), []byte(password)) == nil {
 		return true, u.AdminUserModel

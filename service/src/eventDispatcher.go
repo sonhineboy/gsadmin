@@ -14,8 +14,8 @@ type EventDispatcher struct {
 	Event map[string][]Listener
 }
 
-func NewDispatcher() *EventDispatcher {
-	return &EventDispatcher{
+func NewDispatcher() EventDispatcher {
+	return EventDispatcher{
 		Event: make(map[string][]Listener),
 	}
 }

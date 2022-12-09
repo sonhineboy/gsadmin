@@ -8,7 +8,7 @@ import (
 
 func RouteInit() {
 
-	global.GAD_R.Use(middelware.Limiter())
+	global.GAD_R.Use(middelware.Limiter(), middelware.Event())
 	global.GAD_R.GET("sss", system.Demo)
 	global.GAD_R.GET("/api/common/captcha/img/:id/:w/:h", ApiControllers.CommonController.CaptchaImage)
 	global.GAD_R.GET("/api/common/captcha/info", ApiControllers.CommonController.CaptchaInfo)

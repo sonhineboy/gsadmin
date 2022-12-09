@@ -39,7 +39,7 @@ func (u *UserController) Login(c *gin.Context) {
 		})
 		return
 	}
-	isLogin, user := userRepository.Login(LoginForm.PassWord, LoginForm.Name)
+	isLogin, user := userRepository.Login(LoginForm.PassWord, LoginForm.Name, c)
 
 	if isLogin {
 

@@ -65,7 +65,7 @@ func initMysql() {
 }
 
 //初始化事件
-func InitEvent() *src.EventDispatcher {
+func InitEvent() src.EventDispatcher {
 	EventDispatcher := src.NewDispatcher()
 	EventDispatcher.Register(event.TestEvent{}.GetEventName(), listener.NewTestListener())
 	EventDispatcher.Register(event.LoginEvent{}.GetEventName(), listener.NewTestListener())
