@@ -18,17 +18,17 @@ func (r *RoleRepository) List(page int, pageSize int, sortField string) map[stri
 		data   []models.Role
 		offSet int
 	)
-	global.Db.Model(&r.Model).Count(&total)
+	db := global.Db.Model(&r.Model)
 	offSet = (page - 1) * pageSize
-	db := global.Db.Preload("Menus").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
+	db.Preload("Menus").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
 
-	if r.Where != nil {
+	if r.Where != nil && len(r.Where) > 0 {
 		db.Where(r.Where).Find(&data)
 	} else {
 		db.Find(&data)
 
 	}
-
+	db.Count(&total)
 	return global.Pages(page, pageSize, int(total), data)
 }
 

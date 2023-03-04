@@ -12,7 +12,7 @@ import (
 type RoleController struct {
 }
 
-func (r RoleController) List(c *gin.Context) {
+func (r *RoleController) List(c *gin.Context) {
 
 	var (
 		params         requests.RoleList
@@ -20,14 +20,12 @@ func (r RoleController) List(c *gin.Context) {
 	)
 	_ = c.ShouldBind(&params)
 
-	if params.Where != nil {
-		roleRepository.Where = params.Where
-	}
+	roleRepository.Where = params.Where
 
 	response.Success(c, "ok", roleRepository.List(params.Page, params.PageSize, "sort"))
 }
 
-func (r RoleController) Up(c *gin.Context) {
+func (r *RoleController) Up(c *gin.Context) {
 	var (
 		post           requests.Role
 		roleRepository repositorys.RoleRepository
@@ -46,7 +44,7 @@ func (r RoleController) Up(c *gin.Context) {
 	}
 }
 
-func (r RoleController) Add(c *gin.Context) {
+func (r *RoleController) Add(c *gin.Context) {
 	var (
 		post           requests.Role
 		roleRepository repositorys.RoleRepository
@@ -65,7 +63,7 @@ func (r RoleController) Add(c *gin.Context) {
 	}
 }
 
-func (r RoleController) Del(c *gin.Context) {
+func (r *RoleController) Del(c *gin.Context) {
 	var delIds requests.RoleDel
 	_ = c.ShouldBind(&delIds)
 	result := global.Db.Delete(&models.Role{}, delIds.Ids)
@@ -76,7 +74,7 @@ func (r RoleController) Del(c *gin.Context) {
 	}
 }
 
-func (r RoleController) RoleUpMenu(c *gin.Context) {
+func (r *RoleController) RoleUpMenu(c *gin.Context) {
 
 	var (
 		data           requests.RoleUpMenus

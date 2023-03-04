@@ -88,16 +88,17 @@ func (u *UserRepository) List(page int, pageSize int, sortField string) map[stri
 		data   []models.AdminUser
 		offSet int
 	)
-	global.Db.Model(&u.AdminUserModel).Count(&total)
+	db := global.Db.Model(&u.AdminUserModel)
 	offSet = (page - 1) * pageSize
-	db := global.Db.Debug().Preload("Roles").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
+	global.Db.Debug().Preload("Roles").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
 
-	if u.Where != nil {
+	if u.Where != nil && len(u.Where) > 0 {
 		db.Where("name = ?", u.Where["name"]).Or("real_name = ?", u.Where["name"]).Find(&data)
 	} else {
 		db.Find(&data)
 
 	}
+	db.Count(&total)
 
 	return global.Pages(page, pageSize, int(total), data)
 }
