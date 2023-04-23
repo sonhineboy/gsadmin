@@ -90,7 +90,7 @@ func (u *UserRepository) List(page int, pageSize int, sortField string) map[stri
 	)
 	db := global.Db.Model(&u.AdminUserModel)
 	offSet = (page - 1) * pageSize
-	global.Db.Debug().Preload("Roles").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
+	db.Preload("Roles").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
 
 	if u.Where != nil && len(u.Where) > 0 {
 		db.Where("name = ?", u.Where["name"]).Or("real_name = ?", u.Where["name"]).Find(&data)
