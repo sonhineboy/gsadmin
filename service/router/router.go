@@ -2,13 +2,13 @@ package router
 
 import (
 	"github.com/sonhineboy/gsadmin/service/app/controllers/system"
-	"github.com/sonhineboy/gsadmin/service/app/middelware"
+	"github.com/sonhineboy/gsadmin/service/app/middleware"
 	"github.com/sonhineboy/gsadmin/service/global"
 )
 
 func RouteInit() {
 
-	global.GAD_R.Use(middelware.Limiter(), middelware.Event())
+	global.GAD_R.Use(middleware.Limiter(), middleware.Event())
 	global.GAD_R.GET("sss", system.Demo)
 	global.GAD_R.GET("/api/common/captcha/img/:id/:w/:h", ApiControllers.CommonController.CaptchaImage)
 	global.GAD_R.GET("/api/common/captcha/info", ApiControllers.CommonController.CaptchaInfo)
