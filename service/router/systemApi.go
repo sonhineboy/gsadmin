@@ -8,7 +8,7 @@ import (
 
 func SystemApiInit(r *gin.RouterGroup) {
 
-	r.Use(middleware.JWTAuth(), middleware.Permission())
+	r.Use(middleware.JWTAuth(), middleware.Permission(), middleware.OperationLog())
 	rUser := r.Group("/user")
 	{
 		rUser.POST("/add", ApiControllers.UserController.Add)
