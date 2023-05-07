@@ -45,7 +45,8 @@ func GetError(errs validator.ValidationErrors, r interface{}) string {
 	return ""
 }
 
-/**
+/*
+*
 分页
 */
 func Pages(page int, pageSize int, total int, rows interface{}) map[string]interface{} {
@@ -57,7 +58,7 @@ func Pages(page int, pageSize int, total int, rows interface{}) map[string]inter
 	return data
 }
 
-//即将废弃，请勿使用
+// 即将废弃，请勿使用
 func IsSuperAdmin(roles []string, role string) bool {
 	for _, v := range roles {
 		if v == role {
@@ -68,7 +69,7 @@ func IsSuperAdmin(roles []string, role string) bool {
 	return false
 }
 
-//验证码
+// 验证码
 func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, download bool, width, height int) error {
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Pragma", "no-cache")
@@ -77,7 +78,10 @@ func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, 
 	switch ext {
 	case ".png":
 		w.Header().Set("Content-Type", "image/png")
-		_ = captcha.WriteImage(&content, id, width, height)
+		err := captcha.WriteImage(&content, id, width, height)
+		if err != nil {
+			println(err.Error())
+		}
 	case ".wav":
 		w.Header().Set("Content-Type", "audio/x-wav")
 		_ = captcha.WriteAudio(&content, id, lang)
