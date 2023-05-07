@@ -16,7 +16,7 @@ type UserRepository struct {
 	Where          map[string]interface{}
 }
 
-//添加一个用户
+// 添加一个用户
 func (u *UserRepository) Add(password string, name string, data requests.UserAdd) (*gorm.DB, models.AdminUser) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
@@ -35,7 +35,7 @@ func (u *UserRepository) Add(password string, name string, data requests.UserAdd
 	return global.Db.Create(&u.AdminUserModel), u.AdminUserModel
 }
 
-//更新用户
+// 更新用户
 func (u *UserRepository) Update(data requests.UserUpdate) error {
 
 	return global.Db.Transaction(func(sessionDb *gorm.DB) error {
@@ -69,7 +69,7 @@ func (u *UserRepository) Update(data requests.UserUpdate) error {
 
 }
 
-//登陆用户
+// 登陆用户
 func (u *UserRepository) Login(password string, name string, c *gin.Context) (bool, models.AdminUser) {
 	re := global.Db.Where("name = ?", name).Preload("Roles").Preload("Roles.Menus").Preload("Roles.Menus.ApiList").First(&u.AdminUserModel)
 
@@ -89,16 +89,14 @@ func (u *UserRepository) List(page int, pageSize int, sortField string) map[stri
 		offSet int
 	)
 	db := global.Db.Model(&u.AdminUserModel)
+	db.Count(&total)
 	offSet = (page - 1) * pageSize
 	db.Preload("Roles").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
-
 	if u.Where != nil && len(u.Where) > 0 {
 		db.Where("name = ?", u.Where["name"]).Or("real_name = ?", u.Where["name"]).Find(&data)
 	} else {
 		db.Find(&data)
 
 	}
-	db.Count(&total)
-
 	return global.Pages(page, pageSize, int(total), data)
 }
