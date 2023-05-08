@@ -51,6 +51,7 @@ func initMysql() {
 			TablePrefix:   global.Config.Db.TablePrefix,
 			SingularTable: true,
 		},
+		DisableForeignKeyConstraintWhenMigrating: true,
 	})
 
 	if err != nil {
@@ -64,7 +65,7 @@ func initMysql() {
 
 }
 
-//初始化事件
+// 初始化事件
 func InitEvent() src.EventDispatcher {
 	EventDispatcher := src.NewDispatcher()
 	EventDispatcher.Register(event.TestEvent{}.GetEventName(), listener.NewTestListener())

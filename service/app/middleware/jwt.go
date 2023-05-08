@@ -5,7 +5,6 @@ import (
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"github.com/sonhineboy/gsadmin/service/global"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -22,8 +21,6 @@ func JWTAuth() gin.HandlerFunc {
 			ctx.Abort() //结束后续操作
 			return
 		}
-		log.Print("token:", authHeader)
-
 		//按空格拆分
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
@@ -42,6 +39,7 @@ func JWTAuth() gin.HandlerFunc {
 			return
 		}
 
+		println("-->jwt")
 		// 将当前请求的claims信息保存到请求的上下文c上
 		ctx.Set("claims", claims)
 		ctx.Set("permission", repositorys.NewPermissionRepository(claims))
