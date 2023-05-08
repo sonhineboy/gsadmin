@@ -23,7 +23,9 @@ func main() {
 		&models.AdminUser{},
 		&models.AdminMenu{},
 		&models.MenuApiList{},
-		&models.Role{})
+		&models.Role{},
+		&models.OperationLog{},
+	)
 	if amErr != nil {
 		fmt.Println(amErr)
 	}
