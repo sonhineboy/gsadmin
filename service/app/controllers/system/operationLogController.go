@@ -19,5 +19,5 @@ func (o *OperationLogController) List(c *gin.Context) {
 
 	roleRepository.Where = params.Where
 
-	response.Success(c, "ok", roleRepository.List(params.Page, params.PageSize, "sort"))
+	response.Success(c, "ok", roleRepository.List(params.Page, params.PageSize, "created_at"))
 }

@@ -29,6 +29,9 @@ func SystemApiInit(r *gin.RouterGroup) {
 		rSystem.POST("/role/upMenu", ApiControllers.RoleController.RoleUpMenu)
 		rSystem.GET("/user/list", ApiControllers.UserController.List)
 		rSystem.POST("/common/upload", ApiControllers.CommonController.UpLoad)
+
+		rSystem.GET("/operationLog/list", ApiControllers.OperationLogController.List)
+
 	}
 
 	r.GET("/system/menu/my/:version", ApiControllers.MenuController.MenuPermissions)
