@@ -12,42 +12,43 @@ func OperationLog() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 
-		//ip
-		println(c.ClientIP())
+		cCp := c.Copy()
+		go func() {
+			var (
+				doData []byte
+				log    models.OperationLog
+			)
+			method := c.Request.Method
+			//参数
+			if method == "GET" {
+				doData, _ = json.Marshal(cCp.Request.URL.Query())
+			}
+			if method == "POST" {
+				doData, _ = cCp.GetRawData()
+			}
 
-		//路径
-		println(c.Request.URL.Path)
+			claims, ok := repositorys.GetCustomClaims(c)
+			if ok == true {
+				log.UserId = claims.Id
+			} else {
+				log.UserId = 0
+			}
 
-		var where = make(map[string]interface{})
+			var where = make(map[string]interface{})
+			var d models.MenuApiList
+			db := global.Db.Model(&models.MenuApiList{})
+			where["url"] = cCp.Request.URL.Path
+			db.Preload("Menu").Where(where).First(&d)
 
-		var d models.MenuApiList
+			log.Method = cCp.Request.Method
+			log.DoData = string(doData)
+			log.Ip = cCp.ClientIP()
+			log.PathName = d.Menu.Meta["title"].(string)
+			log.UrlPath = cCp.Request.URL.Path
 
-		db := global.Db.Model(&models.MenuApiList{})
-		where["url"] = c.Request.URL.Path
-		db.Preload("Menu").Where(where).First(&d)
+			global.Db.Create(&log)
 
-		println(d.Menu.Meta["title"].(string))
-
-		//get/post
-		method := c.Request.Method
-		println(method)
-
-		//用户信息
-		claims, ok := repositorys.GetCustomClaims(c)
-		if ok == true {
-			println(claims.Name)
-		}
-
-		//参数
-		if method == "GET" {
-			b, _ := json.Marshal(c.Request.URL.Query())
-			println(string(b))
-		}
-
-		if method == "POST" {
-			s, _ := c.GetRawData()
-			println(string(s))
-		}
+		}()
 
 		c.Next()
 	}
