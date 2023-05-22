@@ -30,6 +30,7 @@ func OperationLog() gin.HandlerFunc {
 			claims, ok := repositorys.GetCustomClaims(c)
 			if ok == true {
 				log.UserId = claims.Id
+				log.UserName = claims.Name
 			} else {
 				log.UserId = 0
 			}
@@ -43,6 +44,7 @@ func OperationLog() gin.HandlerFunc {
 			log.Method = cCp.Request.Method
 			log.DoData = string(doData)
 			log.Ip = cCp.ClientIP()
+
 			log.PathName = d.Menu.Meta["title"].(string)
 			log.UrlPath = cCp.Request.URL.Path
 

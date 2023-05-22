@@ -12,12 +12,12 @@ type OperationLogController struct{}
 func (o *OperationLogController) List(c *gin.Context) {
 
 	var (
-		params         requests.RoleList
-		roleRepository repositorys.RoleRepository
+		params       requests.RoleList
+		operationLog repositorys.OperationLogRepository
 	)
 	_ = c.ShouldBind(&params)
 
-	roleRepository.Where = params.Where
+	operationLog.Where = params.Where
 
-	response.Success(c, "ok", roleRepository.List(params.Page, params.PageSize, "created_at"))
+	response.Success(c, "ok", operationLog.List(params.Page, params.PageSize, "created_at"))
 }

@@ -13,7 +13,7 @@ type OperationLogRepository struct {
 func (o *OperationLogRepository) List(page int, pageSize int, sortField string) map[string]interface{} {
 	var (
 		total  int64
-		data   []models.Role
+		data   []models.OperationLog
 		offSet int
 	)
 	db := global.Db.Model(&o.Model)
