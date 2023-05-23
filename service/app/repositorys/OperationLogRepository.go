@@ -17,14 +17,28 @@ func (o *OperationLogRepository) List(page int, pageSize int, sortField string) 
 		offSet int
 	)
 	db := global.Db.Model(&o.Model)
-	db.Count(&total)
-	offSet = (page - 1) * pageSize
-	db.Preload("Menus").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
 
 	if o.Where != nil && len(o.Where) > 0 {
-		db.Where(o.Where).Find(&data)
-	} else {
-		db.Find(&data)
+		createdAt, ok := o.Where["created_at"]
+		if ok {
+			delete(o.Where, "created_at")
+			createdAtMap, ok := createdAt.(map[string]interface{})
+			if ok {
+				start, startOk := createdAtMap["begin"]
+				end, endOk := createdAtMap["end"]
+				if startOk && endOk {
+					db.Where("created_at BETWEEN ? and ?", start, end)
+				}
+			}
+
+		}
+
+		db.Where(o.Where)
 	}
+	db.Count(&total)
+
+	offSet = (page - 1) * pageSize
+	db.Preload("Menus").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
+	db.Find(&data)
 	return global.Pages(page, pageSize, int(total), data)
 }

@@ -14,7 +14,7 @@ type SystemMenuRepository struct {
 	MenuModel models.AdminMenu
 }
 
-//添加菜单
+// 添加菜单
 func (menu *SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.AdminMenu) {
 	menu.MenuModel.Name = post.Name
 	menu.MenuModel.Component = post.Component
@@ -32,7 +32,7 @@ func (menu *SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.
 	return global.Db.Create(&menu.MenuModel), menu.MenuModel
 }
 
-//更新菜单
+// 更新菜单
 func (menu *SystemMenuRepository) Update(post requests.MenuPost) (error, models.AdminMenu) {
 	var updateData models.AdminMenu
 	updateData.Name = post.Name
@@ -131,7 +131,7 @@ func (menu *SystemMenuRepository) GetCustomClaims(c *gin.Context) (*models.Custo
 	}
 }
 
-//根据当前登陆得用户获得api 权限
+// 根据当前登陆得用户获得api 权限
 func (menu *SystemMenuRepository) GetApiList(c *gin.Context, apiList *[]models.MenuApiList) error {
 	claims, ok := menu.GetCustomClaims(c)
 	if ok {
@@ -149,7 +149,7 @@ func (menu *SystemMenuRepository) GetApiList(c *gin.Context, apiList *[]models.M
 	}
 }
 
-//根据传递用户对象
+// 根据传递用户对象
 func (menu *SystemMenuRepository) GetApiListByUser(adminUser models.AdminUser, apiList *[]models.MenuApiList) error {
 	for _, role := range adminUser.Roles {
 		for _, menu := range role.Menus {
@@ -159,7 +159,7 @@ func (menu *SystemMenuRepository) GetApiListByUser(adminUser models.AdminUser, a
 	return nil
 }
 
-//根据传递用户对象
+// 根据传递用户对象
 func (menu *SystemMenuRepository) GetPermissionByUser(adminUser models.AdminUser, permission *[]string) error {
 	for _, role := range adminUser.Roles {
 		for _, menu := range role.Menus {
@@ -169,7 +169,7 @@ func (menu *SystemMenuRepository) GetPermissionByUser(adminUser models.AdminUser
 	return nil
 }
 
-//获取map apiList
+// 获取map apiList
 func (menu *SystemMenuRepository) GetApiListToMap(c *gin.Context, apiListMap *map[string]string) error {
 	var apiList []models.MenuApiList
 	err := menu.GetApiList(c, &apiList)
@@ -183,7 +183,7 @@ func (menu *SystemMenuRepository) GetApiListToMap(c *gin.Context, apiListMap *ma
 	}
 }
 
-//获取map apiList 根据用户
+// GetApiListToMapByUser 获取map apiList 根据用户
 func (menu *SystemMenuRepository) GetApiListToMapByUser(adminUser models.AdminUser, apiListMap *map[string]string) error {
 	var apiList []models.MenuApiList
 	_ = menu.GetApiListByUser(adminUser, &apiList)

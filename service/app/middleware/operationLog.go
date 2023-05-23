@@ -44,8 +44,12 @@ func OperationLog() gin.HandlerFunc {
 			log.Method = cCp.Request.Method
 			log.DoData = string(doData)
 			log.Ip = cCp.ClientIP()
+			title, ok := d.Menu.Meta["title"]
 
-			log.PathName = d.Menu.Meta["title"].(string)
+			if ok {
+				log.PathName = title.(string)
+			}
+
 			log.UrlPath = cCp.Request.URL.Path
 
 			global.Db.Create(&log)
