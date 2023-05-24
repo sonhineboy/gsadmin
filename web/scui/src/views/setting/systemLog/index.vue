@@ -21,13 +21,13 @@
                 </div>
             </el-header>
             <el-main class="nopadding">
-                <scTable ref="table" :apiObj="apiObj" @selection-change="selectionChange" stripe remoteSort remoteFilter>
-                    <!-- <el-table-column label="ID" prop="id" width="80"></el-table-column> -->
+                <scTable ref="table" :apiObj="apiObj" stripe remoteSort remoteFilter>
+
                     <el-table-column label="#" type="index" width="50"></el-table-column>
                     <el-table-column label="用户名" prop="user_name" width="80"></el-table-column>
                     <el-table-column label="方法" prop="method" width="80"></el-table-column>
                     <el-table-column label="名称" prop="path_name" width="140"></el-table-column>
-                    <el-table-column label="访问路径" prop="url_path" width="140"></el-table-column>
+                    <el-table-column label="访问路径" prop="url_path" width="260"></el-table-column>
                     <el-table-column label="IP" prop="ip" width="120"></el-table-column>
                     <el-table-column label="数据" prop="do_data"></el-table-column>
                     <el-table-column label="创建时间" prop="created_at" width="150"></el-table-column>
@@ -79,7 +79,6 @@ export default {
             }
 
             if (this.search.date) {
-
 
                 Object.assign(where, {
                     created_at: {
