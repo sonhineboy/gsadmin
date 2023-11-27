@@ -25,6 +25,7 @@ var (
 	Limiter         *rate.Limiter
 )
 
+// GetError 获取错误信息
 func GetError(errs validator.ValidationErrors, r interface{}) string {
 	s := reflect.TypeOf(r)
 	for _, fieldError := range errs {
@@ -45,10 +46,7 @@ func GetError(errs validator.ValidationErrors, r interface{}) string {
 	return ""
 }
 
-/*
-*
-分页
-*/
+// Pages 通用分页
 func Pages(page int, pageSize int, total int, rows interface{}) map[string]interface{} {
 	var data = make(map[string]interface{})
 	data["page"] = page
@@ -58,7 +56,7 @@ func Pages(page int, pageSize int, total int, rows interface{}) map[string]inter
 	return data
 }
 
-// 即将废弃，请勿使用
+// IsSuperAdmin 即将废弃，请勿使用
 func IsSuperAdmin(roles []string, role string) bool {
 	for _, v := range roles {
 		if v == role {
@@ -69,7 +67,7 @@ func IsSuperAdmin(roles []string, role string) bool {
 	return false
 }
 
-// 验证码
+// CaptchaServe 验证码
 func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, download bool, width, height int) error {
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Pragma", "no-cache")

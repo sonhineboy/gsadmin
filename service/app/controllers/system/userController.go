@@ -14,7 +14,7 @@ import (
 
 type UserController struct{}
 
-//登陆
+// Login 登陆
 func (u *UserController) Login(c *gin.Context) {
 	var (
 		LoginForm      requests.Login
@@ -67,7 +67,7 @@ func (u *UserController) Login(c *gin.Context) {
 
 }
 
-//注册用户
+// Add 注册用户
 func (u *UserController) Add(c *gin.Context) {
 	var (
 		userAdd        requests.UserAdd
