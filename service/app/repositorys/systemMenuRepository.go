@@ -90,7 +90,15 @@ func (menu *SystemMenuRepository) Update(post requests.MenuPost) (error, models.
 
 func (menu *SystemMenuRepository) ArrayToTree(arr []models.AdminMenu, pid uint) []map[string]interface{} {
 	var newArr []map[string]interface{}
+	var unique = make(map[uint]bool)
+
 	for _, v := range arr {
+		_, ok := unique[v.ID]
+
+		if ok {
+			continue
+		}
+		unique[v.ID] = true
 		mapData := make(map[string]interface{})
 		if v.ParentId == pid {
 			children := menu.ArrayToTree(arr, v.ID)
@@ -131,7 +139,7 @@ func (menu *SystemMenuRepository) GetCustomClaims(c *gin.Context) (*models.Custo
 	}
 }
 
-// 根据当前登陆得用户获得api 权限
+// GetApiList 根据当前登陆得用户获得api 权限
 func (menu *SystemMenuRepository) GetApiList(c *gin.Context, apiList *[]models.MenuApiList) error {
 	claims, ok := menu.GetCustomClaims(c)
 	if ok {
@@ -149,7 +157,7 @@ func (menu *SystemMenuRepository) GetApiList(c *gin.Context, apiList *[]models.M
 	}
 }
 
-// 根据传递用户对象
+// GetApiListByUser 根据传递用户对象
 func (menu *SystemMenuRepository) GetApiListByUser(adminUser models.AdminUser, apiList *[]models.MenuApiList) error {
 	for _, role := range adminUser.Roles {
 		for _, menu := range role.Menus {
@@ -159,7 +167,7 @@ func (menu *SystemMenuRepository) GetApiListByUser(adminUser models.AdminUser, a
 	return nil
 }
 
-// 根据传递用户对象
+// GetPermissionByUser 根据传递用户对象
 func (menu *SystemMenuRepository) GetPermissionByUser(adminUser models.AdminUser, permission *[]string) error {
 	for _, role := range adminUser.Roles {
 		for _, menu := range role.Menus {
@@ -169,7 +177,7 @@ func (menu *SystemMenuRepository) GetPermissionByUser(adminUser models.AdminUser
 	return nil
 }
 
-// 获取map apiList
+// GetApiListToMap 获取map apiList
 func (menu *SystemMenuRepository) GetApiListToMap(c *gin.Context, apiListMap *map[string]string) error {
 	var apiList []models.MenuApiList
 	err := menu.GetApiList(c, &apiList)
