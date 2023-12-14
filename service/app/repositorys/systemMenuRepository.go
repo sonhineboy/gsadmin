@@ -79,10 +79,15 @@ func (menu *SystemMenuRepository) Update(post requests.MenuPost) (error, models.
 		}
 
 		//同步，自动删除不存在的id
+		var syncDb *gorm.DB
 		if len(notDelIds) > 0 {
-			if syncDb := sessionDb.Not(notDelIds).Where("menu_id = ?", id).Delete(&models.MenuApiList{}); syncDb.Error != nil {
-				return syncDb.Error
-			}
+			syncDb = sessionDb.Not(notDelIds).Where("menu_id = ?", id).Delete(&models.MenuApiList{})
+		} else {
+			syncDb = sessionDb.Debug().Where("menu_id = ?", id).Delete(&models.MenuApiList{})
+		}
+
+		if syncDb.Error != nil {
+			return syncDb.Error
 		}
 		return sessionDb.Model(&menu.MenuModel).Updates(updateData).Error
 	}), menu.MenuModel
@@ -126,6 +131,7 @@ func (menu *SystemMenuRepository) ArrayToTree(arr []models.AdminMenu, pid uint) 
 func (menu *SystemMenuRepository) MenuTree() []map[string]interface{} {
 	var all []models.AdminMenu
 	global.Db.Preload("ApiList").Order("sort desc").Find(&all)
+
 	return menu.ArrayToTree(all, 0)
 }
 
