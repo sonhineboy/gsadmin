@@ -233,16 +233,25 @@ export default {
         if (v.id) {
           this.form.apiList[i].id += "";
           this.form.apiList[i].menu_id += "";
+          delete this.form.apiList[i].created_at
+          delete this.form.apiList[i].Menu
+          delete this.form.apiList[i].updated_at
         }
       });
 
       var res = await this.$API.system.menu.updata.post(this.form);
       this.loading = false;
+
       if (res.code == 200) {
+
+        this.form.apiList = res.data.apiList;
+
         this.$message.success("保存成功");
       } else {
         this.$message.warning(res.message);
       }
+
+
     },
     //表单注入数据
     setData(data, pid) {

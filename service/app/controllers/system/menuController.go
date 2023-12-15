@@ -33,9 +33,15 @@ func (m *MenuController) Update(c *gin.Context) {
 		postData       requests.MenuPost
 		menuRepository repositorys.SystemMenuRepository
 	)
-	_ = c.ShouldBind(&postData)
+	if bindErr := c.ShouldBind(&postData); bindErr != nil {
+		response.Failed(c, bindErr.Error())
+		return
+	}
+
 	err, model := menuRepository.Update(postData)
+
 	if err == nil {
+		global.Db.Preload("ApiList").Find(&model)
 		response.Success(c, "ok", model)
 	} else {
 		response.Failed(c, err.Error())
