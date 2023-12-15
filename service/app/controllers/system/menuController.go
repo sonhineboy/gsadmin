@@ -2,6 +2,7 @@ package system
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"github.com/sonhineboy/gsadmin/service/app/requests"
@@ -33,7 +34,7 @@ func (m *MenuController) Update(c *gin.Context) {
 		postData       requests.MenuPost
 		menuRepository repositorys.SystemMenuRepository
 	)
-	if bindErr := c.ShouldBind(&postData); bindErr != nil {
+	if bindErr := c.ShouldBindBodyWith(&postData, binding.JSON); bindErr != nil {
 		response.Failed(c, bindErr.Error())
 		return
 	}

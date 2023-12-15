@@ -232,20 +232,23 @@ export default {
     },
     //保存
     async save() {
-      this.loading = true;
-      this.form.id = this.form.id + "";
+      //深拷贝队形避免影响全局
+      let copyForm = tool.objCopy(this.form);
 
-      this.form.apiList.forEach((v, i) => {
+      this.loading = true;
+      copyForm.id = copyForm.id + "";
+
+      copyForm.apiList.forEach((v, i) => {
         if (v.id) {
-          this.form.apiList[i].id += "";
-          this.form.apiList[i].menu_id += "";
-          delete this.form.apiList[i].created_at;
-          delete this.form.apiList[i].Menu;
-          delete this.form.apiList[i].updated_at;
+          copyForm.apiList[i].id += "";
+          copyForm.apiList[i].menu_id += "";
+          delete copyForm.apiList[i].created_at;
+          delete copyForm.apiList[i].Menu;
+          delete copyForm.apiList[i].updated_at;
         }
       });
 
-      let copyForm = tool.objCopy(this.form);
+      
       if (copyForm.children) {
         delete copyForm.children;
       }
