@@ -18,3 +18,16 @@ func TestStringTo(t *testing.T) {
 
 	b.Wait()
 }
+
+type b struct {
+	Name string
+}
+
+func TestP(t *testing.T) {
+	var a *b
+	a = &b{"asfdfd"}
+
+	//fmt.Println(a)
+	fmt.Printf("%p", a)
+
+}
