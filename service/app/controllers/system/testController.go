@@ -2,21 +2,34 @@ package system
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/event"
 	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"net/http"
 )
+
+func cc(c repositorys.Repository) {
+	fmt.Println(c)
+}
 
 func Demo(c *gin.Context) {
 	art := models.Article{}
 	global.Db.First(&art)
 	_ = global.EventDispatcher.Dispatch(event.NewTestEvent("asdfasoflasj"))
+	role := repositorys.NewTestRepository()
+	var data []models.Role
+
+	var ct repositorys.TestRepository
+	cc(&ct)
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":     "22",
 		"messages": "demo",
 		"data":     art,
+		"data2":    role.Page(1, 10, "id", data),
 	})
 }
 
