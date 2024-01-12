@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Repository interface {
+type RepositoryInterface interface {
 	//获取数据库连接
 	GetDb() *gorm.DB
 	SetDb()
@@ -67,7 +67,7 @@ func (r *BaseRepository) Page(page int, pageSize int, sortField string, data int
 	offSet = (page - 1) * pageSize
 	db.Preload("Menus").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
 	db.Find(&data)
-	return global.Pages(page, pageSize, int(total), data)
+	return global.Pages(page, pageSize, int(total), &data)
 }
 
 //按条件更新
@@ -75,9 +75,6 @@ func (r *BaseRepository) UpdateByWhere(where interface{}, data interface{}) erro
 	return nil
 }
 
-func (r *TestRepository) GetModel() interface{} {
-	if r.Model == nil {
-		r.SetModel()
-	}
+func (r *BaseRepository) GetModel() interface{} {
 	return r.Model
 }
