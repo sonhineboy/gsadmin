@@ -14,6 +14,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"io/ioutil"
+	"os"
 	"time"
 )
 
@@ -25,6 +26,15 @@ func Start() {
 	global.EventDispatcher = InitEvent()
 	global.Limiter = rate.NewLimiter(global.Config.Rate.Limit, global.Config.Rate.Burst)
 	router.RouteInit()
+}
+
+func TestLoad() {
+	dir, err := os.Getwd()
+	if err != nil {
+	}
+	global.GAD_APP_PATH = dir + "/../"
+	loadConfig()
+	loadObject()
 }
 
 func loadConfig() {

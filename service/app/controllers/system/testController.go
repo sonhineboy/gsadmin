@@ -2,6 +2,7 @@ package system
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/event"
 	"github.com/sonhineboy/gsadmin/service/app/models"
@@ -15,12 +16,15 @@ func Demo(c *gin.Context) {
 	global.Db.First(&art)
 	_ = global.EventDispatcher.Dispatch(event.NewTestEvent("asdfasoflasj"))
 	role := repositorys.NewTestRepository()
+	role.Preload = append(role.Preload, "Menus")
 	var data []models.Role
+
+	fmt.Printf("---->--->%p", &data)
 	c.JSON(http.StatusOK, gin.H{
 		"code":     "22",
 		"messages": "demo",
 		"data":     art,
-		"data2":    role.Page(1, 10, "id", data),
+		"data2":    role.Page(1, 10, "id", &data),
 	})
 }
 

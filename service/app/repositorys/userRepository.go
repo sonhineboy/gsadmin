@@ -30,7 +30,6 @@ func (u *UserRepository) Add(password string, name string, data requests.UserAdd
 		var role models.Role
 		role.ID = v
 		u.AdminUserModel.Roles = append(u.AdminUserModel.Roles, role)
-
 	}
 	return global.Db.Create(&u.AdminUserModel), u.AdminUserModel
 }

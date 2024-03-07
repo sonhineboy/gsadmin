@@ -7,7 +7,7 @@ type TestRepository struct {
 }
 
 func (r *TestRepository) SetModel() {
-	r.Model = models.Role{}
+	r.Model = &models.Article{}
 }
 
 func NewTestRepository() *TestRepository {

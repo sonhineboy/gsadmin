@@ -6,28 +6,29 @@ import (
 )
 
 type RepositoryInterface interface {
-	//获取数据库连接
+	// GetDb 获取数据库连接
 	GetDb() *gorm.DB
 	SetDb()
-	//分页
+	// Page 分页
 	Page(page int, pageSize int, sortField string, data interface{}) map[string]interface{}
-	//模型
+	// GetModel 模型
 	GetModel() interface{}
 	SetModel()
-	//添加
+	// Add 添加
 	Add(data interface{}) error
-	//按id更新
-	Update(id uint, data interface{}) error
-	//按条件更新
-	UpdateByWhere(where interface{}, data interface{}) error
-	//删除数据
+	// UpdateById 按id更新
+	UpdateById(id uint, data interface{}) *gorm.DB
+	// UpdateByWhere 按条件更新
+	UpdateByWhere(data interface{}, query interface{}, args ...interface{}) *gorm.DB
+	// Delete 删除数据
 	Delete(condos ...interface{}) error
 }
 
 type BaseRepository struct {
-	Db    *gorm.DB
-	Model interface{}
-	Where map[string]interface{}
+	Db      *gorm.DB
+	Model   interface{}
+	Where   map[string]interface{}
+	Preload []string
 }
 
 func (r *BaseRepository) SetDb() {
@@ -43,15 +44,15 @@ func (r *BaseRepository) GetDb() *gorm.DB {
 }
 
 func (r *BaseRepository) Add(data interface{}) error {
-	return r.GetDb().Create(&data).Error
+	return r.GetDb().Create(data).Error
 }
 
 func (r *BaseRepository) Delete(condos ...interface{}) error {
 	return r.GetDb().Delete(&r.Model, condos...).Error
 }
 
-func (r *BaseRepository) Update(id uint, data interface{}) error {
-	return r.GetDb().Model(&r.Model).Where("id = ?", id).Updates(data).Error
+func (r *BaseRepository) UpdateById(id uint, data interface{}) *gorm.DB {
+	return r.GetDb().Model(&r.Model).Where("id = ?", id).Updates(data)
 }
 
 func (r *BaseRepository) Page(page int, pageSize int, sortField string, data interface{}) map[string]interface{} {
@@ -60,19 +61,25 @@ func (r *BaseRepository) Page(page int, pageSize int, sortField string, data int
 		offSet int
 	)
 	db := r.GetDb().Model(&r.Model)
+
 	if r.Where != nil && len(r.Where) > 0 {
 		db.Where(r.Where)
 	}
 	db.Count(&total)
 	offSet = (page - 1) * pageSize
-	db.Preload("Menus").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
-	db.Find(&data)
-	return global.Pages(page, pageSize, int(total), &data)
+	if r.Preload != nil && len(r.Preload) > 0 {
+		for _, v := range r.Preload {
+			db.Preload(v)
+		}
+	}
+	db.Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
+	db.Find(data)
+	return global.Pages(page, pageSize, int(total), data)
 }
 
-//按条件更新
-func (r *BaseRepository) UpdateByWhere(where interface{}, data interface{}) error {
-	return nil
+// UpdateByWhere 按条件更新
+func (r *BaseRepository) UpdateByWhere(data interface{}, query interface{}, args ...interface{}) *gorm.DB {
+	return r.GetDb().Model(&r.Model).Where(query, args).Updates(data)
 }
 
 func (r *BaseRepository) GetModel() interface{} {
