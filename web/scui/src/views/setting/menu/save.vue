@@ -21,7 +21,10 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="排序" prop="sort">
-            <el-input-number v-model="form.sort" placeholder=""></el-input-number>
+            <el-input-number
+              v-model="form.sort"
+              placeholder=""
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="上级菜单" prop="parentId">
             <el-cascader
@@ -42,8 +45,10 @@
               <el-radio-button label="button">按钮</el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="是否固定" prop="meta.affix"><el-switch v-model="form.meta.affix"></el-switch></el-form-item>
-          
+          <el-form-item label="是否固定" prop="meta.affix"
+            ><el-switch v-model="form.meta.affix"></el-switch
+          ></el-form-item>
+
           <el-form-item label="别名" prop="name">
             <el-input
               v-model="form.name"
@@ -144,6 +149,7 @@
 
 <script>
 import scIconSelect from "@/components/scIconSelect";
+import tool from "@/utils/tool";
 
 export default {
   components: {
@@ -161,7 +167,7 @@ export default {
         path: "",
         component: "",
         redirect: "",
-        sort:1,
+        sort: 1,
         meta: {
           title: "",
           icon: "",
@@ -170,7 +176,7 @@ export default {
           type: "menu",
           fullpage: false,
           tag: "",
-          affix:false
+          affix: false,
         },
         apiList: [],
       },
@@ -226,19 +232,33 @@ export default {
     },
     //保存
     async save() {
-      this.loading = true;
-      this.form.id = this.form.id + "";
+      //深拷贝队形避免影响全局
+      let copyForm = tool.objCopy(this.form);
 
-      this.form.apiList.forEach((v, i) => {
+      this.loading = true;
+      copyForm.id = copyForm.id + "";
+
+      copyForm.apiList.forEach((v, i) => {
         if (v.id) {
-          this.form.apiList[i].id += "";
-          this.form.apiList[i].menu_id += "";
+          copyForm.apiList[i].id += "";
+          copyForm.apiList[i].menu_id += "";
+          delete copyForm.apiList[i].created_at;
+          delete copyForm.apiList[i].Menu;
+          delete copyForm.apiList[i].updated_at;
         }
       });
 
-      var res = await this.$API.system.menu.updata.post(this.form);
+      
+      if (copyForm.children) {
+        delete copyForm.children;
+      }
+
+      var res = await this.$API.system.menu.updata.post(copyForm);
       this.loading = false;
+
       if (res.code == 200) {
+        this.form.apiList = res.data.apiList;
+
         this.$message.success("保存成功");
       } else {
         this.$message.warning(res.message);

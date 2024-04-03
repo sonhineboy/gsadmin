@@ -2,11 +2,12 @@ package global
 
 import (
 	"bytes"
-	"ginedu2/service/config"
-	"ginedu2/service/src"
+	"fmt"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/sonhineboy/gsadmin/service/config"
+	"github.com/sonhineboy/gsadmin/service/src"
 	"golang.org/x/time/rate"
 	"gorm.io/gorm"
 	"net/http"
@@ -20,10 +21,11 @@ var (
 	Config          *config.Config
 	Db              *gorm.DB
 	SuperAdmin      string
-	EventDispatcher *src.EventDispatcher
+	EventDispatcher src.EventDispatcher
 	Limiter         *rate.Limiter
 )
 
+// GetError 获取错误信息
 func GetError(errs validator.ValidationErrors, r interface{}) string {
 	s := reflect.TypeOf(r)
 	for _, fieldError := range errs {
@@ -44,9 +46,7 @@ func GetError(errs validator.ValidationErrors, r interface{}) string {
 	return ""
 }
 
-/**
-分页
-*/
+// Pages 通用分页
 func Pages(page int, pageSize int, total int, rows interface{}) map[string]interface{} {
 	var data = make(map[string]interface{})
 	data["page"] = page
@@ -56,7 +56,7 @@ func Pages(page int, pageSize int, total int, rows interface{}) map[string]inter
 	return data
 }
 
-//即将废弃，请勿使用
+// IsSuperAdmin 即将废弃，请勿使用
 func IsSuperAdmin(roles []string, role string) bool {
 	for _, v := range roles {
 		if v == role {
@@ -67,7 +67,7 @@ func IsSuperAdmin(roles []string, role string) bool {
 	return false
 }
 
-//验证码
+// CaptchaServe 验证码
 func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, download bool, width, height int) error {
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Pragma", "no-cache")
@@ -76,7 +76,10 @@ func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, 
 	switch ext {
 	case ".png":
 		w.Header().Set("Content-Type", "image/png")
-		_ = captcha.WriteImage(&content, id, width, height)
+		err := captcha.WriteImage(&content, id, width, height)
+		if err != nil {
+			println(err.Error())
+		}
 	case ".wav":
 		w.Header().Set("Content-Type", "audio/x-wav")
 		_ = captcha.WriteAudio(&content, id, lang)
@@ -89,4 +92,23 @@ func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, 
 	}
 	http.ServeContent(w, r, id+ext, time.Time{}, bytes.NewReader(content.Bytes()))
 	return nil
+}
+
+func GetEventDispatcher(c *gin.Context) *src.EventDispatcher {
+
+	v, ok := c.Get("e")
+
+	if ok == false {
+		fmt.Print("无法获取对象")
+		return nil
+	}
+
+	e, ok := v.(src.EventDispatcher)
+
+	if ok == false {
+		fmt.Print("类型不正确")
+		return nil
+	}
+
+	return &e
 }

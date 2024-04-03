@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"ginedu2/service/global"
+	"github.com/sonhineboy/gsadmin/service/global"
 )
 
 type AdminMenu struct {

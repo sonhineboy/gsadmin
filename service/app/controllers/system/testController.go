@@ -2,10 +2,10 @@ package system
 
 import (
 	"encoding/json"
-	"ginedu2/service/app/event"
-	"ginedu2/service/app/models"
-	"ginedu2/service/global"
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/app/event"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"net/http"
 )
 

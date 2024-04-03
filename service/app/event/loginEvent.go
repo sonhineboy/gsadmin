@@ -1,6 +1,6 @@
 package event
 
-import "ginedu2/service/app/models"
+import "github.com/sonhineboy/gsadmin/service/app/models"
 
 type LoginEvent struct {
 	Name string

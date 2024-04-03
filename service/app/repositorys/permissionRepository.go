@@ -2,8 +2,8 @@ package repositorys
 
 import (
 	"errors"
-	"ginedu2/service/app/models"
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/app/models"
 )
 
 type PermissionRepository struct {

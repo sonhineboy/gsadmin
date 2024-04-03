@@ -1,6 +1,6 @@
 package requests
 
-import "ginedu2/service/global"
+import "github.com/sonhineboy/gsadmin/service/global"
 
 type UserList struct {
 	global.List

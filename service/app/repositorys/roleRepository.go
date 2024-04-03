@@ -1,9 +1,9 @@
 package repositorys
 
 import (
-	"ginedu2/service/app/models"
-	"ginedu2/service/app/requests"
-	"ginedu2/service/global"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/requests"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"gorm.io/gorm"
 )
 
@@ -12,30 +12,28 @@ type RoleRepository struct {
 	Where map[string]interface{}
 }
 
-func (r RoleRepository) List(page int, pageSize int, sortField string) map[string]interface{} {
+func (r *RoleRepository) List(page int, pageSize int, sortField string) map[string]interface{} {
 	var (
 		total  int64
 		data   []models.Role
 		offSet int
 	)
-	global.Db.Model(&r.Model).Count(&total)
-	offSet = (page - 1) * pageSize
-	db := global.Db.Preload("Menus").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
+	db := global.Db.Model(&r.Model)
 
-	if r.Where != nil {
-		db.Where(r.Where).Find(&data)
-	} else {
-		db.Find(&data)
-
+	if r.Where != nil && len(r.Where) > 0 {
+		db.Where(r.Where)
 	}
-
+	db.Count(&total)
+	offSet = (page - 1) * pageSize
+	db.Preload("Menus").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
+	db.Find(&data)
 	return global.Pages(page, pageSize, int(total), data)
 }
 
 /*
 添加角色
 */
-func (r RoleRepository) Add(post requests.Role) error {
+func (r *RoleRepository) Add(post requests.Role) error {
 	db := global.Db.Create(&models.Role{
 		Alias:  post.Alias,
 		Label:  post.Label,
@@ -49,7 +47,7 @@ func (r RoleRepository) Add(post requests.Role) error {
 /*
 更新角色
 */
-func (r RoleRepository) Update(post requests.Role) error {
+func (r *RoleRepository) Update(post requests.Role) error {
 
 	return global.Db.Transaction(func(sessionDb *gorm.DB) error {
 		return sessionDb.Debug().Where("id = ?", post.Id).Updates(&models.Role{
@@ -63,7 +61,7 @@ func (r RoleRepository) Update(post requests.Role) error {
 
 }
 
-func (r RoleRepository) UpMenus(post requests.RoleUpMenus) error {
+func (r *RoleRepository) UpMenus(post requests.RoleUpMenus) error {
 	var role models.Role
 	role.ID = post.Id
 

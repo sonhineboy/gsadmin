@@ -2,8 +2,8 @@ package listener
 
 import (
 	"fmt"
-	event2 "ginedu2/service/app/event"
-	"ginedu2/service/src"
+	event2 "github.com/sonhineboy/gsadmin/service/app/event"
+	"github.com/sonhineboy/gsadmin/service/src"
 )
 
 type TestListener struct {

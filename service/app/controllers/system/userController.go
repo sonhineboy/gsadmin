@@ -1,35 +1,34 @@
 package system
 
 import (
-	"ginedu2/service/app/models"
-	"ginedu2/service/app/repositorys"
-	"ginedu2/service/app/requests"
-	"ginedu2/service/global"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/repositorys"
+	"github.com/sonhineboy/gsadmin/service/app/requests"
+	"github.com/sonhineboy/gsadmin/service/global"
+	"github.com/sonhineboy/gsadmin/service/global/response"
 	"net/http"
 )
 
-type UserController struct {
-	res            global.Response
-	userRepository repositorys.UserRepository
-	menuRepository repositorys.SystemMenuRepository
-}
+type UserController struct{}
 
-//登陆
-func (u UserController) Login(c *gin.Context) {
+// Login 登陆
+func (u *UserController) Login(c *gin.Context) {
 	var (
-		LoginForm  requests.Login
-		roles      []string
-		permission []string
+		LoginForm      requests.Login
+		roles          []string
+		permission     []string
+		userRepository repositorys.UserRepository
+		menuRepository repositorys.SystemMenuRepository
 	)
 	apiList := make(map[string]string)
 
 	err := c.ShouldBind(&LoginForm)
 
 	if !captcha.VerifyString(LoginForm.CaptchaId, LoginForm.CaptchaValue) {
-		u.res.Failed(c, "验证码错误")
+		response.Failed(c, "验证码错误")
 		return
 	}
 
@@ -40,7 +39,7 @@ func (u UserController) Login(c *gin.Context) {
 		})
 		return
 	}
-	isLogin, user := u.userRepository.Login(LoginForm.PassWord, LoginForm.Name)
+	isLogin, user := userRepository.Login(LoginForm.PassWord, LoginForm.Name, c)
 
 	if isLogin {
 
@@ -48,8 +47,8 @@ func (u UserController) Login(c *gin.Context) {
 			roles = append(roles, role.Alias)
 		}
 
-		_ = u.menuRepository.GetApiListToMapByUser(user, &apiList)
-		_ = u.menuRepository.GetPermissionByUser(user, &permission)
+		_ = menuRepository.GetApiListToMapByUser(user, &apiList)
+		_ = menuRepository.GetPermissionByUser(user, &permission)
 
 		token, _ := models.GenToken(models.JwtUser{}.NewJwtUser(
 			user.ID,
@@ -58,65 +57,74 @@ func (u UserController) Login(c *gin.Context) {
 			apiList,
 			permission,
 		), global.Config.MyJwt.Secret)
-		u.res.Success(c, "登陆成功", gin.H{
+		response.Success(c, "登陆成功", gin.H{
 			"token":    token,
 			"userInfo": user,
 		})
 	} else {
-		u.res.Failed(c, "用户名或密码错误")
+		response.Failed(c, "用户名或密码错误")
 	}
 
 }
 
-//注册用户
-func (u UserController) Add(c *gin.Context) {
-	var userAdd requests.UserAdd
+// Add 注册用户
+func (u *UserController) Add(c *gin.Context) {
+	var (
+		userAdd        requests.UserAdd
+		userRepository repositorys.UserRepository
+	)
 	err := c.ShouldBind(&userAdd)
 	if err != nil {
-		u.res.Failed(c, global.GetError(err.(validator.ValidationErrors), userAdd))
+		response.Failed(c, global.GetError(err.(validator.ValidationErrors), userAdd))
 		return
 	}
-	result, model := u.userRepository.Add(userAdd.PassWord, userAdd.Name, userAdd)
+	result, model := userRepository.Add(userAdd.PassWord, userAdd.Name, userAdd)
 
 	if result.Error == nil {
-		u.res.Success(c, "ok", model)
+		response.Success(c, "ok", model)
 	} else {
-		u.res.Failed(c, result.Error.Error())
+		response.Failed(c, result.Error.Error())
 	}
 }
 
-func (u UserController) List(c *gin.Context) {
-	var params requests.UserList
+func (u *UserController) List(c *gin.Context) {
+	var (
+		params         requests.UserList
+		userRepository repositorys.UserRepository
+	)
 	_ = c.ShouldBind(&params)
 
-	u.userRepository.Where = params.Where
-	u.res.Success(c, "ok", u.userRepository.List(params.Page, params.PageSize, "created_at"))
+	userRepository.Where = params.Where
+	response.Success(c, "ok", userRepository.List(params.Page, params.PageSize, "created_at"))
 }
 
-func (u UserController) Up(c *gin.Context) {
+func (u *UserController) Up(c *gin.Context) {
 
-	var data requests.UserUpdate
+	var (
+		data           requests.UserUpdate
+		userRepository repositorys.UserRepository
+	)
 	err := c.ShouldBind(&data)
 	if err != nil {
-		u.res.Failed(c, global.GetError(err.(validator.ValidationErrors), data))
+		response.Failed(c, global.GetError(err.(validator.ValidationErrors), data))
 		return
 	}
 
-	reErr := u.userRepository.Update(data)
+	reErr := userRepository.Update(data)
 	if reErr == nil {
-		u.res.Success(c, "ok", "")
+		response.Success(c, "ok", "")
 	} else {
-		u.res.Failed(c, reErr.Error())
+		response.Failed(c, reErr.Error())
 	}
 }
 
-func (u UserController) Del(c *gin.Context) {
+func (u *UserController) Del(c *gin.Context) {
 	var delIds global.Del
 	_ = c.ShouldBind(&delIds)
 	result := global.Db.Delete(&models.AdminUser{}, delIds.Ids)
 	if result.Error == nil {
-		u.res.Success(c, "ok", "")
+		response.Success(c, "ok", "")
 	} else {
-		u.res.Failed(c, result.Error.Error())
+		response.Failed(c, result.Error.Error())
 	}
 }

@@ -1,6 +1,6 @@
 package models
 
-import "ginedu2/service/global"
+import "github.com/sonhineboy/gsadmin/service/global"
 
 type Role struct {
 	global.GAD_MODEL
