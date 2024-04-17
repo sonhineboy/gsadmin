@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/dchest/captcha v1.0.0
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/validator/v10 v10.11.1
