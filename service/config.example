@@ -1,6 +1,6 @@
 db:
   type: 'mysql'
-  host: '127.0.0.1'
+  host: '127.0.0.1' #这个地方填写msyql服务的IP
   port: '3306'
   max-idle-conns: 10
   max-open-conns: 100
@@ -10,12 +10,12 @@ db:
   table_prefix: 'gc_'
 
 myjwt:
-  secret: '1212121213131'
-  expires_at: 36000
+  secret: 'BbT4nlt4YCVAolTKf9ImxbYs7u1BGusKPtWuWLQ3ZtuOyk3F57' #这里是你的jwt秘钥
+  expires_at: 36000 #过期时间
 app:
-  host: "http://localhost:8080"
+  host: "http://localhost:8080" #这里localhost 要替换成你的宿主机IP
   port: ":8080"
-  uploadFile: "/upload"
-rate:
+  uploadFile: "/upload" #文件上传地址
+rate: #限流配置
   limit: 15
-  burst: 2
+  burst: 15

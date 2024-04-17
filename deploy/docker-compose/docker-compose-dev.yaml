@@ -7,7 +7,6 @@ networks:
       driver: default
       config:
         - subnet: '177.7.0.0/16'
-        
 
 services:
   web:
@@ -31,7 +30,7 @@ services:
 
   server:
     image: golang:1.17
-    container_name: gsadmin-server
+    container_
     hostname: gsadmin-server
     restart: always
     ports:
