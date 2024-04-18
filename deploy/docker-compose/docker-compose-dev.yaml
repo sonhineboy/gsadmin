@@ -30,7 +30,7 @@ services:
 
   server:
     image: golang:1.17
-    container_
+    container_name: gsadmin-server
     hostname: gsadmin-server
     restart: always
     ports:
