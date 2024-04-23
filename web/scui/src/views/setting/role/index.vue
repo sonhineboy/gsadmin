@@ -222,7 +222,7 @@ export default {
     },
     //表格内开关
     async changeSwitch(val, row) {
-      row.status = row.status == "1" ? "0" : "1";
+	  row.status = row.status == "1" ? "0" : "1";
       row.$switch_status = true;
 
       row.status = parseInt(row.status);
