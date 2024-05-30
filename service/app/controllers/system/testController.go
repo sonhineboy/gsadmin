@@ -51,3 +51,37 @@ func DemoUser(c *gin.Context) {
 	c.JSON(http.StatusOK, userMap)
 
 }
+
+func OrderDemo(c *gin.Context) {
+
+	//
+	//model := models.Order{
+	//	UserName: "zs",
+	//	Age:      10,
+	//}
+	//
+	//err := re.Insert(&model)
+	//if err != nil {
+	//	c.JSON(http.StatusOK, gin.H{
+	//		"code":  202,
+	//		"error": err.Error(),
+	//	})
+	//	return
+	//}
+	//c.JSON(http.StatusOK, model)
+
+	type request struct {
+		A string `json:"a" binding:"required"`
+		B string `json:"b"`
+	}
+	var model models.Order
+	err := c.ShouldBind(&model)
+	if err != nil {
+
+		c.JSON(http.StatusOK, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+}

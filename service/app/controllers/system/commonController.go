@@ -1,11 +1,15 @@
 package system
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	uuid2 "github.com/satori/go.uuid"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadmin/service/global/response"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -74,4 +78,37 @@ func (p *CommonController) CaptchaImage(c *gin.Context) {
 	w, _ := strconv.Atoi(c.Param("w"))
 	h, _ := strconv.Atoi(c.Param("h"))
 	_ = global.CaptchaServe(c.Writer, c.Request, c.Param("id"), ".png", "zh", false, w, h)
+}
+
+func (p *CommonController) GetVersion(c *gin.Context) {
+
+	res, err := http.DefaultClient.Get("https://gitee.com/api/v5/repos/kevn/gsadmin/tags?access_token=7a4fdb29511847dffde589132d9057a3&sort=name&direction=desc&page=1&per_page=1")
+	if err != nil {
+		response.Failed(c, err.Error())
+		return
+	}
+
+	if res.StatusCode != 200 {
+		response.Failed(c, fmt.Sprintf("%s %s", "Http Status Code:", res.Status))
+		return
+	}
+
+	all, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		response.Failed(c, err.Error())
+		return
+	}
+
+	defer func() {
+		_ = res.Body.Close()
+	}()
+
+	versionInfo := make([]map[string]interface{}, 1)
+
+	err = json.Unmarshal(all, &versionInfo)
+	if err != nil {
+		response.Failed(c, err.Error())
+		return
+	}
+	response.Success(c, "ok", versionInfo[0])
 }

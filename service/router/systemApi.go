@@ -2,12 +2,13 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/app/middleware"
 	"net/http"
 )
 
 func SystemApiInit(r *gin.RouterGroup) {
 
-	//r.Use(middleware.JWTAuth(), middleware.Permission(), middleware.OperationLog())
+	r.Use(middleware.JWTAuth(), middleware.Permission(), middleware.OperationLog())
 	rUser := r.Group("/user")
 	{
 		rUser.POST("/add", ApiControllers.UserController.Add)

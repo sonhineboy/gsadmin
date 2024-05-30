@@ -21,7 +21,10 @@ module.exports = defineConfig({
 					'^/api': '/'
 				}
 			}
-		}
+		},
+		client: {
+			overlay: false,
+		},
 	},
 
 	chainWebpack: config => {

@@ -14,6 +14,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"io/ioutil"
+	"log"
 	"os"
 	"time"
 )
@@ -55,6 +56,11 @@ func loadObject() {
 }
 
 func initMysql() {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Fatal("数据库连接失败", err)
+		}
+	}()
 	dsn := global.Config.Db.User + ":" + global.Config.Db.PassWord + "@tcp(" + global.Config.Db.Host + ":" + global.Config.Db.Port + ")/" + global.Config.Db.Database + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
@@ -75,7 +81,7 @@ func initMysql() {
 
 }
 
-// 初始化事件
+// InitEvent 初始化事件
 func InitEvent() src.EventDispatcher {
 	EventDispatcher := src.NewDispatcher()
 	EventDispatcher.Register(event.TestEvent{}.GetEventName(), listener.NewTestListener())
