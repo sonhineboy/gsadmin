@@ -70,18 +70,18 @@ func OrderDemo(c *gin.Context) {
 	//}
 	//c.JSON(http.StatusOK, model)
 
-	type request struct {
-		A string `json:"a" binding:"required"`
-		B string `json:"b"`
-	}
-	var model models.Order
-	err := c.ShouldBind(&model)
-	if err != nil {
-
-		c.JSON(http.StatusOK, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+	//type request struct {
+	//	A string `json:"a" binding:"required"`
+	//	B string `json:"b"`
+	//}
+	//var model models.Order
+	//err := c.ShouldBind(&model)
+	//if err != nil {
+	//
+	//	c.JSON(http.StatusOK, gin.H{
+	//		"error": err.Error(),
+	//	})
+	//	return
+	//}
 
 }

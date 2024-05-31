@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadminGen"
 	"reflect"
 	"strconv"
 	"sync"
@@ -128,7 +129,6 @@ func test(b int, c int) (a int) {
 }
 
 func TestSlice(t *testing.T) {
-
 	defer func() {
 
 		fmt.Println("defer :-->1")
@@ -163,4 +163,63 @@ func TestDemo(t *testing.T) {
 	}
 
 	fmt.Println(id)
+}
+
+func TestGenModel(t *testing.T) {
+
+	fields := []gsadminGen.Field{
+		{
+			Name:     "userName",
+			Json:     "user_name",
+			Default:  "",
+			Describe: "用户名",
+			Primary:  false,
+			Index:    "FULLTEXT",
+			IsNull:   false,
+			Type:     "varchar",
+			Transfer: "用户名",
+		},
+		{
+			Name:     "age",
+			Json:     "age",
+			Default:  "0",
+			Describe: "年龄",
+			Primary:  false,
+			Index:    "Null",
+			IsNull:   true,
+			Type:     "int",
+			Transfer: "年龄",
+		},
+	}
+
+	v := gsadminGen.TableModal{
+		Name:   "member",
+		Fields: fields,
+	}
+
+	var err error
+
+	err = gsadminGen.GenController("../app/controllers/system/memberController.go", v)
+
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+
+	err = gsadminGen.GenModel("../app/models/member.go", v)
+
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+
+	err = gsadminGen.GenRequest("../app/requests/memberRequest.go", v)
+
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+
+	err = gsadminGen.GenRepository("../app/repositorys/memberRepository.go", v)
+
+	if err != nil {
+		t.Fatal(err.Error())
+	}
 }

@@ -2,6 +2,7 @@ package global
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,9 @@ var (
 	SuperAdmin      string
 	EventDispatcher src.EventDispatcher
 	Limiter         *rate.Limiter
+	ormTrans        = map[string]string{
+		"record not found": "数据不存在",
+	}
 )
 
 // GetError 获取错误信息
@@ -111,4 +115,13 @@ func GetEventDispatcher(c *gin.Context) *src.EventDispatcher {
 	}
 
 	return &e
+}
+
+func GormTans(err error) error {
+	if err != nil {
+		if v, ok := ormTrans[err.Error()]; ok {
+			return errors.New(v)
+		}
+	}
+	return err
 }
