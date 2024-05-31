@@ -6,6 +6,7 @@ import (
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"github.com/sonhineboy/gsadmin/service/global"
+	"strings"
 )
 
 func OperationLog() gin.HandlerFunc {
@@ -14,6 +15,7 @@ func OperationLog() gin.HandlerFunc {
 
 		cCp := c.Copy()
 		go func() {
+			contentType := cCp.GetHeader("Content-Type")
 			var (
 				doData []byte
 				log    models.OperationLog
@@ -24,7 +26,12 @@ func OperationLog() gin.HandlerFunc {
 				doData, _ = json.Marshal(cCp.Request.URL.Query())
 			}
 			if method == "POST" {
-				doData, _ = cCp.GetRawData()
+
+				if strings.Contains(contentType, "multipart/form-data") {
+					doData = []byte("图片上传")
+				} else {
+					doData, _ = cCp.GetRawData()
+				}
 			}
 
 			claims, ok := repositorys.GetCustomClaims(c)
