@@ -3,7 +3,6 @@ package system
 import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"github.com/sonhineboy/gsadmin/service/app/requests"
@@ -35,7 +34,7 @@ func (u *UserController) Login(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":  "422",
-			"error": global.GetError(err.(validator.ValidationErrors), LoginForm),
+			"error": global.GetError(err, LoginForm),
 		})
 		return
 	}
@@ -75,7 +74,7 @@ func (u *UserController) Add(c *gin.Context) {
 	)
 	err := c.ShouldBind(&userAdd)
 	if err != nil {
-		response.Failed(c, global.GetError(err.(validator.ValidationErrors), userAdd))
+		response.Failed(c, global.GetError(err, userAdd))
 		return
 	}
 	result, model := userRepository.Add(userAdd.PassWord, userAdd.Name, userAdd)
@@ -106,7 +105,7 @@ func (u *UserController) Up(c *gin.Context) {
 	)
 	err := c.ShouldBind(&data)
 	if err != nil {
-		response.Failed(c, global.GetError(err.(validator.ValidationErrors), data))
+		response.Failed(c, global.GetError(err, data))
 		return
 	}
 

@@ -30,7 +30,18 @@ var (
 )
 
 // GetError 获取错误信息
-func GetError(errs validator.ValidationErrors, r interface{}) string {
+func GetError(errs error, r interface{}) string {
+	var (
+		v validator.ValidationErrors
+	)
+	if errors.As(errs, &v) {
+		return getValidateMsg(v, r)
+	} else {
+		return errs.Error()
+	}
+}
+
+func getValidateMsg(errs validator.ValidationErrors, r interface{}) string {
 	s := reflect.TypeOf(r)
 	for _, fieldError := range errs {
 		filed, _ := s.FieldByName(fieldError.Field())
