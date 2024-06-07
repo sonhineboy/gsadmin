@@ -15,25 +15,38 @@ func TestTableInfo(t *testing.T) {
 		t.Error(err)
 	}
 
-	db.Migrator()
+	//types, err := db.Migrator().ColumnTypes("member")
+	//if err != nil {
+	//	return
+	//}
+	//
+	//for _, columnType := range types {
+	//
+	//	v, _ := columnType.DefaultValue()
+	//
+	//	fmt.Println("default", v, "len", len(v))
+	//}
 
-	tables, err := db.Migrator().GetTables()
-	if err != nil {
-		return
+	var indexes []map[string]interface{}
+	db.Raw("show Index from member").Scan(&indexes)
+
+	indexMap := make(map[string]map[string]interface{}, 20)
+
+	for _, v := range indexes {
+		columnName, _ := v["Column_name"]
+		if columnNameString, ok := columnName.(string); ok {
+			indexMap[columnNameString] = map[string]interface{}{
+				"Non_unique": v["Non_unique"],
+				"Index_type": v["Index_type"],
+			}
+		} else {
+			continue
+		}
 	}
 
-	for _, v := range tables {
+	fmt.Println(indexMap)
+}
 
-		fmt.Println(v)
-	}
-	types, err := db.Migrator().ColumnTypes("member")
-	if err != nil {
-		return
-	}
+func GetIndexType(field string) {
 
-	for _, v := range types {
-
-		null, _ := v.Nullable()
-		fmt.Println(v.Name(), v.DatabaseTypeName(), null)
-	}
 }

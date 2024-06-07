@@ -19,6 +19,12 @@ func RouteInit() {
 	global.GAD_R.GET("/api/demo/page", system.DemoUser)
 	global.GAD_R.POST("/api/demo/order", system.OrderDemo)
 
+
+	memberRouter := global.GAD_R.Group("member"){
+
+		memberRouter.GET("index")
+	}
+
 	r := global.GAD_R.Group("api")
 	{
 		SystemApiInit(r)

@@ -51,12 +51,12 @@ func getValidateMsg(errs validator.ValidationErrors, r interface{}) string {
 		// 获取统一错误消息
 		errText := filed.Tag.Get("msg")
 		if errTagText != "" {
-			return errTagText
+			return filed.Tag.Get("json") + ":" + errTagText
 		}
 		if errText != "" {
 			return errText
 		}
-		return fieldError.Field() + ":" + fieldError.Tag()
+		return filed.Tag.Get("json") + ":" + fieldError.Tag()
 	}
 	return ""
 }

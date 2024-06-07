@@ -1,94 +1,163 @@
 <template>
-  <el-container
-    ><el-main class="noPadding">
-      <el-card shadow="never">
-        <template #header> 代码生成器 </template>
+  <el-container>
+    <el-main class="nopadding">
+      <div class="diy-gen">
         <el-form :model="form" label-width="auto" style="max-width: 80%">
           <el-row>
             <el-form-item label="表名">
-              <el-col :span="6">
+              <el-col :span="8">
                 <el-input
                   v-model="form.tableDiyName"
                   placeholder="请填写表名"
                   style="max-width: 95%"
-                ></el-input>
-              </el-col>
+                ></el-input
+              ></el-col>
 
-              <el-col :span="10">
-                <el-select v-model="form.tableName" placeholder="已有数据表">
+              <el-col :span="8">
+                <el-select
+                  v-model="form.tableName"
+                  placeholder="已有数据表"
+                  clearable
+                  @change="tablesChange"
+                >
+                  <el-option
+                    v-for="item in tableNames"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
                 </el-select>
               </el-col>
+              <el-col :span="8"
+                ><div style="padding-left: 8px">
+                  <el-button type="success" @click="genFields"
+                    >生成字段</el-button
+                  >
+                </div></el-col
+              >
             </el-form-item>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="控制器包名">
+                <el-input
+                  v-model="form.controllerPackage"
+                  placeholder="默认system"
+                ></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-checkbox-group v-model="form.checkbox">
-                <el-checkbox label="自动创建表" value="a"></el-checkbox>
-                <el-checkbox label="b" value="b"></el-checkbox>
+                <el-checkbox
+                  checked
+                  label="生成Model"
+                  value="genModel"
+                ></el-checkbox>
+                <el-checkbox
+                  checked
+                  label="生成Request"
+                  value="genRequest"
+                ></el-checkbox>
+                <el-checkbox
+                  checked
+                  label="生成Controller"
+                  value="genController"
+                ></el-checkbox>
+                <el-checkbox
+                  checked
+                  label="生成Repository"
+                  value="genRepository"
+                ></el-checkbox>
+                <el-checkbox
+                  checked
+                  label="生成前端模板"
+                  value="genRepository"
+                ></el-checkbox>
               </el-checkbox-group>
             </el-col>
           </el-row>
         </el-form>
-        <el-divider />
-        <el-button type="primary" @click="openNewDrawer()" icon="ElIconPlus" />
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="name" label="字段名"></el-table-column>
-          <el-table-column prop="transfor" label="翻译"></el-table-column>
-          <el-table-column prop="type" label="类型"></el-table-column>
-          <el-table-column prop="isNull" label="是否空值">
-            <template #default="scope">
-              <el-switch v-model="scope.row.isNull" disabled />
+      </div>
+      <div style="height: 10px; background-color: #f6f8f9; width: 100%"></div>
+      <el-container>
+        <el-header>
+          <div class="left-panel">
+            <el-button
+              type="primary"
+              @click="openNewDrawer()"
+              icon="ElIconPlus"
+            />
+          </div>
+        </el-header>
+        <el-main class="nopadding">
+          <el-table :data="tableData" style="width: 100%">
+            <el-table-column prop="name" label="字段名"></el-table-column>
+            <el-table-column prop="transform" label="翻译"></el-table-column>
+            <el-table-column prop="type" label="类型"></el-table-column>
+            <el-table-column prop="isNull" label="是否空值">
+              <template #default="scope">
+                <el-switch v-model="scope.row.isNull" disabled />
+              </template>
+            </el-table-column>
+            <el-table-column prop="index" label="索引"></el-table-column>
+            <el-table-column prop="json" label="Json"></el-table-column>
+            <el-table-column prop="default" label="默认值">
+              <template #default="scope">
+                <div v-if="scope.row.default">
+                  {{ scope.row.default }}
+                </div>
+                <div v-else>-</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="describe" label="描述">
+              <template #default="scope">
+                <div v-if="scope.row.describe">
+                  {{ scope.row.describe }}
+                </div>
+                <div v-else>-</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="primary" label="主键">
+              <template #default="scope">
+                <el-checkbox
+                  disabled
+                  :model-value="scope.row.primary"
+                ></el-checkbox>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" fixed="right" width="100">
+              <template #default="scope">
+                <el-link
+                  type="primary"
+                  @click="actions('edit', scope.$index, scope.row)"
+                  icon="ElIconEdit"
+                />
+                &nbsp;
+                <el-popconfirm
+                  title="确定要删除吗?"
+                  @confirm="actions('del', scope.$index, scope.row)"
+                >
+                  <template #reference>
+                    <el-link type="primary" icon="ElIconDelete" />
+                  </template>
+                </el-popconfirm>
+              </template>
+            </el-table-column>
+            <template #empty>
+              <el-empty description="站暂无数据" />
             </template>
-          </el-table-column>
-          <el-table-column prop="index" label="索引"></el-table-column>
-          <el-table-column prop="json" label="Json"></el-table-column>
-          <el-table-column prop="default" label="默认值">
-            <template #default="scope">
-              <div v-if="scope.row.default">
-                {{ scope.row.default }}
-              </div>
-              <div v-else>-</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="describe" label="描述">
-            <template #default="scope">
-              <div v-if="scope.row.describe">
-                {{ scope.row.describe }}
-              </div>
-              <div v-else>-</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="primapy" label="主键">
-            <template #default="scope">
-            
-            <el-checkbox disabled :model-value="scope.row.primapy"></el-checkbox>
-            </template>
-
-          </el-table-column>
-          <el-table-column label="操作" fixed="right" width="100">
-            <template #default="scope">
-              <el-link
-                type="primary"
-                @click="actions('edit', scope.$index, scope.row)"
-                icon="ElIconEdit"
-              />
-              &nbsp;
-              <el-popconfirm
-                title="确定要删除吗?"
-                @confirm="actions('del', scope.$index, scope.row)"
-              >
-                <template #reference>
-                  <el-link type="primary" icon="ElIconDelete" />
-                </template>
-              </el-popconfirm>
-            </template>
-          </el-table-column>
-          <template #empty>
-            <el-empty description="站暂无数据" />
-          </template>
-        </el-table>
-      </el-card> </el-main
-  ></el-container>
+          </el-table>
+        </el-main>
+      </el-container>
+    </el-main>
+    <el-footer>
+      <div style="float: right">
+        <el-button type="primary" @click="genCode">生成代码</el-button>
+      </div></el-footer
+    >
+  </el-container>
 
   <el-drawer
     v-model="drawer"
@@ -110,17 +179,17 @@
             <el-form-item label="字段名" prop="name">
               <el-input v-model="formField.name" placeholder=""></el-input>
             </el-form-item>
-            <el-form-item label="主键" prop="primapy">
+            <el-form-item label="主键" prop="primary">
               <el-checkbox
-                v-model="formField.primapy"
+                v-model="formField.primary"
                 label="主键"
               ></el-checkbox>
             </el-form-item>
             <el-form-item label="Json" prop="json">
               <el-input v-model="formField.json" placeholder=""></el-input>
             </el-form-item>
-            <el-form-item label="翻译" prop="transfor">
-              <el-input v-model="formField.transfor" placeholder=""></el-input>
+            <el-form-item label="翻译" prop="transform">
+              <el-input v-model="formField.transform" placeholder=""></el-input>
             </el-form-item>
             <el-form-item label="类型" prop="type">
               <el-select v-model="formField.type" placeholder="请选择类型">
@@ -170,6 +239,15 @@
     </template>
   </el-drawer>
 </template>
+
+<style scoped>
+.diy-gen {
+  background-color: #fff;
+  padding: 15px;
+}
+</style>
+
+
 <script>
 export default {
   name: "gen",
@@ -196,7 +274,7 @@ export default {
             trigger: "blur",
           },
         ],
-        transfor: [
+        transform: [
           {
             required: true,
             message: this.$TOOL.validate.transform(
@@ -217,15 +295,16 @@ export default {
           },
         ],
       },
-      tableData: [
-      ],
+      tableData: [],
       drawer: false,
       drawerType: null,
       form: {
         checkbox: [],
         tableName: "",
         tableDiyName: "",
+        controllerPackage: "system",
       },
+      tableNames: [],
       formField: {
         index: "",
         type: "",
@@ -250,7 +329,62 @@ export default {
       ],
     };
   },
+  created: function () {
+    let _that = this;
+    this.$API.gen.tables.get().then(function (re) {
+      _that.tableNames = re.data;
+    });
+  },
   methods: {
+    genCode() {
+      if (this.tableData.length === 0) {
+        this.$message.error("字段信息不能为空");
+        return;
+      }
+
+      if (this.form.checkbox.length === 0) {
+        this.$message.error("生成内容至少选择一项");
+        return;
+      }
+
+      if (!this.form.tableDiyName) {
+        this.$message.error("表名必填");
+        return;
+      }
+      if (!this.form.controllerPackage) {
+        this.$message.error("报名必须");
+        return;
+      }
+      let data = {};
+
+      data = this.$TOOL.objCopy(this.form);
+      let _that = this;
+      Object.assign(data, { fields: this.tableData });
+      this.$API.gen.genCode.post(data).then((re) => {
+        if (re.code === 422) {
+          _that.$message.error(re.msg);
+        } else {
+          _that.$message.success(re.msg);
+        }
+      });
+    },
+    genFields() {
+      if (!this.form.tableName) {
+        this.$message.error("请先选择表名");
+        return;
+      }
+
+      let _that = this;
+
+      this.$API.gen.genField
+        .get({ table_name: _that.form.tableName })
+        .then((re) => {
+          _that.tableData = re.data;
+        });
+    },
+    tablesChange(v) {
+      this.form.tableDiyName = v;
+    },
     actions(type, index, row) {
       const _that = this;
       switch (type) {
@@ -306,6 +440,8 @@ export default {
             this.addItem(this.formField);
             this.drawer = false;
           }
+
+          console.log(this.formField);
         } else {
           this.$message.error("请完善字段信息！");
         }

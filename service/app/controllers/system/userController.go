@@ -8,7 +8,6 @@ import (
 	"github.com/sonhineboy/gsadmin/service/app/requests"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadmin/service/global/response"
-	"net/http"
 )
 
 type UserController struct{}
@@ -25,19 +24,16 @@ func (u *UserController) Login(c *gin.Context) {
 	apiList := make(map[string]string)
 
 	err := c.ShouldBind(&LoginForm)
+	if err != nil {
+		response.Failed(c, global.GetError(err, LoginForm))
+		return
+	}
 
 	if !captcha.VerifyString(LoginForm.CaptchaId, LoginForm.CaptchaValue) {
 		response.Failed(c, "验证码错误")
 		return
 	}
 
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"code":  "422",
-			"error": global.GetError(err, LoginForm),
-		})
-		return
-	}
 	isLogin, user := userRepository.Login(LoginForm.PassWord, LoginForm.Name, c)
 
 	if isLogin {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadminGen"
+	"github.com/sonhineboy/gsadminGen/pkg"
 	"reflect"
 	"strconv"
 	"sync"
@@ -167,14 +168,28 @@ func TestDemo(t *testing.T) {
 
 func TestGenModel(t *testing.T) {
 
-	fields := []gsadminGen.Field{
+	/**
+
+	default:""
+	describe:""
+	index:"Null"
+	isNull:true
+	json:"content"
+	name:"content"
+	primary:false
+	transform:""
+	type:"longtext"
+
+	*/
+
+	fields := []pkg.Field{
 		{
 			Name:     "userName",
 			Json:     "user_name",
 			Default:  "",
 			Describe: "用户名",
 			Primary:  false,
-			Index:    "FULLTEXT",
+			Index:    "UNIQUE",
 			IsNull:   false,
 			Type:     "varchar",
 			Transfer: "用户名",
@@ -185,14 +200,14 @@ func TestGenModel(t *testing.T) {
 			Default:  "0",
 			Describe: "年龄",
 			Primary:  false,
-			Index:    "Null",
+			Index:    "UNIQUE",
 			IsNull:   true,
 			Type:     "int",
 			Transfer: "年龄",
 		},
 	}
 
-	v := gsadminGen.TableModal{
+	v := pkg.TableModal{
 		Name:   "member",
 		Fields: fields,
 	}
