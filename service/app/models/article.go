@@ -10,7 +10,7 @@ type Article struct {
 	Img          string `gorm:"column:img;type:varchar(100)" json:"img"`
 	CommentCount int64  `gorm:"column:comment_count;type:bigint(20);default:0;NOT NULL" json:"comment_count"`
 	ReadCount    int64  `gorm:"column:read_count;type:bigint(20);default:0;NOT NULL" json:"read_count"`
-	*global.GAD_MODEL
+	global.GAD_MODEL
 }
 
 func (m *Article) TableName() string {

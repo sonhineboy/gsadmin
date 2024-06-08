@@ -103,16 +103,16 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 		Fields: data.Fields,
 	}
 	var err error
-	if err = gsadminGen.GenController("./app/controllers/system/"+v.Name+"Controller.go", v); err != nil {
+	if err = gsadminGen.GenController("./app/controllers/"+data.ControllerPackage+"/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Controller.go", v, data.ControllerPackage); err != nil {
 		return err
 	}
-	if err = gsadminGen.GenModel("./app/models/"+v.Name+".go", v); err != nil {
+	if err = gsadminGen.GenModel("./app/models/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".go", v); err != nil {
 		return err
 	}
-	if err = gsadminGen.GenRequest("./app/requests/"+v.Name+"Request.go", v); err != nil {
+	if err = gsadminGen.GenRequest("./app/requests/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Request.go", v); err != nil {
 		return err
 	}
-	err = gsadminGen.GenRepository("./app/repositorys/"+v.Name+"Repository.go", v)
+	err = gsadminGen.GenRepository("./app/repositorys/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Repository.go", v)
 	if err != nil {
 		return err
 	}

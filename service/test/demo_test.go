@@ -208,31 +208,33 @@ func TestGenModel(t *testing.T) {
 	}
 
 	v := pkg.TableModal{
-		Name:   "member",
+		Name:   "user_member",
 		Fields: fields,
 	}
 
 	var err error
 
-	err = gsadminGen.GenController("../app/controllers/system/memberController.go", v)
+	fileName := "user_member"
+
+	err = gsadminGen.GenController("../app/controllers/demo/"+gsadminGen.UnderToConvertSoreLow(fileName)+"Controller.go", v, "demo")
 
 	if err != nil {
 		t.Fatal(err.Error())
 	}
 
-	err = gsadminGen.GenModel("../app/models/member.go", v)
+	err = gsadminGen.GenModel("../app/models/"+gsadminGen.UnderToConvertSoreLow(fileName)+".go", v)
 
 	if err != nil {
 		t.Fatal(err.Error())
 	}
 
-	err = gsadminGen.GenRequest("../app/requests/memberRequest.go", v)
+	err = gsadminGen.GenRequest("../app/requests/"+gsadminGen.UnderToConvertSoreLow(fileName)+"Request.go", v)
 
 	if err != nil {
 		t.Fatal(err.Error())
 	}
 
-	err = gsadminGen.GenRepository("../app/repositorys/memberRepository.go", v)
+	err = gsadminGen.GenRepository("../app/repositorys/"+gsadminGen.UnderToConvertSoreLow(fileName)+"Repository.go", v)
 
 	if err != nil {
 		t.Fatal(err.Error())
