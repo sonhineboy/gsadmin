@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sonhineboy/gsadmin/service/app/controllers/demo"
 	"github.com/sonhineboy/gsadmin/service/app/controllers/system"
 	"github.com/sonhineboy/gsadmin/service/app/middleware"
 	"net/http"
@@ -48,5 +49,16 @@ func SystemApiInit(r *gin.RouterGroup) {
 		gen.GET("/tables", genController.GetTables)
 		gen.GET("/fields", genController.TableFields)
 		gen.POST("/genCode", genController.GenCode)
+	}
+
+	//user_member
+	userMember := r.Group("/userMember")
+	{
+		var userMemberController demo.UserMemberController
+		userMember.GET("/index", userMemberController.Index)
+		userMember.POST("/save", userMemberController.Save)
+		userMember.POST("/delete", userMemberController.Delete)
+		userMember.GET("/:id", userMemberController.Get)
+		userMember.POST("/edit/:id", userMemberController.Edit)
 	}
 }
