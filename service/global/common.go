@@ -136,3 +136,22 @@ func GormTans(err error) error {
 	}
 	return err
 }
+
+func SlicesHasStr(s interface{}, str string) bool {
+
+	if v, ok := s.([]string); ok {
+		for _, ss := range v {
+			if ss == str {
+				return true
+			}
+		}
+	}
+
+	return false
+
+}
+
+func IsSlice(v interface{}) bool {
+	_, ok := v.([]interface{})
+	return ok
+}

@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
 	"reflect"
@@ -184,26 +185,26 @@ func TestGenModel(t *testing.T) {
 
 	fields := []pkg.Field{
 		{
-			Name:     "userName",
-			Json:     "user_name",
-			Default:  "",
-			Describe: "用户名",
-			Primary:  false,
-			Index:    "UNIQUE",
-			IsNull:   false,
-			Type:     "varchar",
-			Transfer: "用户名",
+			Name:      "userName",
+			Json:      "user_name",
+			Default:   "",
+			Describe:  "用户名",
+			Primary:   false,
+			Index:     "UNIQUE",
+			IsNull:    false,
+			Type:      "varchar",
+			Transform: "用户名",
 		},
 		{
-			Name:     "age",
-			Json:     "age",
-			Default:  "0",
-			Describe: "年龄",
-			Primary:  false,
-			Index:    "UNIQUE",
-			IsNull:   true,
-			Type:     "int",
-			Transfer: "年龄",
+			Name:      "age",
+			Json:      "age",
+			Default:   "0",
+			Describe:  "年龄",
+			Primary:   false,
+			Index:     "UNIQUE",
+			IsNull:    true,
+			Type:      "int",
+			Transform: "年龄",
 		},
 	}
 
@@ -239,4 +240,9 @@ func TestGenModel(t *testing.T) {
 	if err != nil {
 		t.Fatal(err.Error())
 	}
+}
+
+func TestHasSlice(t *testing.T) {
+	c := []string{"hello", "name", "black"}
+	fmt.Println(global.SlicesHasStr(c, "name"))
 }

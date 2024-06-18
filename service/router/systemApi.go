@@ -51,17 +51,6 @@ func SystemApiInit(r *gin.RouterGroup) {
 		gen.POST("/genCode", genController.GenCode)
 	}
 
-	//user_member
-	userMember := r.Group("/userMember")
-	{
-		var userMemberController system.UserMemberController
-		userMember.GET("/index", userMemberController.Index)
-		userMember.POST("/save", userMemberController.Save)
-		userMember.POST("/delete", userMemberController.Delete)
-		userMember.GET("/:id", userMemberController.Get)
-		userMember.POST("/edit/:id", userMemberController.Edit)
-	}
-
 	//gen_news
 	News := r.Group("/news")
 	{

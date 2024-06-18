@@ -103,32 +103,46 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 		Fields: data.Fields,
 	}
 	var err error
-	if err = gsadminGen.GenController("./app/controllers/"+data.ControllerPackage+"/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Controller.go", v, data.ControllerPackage); err != nil {
-		return err
-	}
-	if err = gsadminGen.GenModel("./app/models/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".go", v); err != nil {
-		return err
-	}
-	if err = gsadminGen.GenRequest("./app/requests/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Request.go", v); err != nil {
-		return err
-	}
-	err = gsadminGen.GenRepository("./app/repositorys/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Repository.go", v)
-	if err != nil {
-		return err
+
+	if global.SlicesHasStr(data.Checkbox, "生成Controller") {
+		if err = gsadminGen.GenController("./app/controllers/"+data.ControllerPackage+"/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Controller.go", v, data.ControllerPackage); err != nil {
+			return err
+		}
 	}
 
-	err = gsadminGen.GenIndex("./web/view/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"index.vue", v)
-	if err != nil {
-		return err
+	if global.SlicesHasStr(data.Checkbox, "生成Model") {
+		if err = gsadminGen.GenModel("./app/models/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".go", v); err != nil {
+			return err
+		}
 	}
 
-	err = gsadminGen.GenForm("./web/view/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"form.vue", v)
-	if err != nil {
-		return err
+	if global.SlicesHasStr(data.Checkbox, "生成Request") {
+		if err = gsadminGen.GenRequest("./app/requests/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Request.go", v); err != nil {
+			return err
+		}
 	}
-	err = gsadminGen.GenApi("./web/js/model/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".js", v)
-	if err != nil {
-		return err
+
+	if global.SlicesHasStr(data.Checkbox, "生成Repository") {
+		err = gsadminGen.GenRepository("./app/repositorys/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Repository.go", v)
+		if err != nil {
+			return err
+		}
+	}
+
+	if global.SlicesHasStr(data.Checkbox, "生成前端模板") {
+		err = gsadminGen.GenIndex("./web/view/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"index.vue", v)
+		if err != nil {
+			return err
+		}
+
+		err = gsadminGen.GenForm("./web/view/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"form.vue", v)
+		if err != nil {
+			return err
+		}
+		err = gsadminGen.GenApi("./web/js/model/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".js", v)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

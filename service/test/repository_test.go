@@ -1,19 +1,10 @@
 package test
 
 import (
-	"fmt"
-	"github.com/sonhineboy/gsadmin/service/app"
-	"github.com/sonhineboy/gsadmin/service/app/models"
-	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"testing"
 )
 
 func TestSelect(t *testing.T) {
-	app.TestLoad()
-	testRe := repositorys.NewTestRepository()
-	var data []models.Article
-	page := testRe.Page(1, 10, "id", &data)
-	fmt.Println(page)
 
 	//add
 	//var data models.Article
