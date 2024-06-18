@@ -8,10 +8,11 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/satori/go.uuid v1.2.0
-	github.com/sonhineboy/gsadminGen v0.0.0-00010101000000-000000000000
+	github.com/sonhineboy/gsadminGen v0.9.0
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be
 	golang.org/x/time v0.2.0
 	gopkg.in/yaml.v3 v3.0.1
+	gorm.io/datatypes v1.0.7
 	gorm.io/driver/mysql v1.4.1
 	gorm.io/gorm v1.23.10
 )
@@ -36,7 +37,4 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gorm.io/datatypes v1.0.7 // indirect
 )
-
-replace github.com/sonhineboy/gsadminGen => ../../gsadminGen
