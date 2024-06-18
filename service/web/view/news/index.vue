@@ -35,7 +35,7 @@
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column label="#" type="index" width="50"></el-table-column>
         <el-table-column label="ID" prop="id" width="50"></el-table-column>
-        <el-table-column label="昵称" prop="nick_name"></el-table-column><el-table-column label="真实姓名" prop="real_name"></el-table-column><el-table-column label="年龄" prop="age"></el-table-column><el-table-column label="状态" prop="status"></el-table-column><el-table-column label="在线" prop="online"></el-table-column>
+        <el-table-column label="标题" prop="title"></el-table-column><el-table-column label="作者" prop="author"></el-table-column><el-table-column label="内容" prop="content"></el-table-column>
         <el-table-column label="时间" prop="created_at"></el-table-column>
         <el-table-column label="操作" fixed="right" width="100">
           <template #default="scope">
@@ -69,11 +69,11 @@
 <script>
 import myForm from "./form";
 export default {
-  name: "userMember",
+  name: "news",
   components: { myForm },
   data() {
     return {
-      apiObj: this.$API.userMember.index,
+      apiObj: this.$API.news.index,
       selection: [],
       searchValue: "",
       loading: false,
@@ -104,7 +104,7 @@ export default {
     },
     async del(row, index) {
       var reqData = { ids: [row.id] };
-      var res = await this.$API.userMember.delete.post(reqData);
+      var res = await this.$API.news.delete.post(reqData);
       if (res.code == 200) {
         this.$refs.table.tableData.splice(index, 1);
         this.$message.success("删除成功");
@@ -149,10 +149,10 @@ export default {
       let re = { code: "422", msg: "未知事件", message: "未知事件" };
       switch (this.$refs.myForm.mode) {
         case "add":
-          re = await this.$API.userMember.save.post(data);
+          re = await this.$API.news.save.post(data);
           break;
         case "edit":
-          re = await this.$API.userMember.edit.post(data.id, data);
+          re = await this.$API.news.edit.post(data.id, data);
           break;
 
         default:

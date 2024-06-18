@@ -116,5 +116,19 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 	if err != nil {
 		return err
 	}
+
+	err = gsadminGen.GenIndex("./web/view/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"index.vue", v)
+	if err != nil {
+		return err
+	}
+
+	err = gsadminGen.GenForm("./web/view/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"form.vue", v)
+	if err != nil {
+		return err
+	}
+	err = gsadminGen.GenApi("./web/js/model/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".js", v)
+	if err != nil {
+		return err
+	}
 	return nil
 }

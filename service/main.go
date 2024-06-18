@@ -25,7 +25,7 @@ func main() {
 		&models.MenuApiList{},
 		&models.Role{},
 		&models.OperationLog{},
-		&models.UserMember{},
+		&models.News{},
 	)
 	if amErr != nil {
 		fmt.Println(amErr)

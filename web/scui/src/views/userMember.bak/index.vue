@@ -35,7 +35,11 @@
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column label="#" type="index" width="50"></el-table-column>
         <el-table-column label="ID" prop="id" width="50"></el-table-column>
-        <el-table-column label="昵称" prop="nick_name"></el-table-column><el-table-column label="真实姓名" prop="real_name"></el-table-column><el-table-column label="年龄" prop="age"></el-table-column><el-table-column label="状态" prop="status"></el-table-column><el-table-column label="在线" prop="online"></el-table-column>
+        <el-table-column label="昵称" prop="nick_name"></el-table-column>
+        <el-table-column label="姓名" prop="real_name"></el-table-column>
+        <el-table-column label="年龄" prop="age"></el-table-column>
+        <el-table-column label="状态" prop="status"></el-table-column>
+        <el-table-column label="在线" prop="online"></el-table-column>
         <el-table-column label="时间" prop="created_at"></el-table-column>
         <el-table-column label="操作" fixed="right" width="100">
           <template #default="scope">
@@ -121,7 +125,7 @@ export default {
       this.selection.forEach((v) => {
         ids.unshift(v.id);
       });
-      this.$confirm("确定删除选中的"+this.selection.length+"项吗？", "提示", {
+      this.$confirm(`确定删除选中的 ${this.selection.length} 项吗？`, "提示", {
         type: "warning",
       })
         .then(async () => {

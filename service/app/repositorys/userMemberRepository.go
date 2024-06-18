@@ -67,6 +67,12 @@ func (re *UserMemberRepository) Page(where map[string]interface{}, page int, pag
 	)
 	db := global.Db.Model(&models.UserMember{})
 
+	for k, v := range where {
+		if len(v.(string)) == 0 {
+			delete(where, k)
+		}
+	}
+
 	if where != nil && len(where) > 0 {
 		db.Where(where)
 	}
