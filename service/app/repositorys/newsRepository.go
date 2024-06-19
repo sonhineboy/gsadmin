@@ -41,6 +41,8 @@ func (re *NewsRepository) UpdateById(id int, data requests.NewsRequest) (int64, 
 		
 		Content:	data.Content,
 		
+		Image:	data.Image,
+		
 	})
 	return tx.RowsAffected, tx.Error
 }
@@ -90,6 +92,7 @@ func (re *NewsRepository) Insert(data requests.NewsRequest) (model models.News, 
 		Title:	data.Title,
 		Author:	data.Author,
 		Content:	data.Content,
+		Image:	data.Image,
 		
 	}
 

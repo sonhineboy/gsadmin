@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/satori/go.uuid v1.2.0
-	github.com/sonhineboy/gsadminGen v0.9.0
+	github.com/sonhineboy/gsadminGen v0.9.4
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be
 	golang.org/x/time v0.2.0
 	gopkg.in/yaml.v3 v3.0.1

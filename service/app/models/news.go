@@ -7,6 +7,7 @@ type News struct {
 	Title          string    `gorm:"column:title;type:varchar(255);not null;comment:标题;" json:"title"`
 	Author         string    `gorm:"column:author;type:varchar(255);not null;comment:作者;" json:"author"`
 	Content        string    `gorm:"column:content;type:text;not null;comment:内容;" json:"content"`
+	Image          string    `gorm:"column:image;comment:缩略图;" json:"image"`
 	
 }
 

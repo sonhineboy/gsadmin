@@ -320,6 +320,7 @@ export default {
         { value: "tinyint", label: "tinyint" },
         { value: "float", label: "float" },
         { value: "decimal", label: "decimal" },
+        { value: "image", label: "image" },
       ],
       filedIndex: [
         { value: "Null", labelL: "Null" },
