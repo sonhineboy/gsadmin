@@ -82,7 +82,7 @@ func (p *CommonController) CaptchaImage(c *gin.Context) {
 
 func (p *CommonController) GetVersion(c *gin.Context) {
 
-	res, err := http.DefaultClient.Get("https://gitee.com/api/v5/repos/kevn/gsadmin/tags?access_token=7a4fdb29511847dffde589132d9057a3&sort=name&direction=desc&page=1&per_page=1")
+	res, err := http.DefaultClient.Get("https://gitee.com/kevn/gsadmin/tags/names.json?search=&page=1")
 	if err != nil {
 		response.Failed(c, err.Error())
 		return
@@ -103,12 +103,17 @@ func (p *CommonController) GetVersion(c *gin.Context) {
 		_ = res.Body.Close()
 	}()
 
-	versionInfo := make([]map[string]interface{}, 1)
+	versionInfo := make(map[string]interface{}, 1)
 
 	err = json.Unmarshal(all, &versionInfo)
 	if err != nil {
 		response.Failed(c, err.Error())
 		return
 	}
-	response.Success(c, "ok", versionInfo[0])
+	if tags, ok := versionInfo["tags"]; ok {
+		response.Success(c, "ok", tags)
+	} else {
+		response.Success(c, "ok", nil)
+	}
+
 }
