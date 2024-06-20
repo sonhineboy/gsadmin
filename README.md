@@ -2,7 +2,7 @@
 
 <div align=center>
 <img src="https://kevn.gitee.io/gsadmindoc/img/gslogo.png" width=20%><br/>
-<div style="padding: 20px 0"><a href="https://kevn.gitee.io/gsadmindoc">文档</a> | <a href="https://gsadmin.suiyidian.cn/">演示</a></div>
+<div style="padding: 20px 0"><a href="https://sonhineboy.github.io/gsadmindoc">文档</a> | <a href="https://gsadmin.suiyidian.cn/">演示</a></div>
 
    <a href='https://gitee.com/kevn/gsadmin' target="_blank">
 				<img src='https://gitee.com/kevn/gsadmin/badge/star.svg?theme=dark' alt='star' style="vertical-align: middle">
