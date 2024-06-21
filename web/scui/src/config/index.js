@@ -6,10 +6,10 @@ const DEFAULT_CONFIG = {
 	DASHBOARD_URL: "/dashboard",
 
 	//版本号
-	APP_VER: "1.0.0",
+	APP_VER: "1.5.0",
 
 	//内核版本号
-	CORE_VER: "1.0.0",
+	CORE_VER: "1.5.0",
 
 	//接口地址
 	API_URL: process.env.NODE_ENV === 'development' && process.env.VUE_APP_PROXY === 'true' ? "/api" : process.env.VUE_APP_API_BASEURL,
@@ -73,7 +73,7 @@ Object.assign(DEFAULT_CONFIG, MY_CONFIG)
 
 // 如果生产模式，就合并动态的APP_CONFIG
 // public/config.js
-if(process.env.NODE_ENV === 'production'){
+if (process.env.NODE_ENV === 'production') {
 	Object.assign(DEFAULT_CONFIG, APP_CONFIG)
 }
 

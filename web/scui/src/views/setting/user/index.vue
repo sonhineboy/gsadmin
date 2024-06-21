@@ -3,12 +3,14 @@
     <el-container>
       <el-header>
         <div class="left-panel">
-          <el-button v-if="this.$AUTH('user.add')"
+          <el-button
+            v-if="this.$AUTH('user.add')"
             type="primary"
             icon="el-icon-plus"
             @click="add"
           ></el-button>
-          <el-button v-if="this.$AUTH('user.del')"
+          <el-button
+            v-if="this.$AUTH('user.del')"
             type="danger"
             plain
             icon="el-icon-delete"
@@ -82,7 +84,8 @@
                   @click="table_show(scope.row, scope.$index)"
                   >查看</el-button
                 >
-                <el-button v-if="this.$AUTH('user.edit')"
+                <el-button
+                  v-if="this.$AUTH('user.edit')"
                   text
                   type="primary"
                   size="small"
@@ -94,7 +97,13 @@
                   @confirm="table_del(scope.row, scope.$index)"
                 >
                   <template #reference>
-                    <el-button v-if="this.$AUTH('user.del')" text type="primary" size="small">删除</el-button>
+                    <el-button
+                      v-if="this.$AUTH('user.del')"
+                      text
+                      type="primary"
+                      size="small"
+                      >删除</el-button
+                    >
                   </template>
                 </el-popconfirm>
               </el-button-group>
@@ -144,7 +153,7 @@ export default {
   mounted() {
     // this.getGroup()
 
-    console.log(this.$AUTH("user.add"))
+    console.log(this.$AUTH("user.add"));
   },
   methods: {
     //添加
@@ -236,13 +245,13 @@ export default {
     },
     //搜索
     upsearch() {
-					let where;
+      let where;
       if (this.search.name) {
-        where = {name:this.search.name,real_name:this.search.name};
+        where = { name: this.search.name, real_name: this.search.name };
       } else {
         where = {};
       }
-      this.$refs.table.reload({where:where});
+      this.$refs.table.reload({ where: where });
     },
     //本地更新数据
     handleSuccess(data, mode) {

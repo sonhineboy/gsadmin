@@ -18,3 +18,6 @@ INSERT INTO `gc_menu_api_list`(`id`, `created_at`, `updated_at`, `deleted_at`, `
 INSERT INTO `gc_menu_api_list`(`id`, `created_at`, `updated_at`, `deleted_at`, `code`, `url`, `menu_id`) VALUES (23, '2022-11-06 10:25:37.550', '2022-11-06 10:25:37.550', NULL, 'post', '/api/system/menu/up', 108);
 INSERT INTO `gc_menu_api_list`(`id`, `created_at`, `updated_at`, `deleted_at`, `code`, `url`, `menu_id`) VALUES (24, '2022-11-06 10:26:16.539', '2022-11-06 12:00:50.791', NULL, 'post', '/api/system/menu/dels', 109);
 INSERT INTO `gc_menu_api_list`(`id`, `created_at`, `updated_at`, `deleted_at`, `code`, `url`, `menu_id`) VALUES (25, '2022-11-06 12:00:03.749', '2022-11-06 12:00:03.749', NULL, 'get', '/api/system/menu/my/1.6.1', 46);
+INSERT INTO `gc_menu_api_list`(`id`, `created_at`, `updated_at`, `deleted_at`, `code`, `url`, `menu_id`) VALUES (27, '2024-06-18 10:59:08.943', '2024-06-18 15:01:48.044', NULL, 'post', '/api/gen/genCode', 122);
+INSERT INTO `gc_menu_api_list`(`id`, `created_at`, `updated_at`, `deleted_at`, `code`, `url`, `menu_id`) VALUES (28, '2024-06-18 10:59:08.943', '2024-06-18 15:01:48.045', NULL, 'get', '/api/gen/fields', 122);
+INSERT INTO `gc_menu_api_list`(`id`, `created_at`, `updated_at`, `deleted_at`, `code`, `url`, `menu_id`) VALUES (29, '2024-06-18 10:59:08.943', '2024-06-18 15:01:48.046', NULL, 'get', '/api/gen/tables', 122);

@@ -28,8 +28,8 @@
 		},
 		methods: {
 			async getVer(){
-				// const ver = await this.$API.demo.ver.get()
-				// this.ver = ver.data
+				const ver = await this.$API.demo.ver.get()
+				this.ver = ver.data[0].name
 			},
 			golog(){
 				window.open("https://gitee.com/kevn/gsadmin/releases")

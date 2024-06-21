@@ -13,7 +13,6 @@ type RoleController struct {
 }
 
 func (r *RoleController) List(c *gin.Context) {
-
 	var (
 		params         requests.RoleList
 		roleRepository repositorys.RoleRepository

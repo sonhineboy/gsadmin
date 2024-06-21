@@ -2,6 +2,7 @@ package global
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
@@ -23,10 +24,24 @@ var (
 	SuperAdmin      string
 	EventDispatcher src.EventDispatcher
 	Limiter         *rate.Limiter
+	ormTrans        = map[string]string{
+		"record not found": "数据不存在",
+	}
 )
 
 // GetError 获取错误信息
-func GetError(errs validator.ValidationErrors, r interface{}) string {
+func GetError(errs error, r interface{}) string {
+	var (
+		v validator.ValidationErrors
+	)
+	if errors.As(errs, &v) {
+		return getValidateMsg(v, r)
+	} else {
+		return errs.Error()
+	}
+}
+
+func getValidateMsg(errs validator.ValidationErrors, r interface{}) string {
 	s := reflect.TypeOf(r)
 	for _, fieldError := range errs {
 		filed, _ := s.FieldByName(fieldError.Field())
@@ -36,12 +51,12 @@ func GetError(errs validator.ValidationErrors, r interface{}) string {
 		// 获取统一错误消息
 		errText := filed.Tag.Get("msg")
 		if errTagText != "" {
-			return errTagText
+			return filed.Tag.Get("json") + ":" + errTagText
 		}
 		if errText != "" {
 			return errText
 		}
-		return fieldError.Field() + ":" + fieldError.Tag()
+		return filed.Tag.Get("json") + ":" + fieldError.Tag()
 	}
 	return ""
 }
@@ -111,4 +126,32 @@ func GetEventDispatcher(c *gin.Context) *src.EventDispatcher {
 	}
 
 	return &e
+}
+
+func GormTans(err error) error {
+	if err != nil {
+		if v, ok := ormTrans[err.Error()]; ok {
+			return errors.New(v)
+		}
+	}
+	return err
+}
+
+func SlicesHasStr(s interface{}, str string) bool {
+
+	if v, ok := s.([]string); ok {
+		for _, ss := range v {
+			if ss == str {
+				return true
+			}
+		}
+	}
+
+	return false
+
+}
+
+func IsSlice(v interface{}) bool {
+	_, ok := v.([]interface{})
+	return ok
 }

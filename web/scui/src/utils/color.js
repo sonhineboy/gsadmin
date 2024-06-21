@@ -1,6 +1,9 @@
 export default {
 	//hex颜色转rgb颜色
 	HexToRgb(str) {
+		if (!str) {
+			str = "#409EFF"
+		}
 		str = str.replace("#", "")
 		var hxs = str.match(/../g)
 		for (var i = 0; i < 3; i++) hxs[i] = parseInt(hxs[i], 16)

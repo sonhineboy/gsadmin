@@ -3,13 +3,11 @@ package system
 import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"github.com/sonhineboy/gsadmin/service/app/requests"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadmin/service/global/response"
-	"net/http"
 )
 
 type UserController struct{}
@@ -26,19 +24,16 @@ func (u *UserController) Login(c *gin.Context) {
 	apiList := make(map[string]string)
 
 	err := c.ShouldBind(&LoginForm)
+	if err != nil {
+		response.Failed(c, global.GetError(err, LoginForm))
+		return
+	}
 
 	if !captcha.VerifyString(LoginForm.CaptchaId, LoginForm.CaptchaValue) {
 		response.Failed(c, "验证码错误")
 		return
 	}
 
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"code":  "422",
-			"error": global.GetError(err.(validator.ValidationErrors), LoginForm),
-		})
-		return
-	}
 	isLogin, user := userRepository.Login(LoginForm.PassWord, LoginForm.Name, c)
 
 	if isLogin {
@@ -75,7 +70,7 @@ func (u *UserController) Add(c *gin.Context) {
 	)
 	err := c.ShouldBind(&userAdd)
 	if err != nil {
-		response.Failed(c, global.GetError(err.(validator.ValidationErrors), userAdd))
+		response.Failed(c, global.GetError(err, userAdd))
 		return
 	}
 	result, model := userRepository.Add(userAdd.PassWord, userAdd.Name, userAdd)
@@ -106,7 +101,7 @@ func (u *UserController) Up(c *gin.Context) {
 	)
 	err := c.ShouldBind(&data)
 	if err != nil {
-		response.Failed(c, global.GetError(err.(validator.ValidationErrors), data))
+		response.Failed(c, global.GetError(err, data))
 		return
 	}
 

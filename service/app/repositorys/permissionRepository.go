@@ -47,7 +47,7 @@ func GetPermission(c *gin.Context) *PermissionRepository {
 	}
 }
 
-//判断是否某个用户组
+// IsRole 判断是否某个用户组
 func (p *PermissionRepository) IsRole(role string) bool {
 	for _, v := range p.CustomClaims.Roles {
 		if v == role {

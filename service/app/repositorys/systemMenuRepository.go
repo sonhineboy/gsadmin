@@ -14,7 +14,7 @@ type SystemMenuRepository struct {
 	MenuModel models.AdminMenu
 }
 
-// 添加菜单
+//Add 添加菜单
 func (menu *SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.AdminMenu) {
 	menu.MenuModel.Name = post.Name
 	menu.MenuModel.Component = post.Component
@@ -32,7 +32,7 @@ func (menu *SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.
 	return global.Db.Create(&menu.MenuModel), menu.MenuModel
 }
 
-// 更新菜单
+//Update 更新菜单
 func (menu *SystemMenuRepository) Update(post requests.MenuPost) (error, models.AdminMenu) {
 	var updateData models.AdminMenu
 	updateData.Name = post.Name
