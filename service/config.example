@@ -1,3 +1,4 @@
+env: 'dev' #dev 开发环境会启用代码生成工具
 db:
   type: 'mysql'
   host: '127.0.0.1' #这个地方填写msyql服务的IP

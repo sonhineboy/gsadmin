@@ -5,7 +5,8 @@ import (
 )
 
 type Config struct {
-	Db struct {
+	Env string `yaml:"env"`
+	Db  struct {
 		Type         string `yaml:"type"`
 		MaxIdleConns int    `yaml:"max-idle-conns"`
 		MaxOpenConns int    `yaml:"max-open-conns"`

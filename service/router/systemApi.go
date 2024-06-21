@@ -48,7 +48,7 @@ func SystemApiInit(r *gin.RouterGroup) {
 		var genController system.GenController
 		gen.GET("/tables", genController.GetTables)
 		gen.GET("/fields", genController.TableFields)
-		gen.POST("/genCode", genController.GenCode)
+		gen.Use(middleware.EnvCheck()).POST("/genCode", genController.GenCode)
 	}
 
 	//gen_news
