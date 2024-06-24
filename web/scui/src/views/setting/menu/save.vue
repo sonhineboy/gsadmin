@@ -23,7 +23,7 @@
           <el-form-item label="排序" prop="sort">
             <el-input-number
               v-model="form.sort"
-              placeholder=""
+              placeholder="4"
             ></el-input-number>
           </el-form-item>
           <el-form-item label="上级菜单" prop="parentId">
@@ -195,7 +195,9 @@ export default {
         "#409EFF",
         "#c71585",
       ],
-      rules: [],
+      rules: {
+        sort: [{ type: "number", trigger: "blur" }],
+      },
       apiListAddTemplate: {
         code: "",
         url: "",
@@ -248,7 +250,6 @@ export default {
         }
       });
 
-      
       if (copyForm.children) {
         delete copyForm.children;
       }
