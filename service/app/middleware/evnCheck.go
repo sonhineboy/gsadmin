@@ -13,7 +13,7 @@ func EnvCheck() gin.HandlerFunc {
 		if global.Config.Env == "dev" {
 			context.Next()
 		} else {
-			response.Failed(context, "生成环境当前操作不允许！")
+			response.Failed(context, "生产环境当前操作不允许！")
 			context.Abort()
 			return
 		}
