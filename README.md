@@ -1,8 +1,8 @@
 ## 介绍
 
 <div align=center>
-<img src="https://kevn.gitee.io/gsadmindoc/img/gslogo.png" width=20%><br/>
-<div style="padding: 20px 0"><a href="https://gsadmin.suiyidian.cn">文档</a> | <a href="https://gsadmin.suiyidian.cn/">演示</a></div>
+<img src="https://gsadmindoc.suiyidian.cn/img/gslogo.png" width=20%><br/>
+<div style="padding: 20px 0"><a href="https://gsadmindoc.suiyidian.cn">文档</a> | <a href="https://gsadmin.suiyidian.cn/">演示</a></div>
 
    <a href='https://gitee.com/kevn/gsadmin' target="_blank">
 				<img src='https://gitee.com/kevn/gsadmin/badge/star.svg?theme=dark' alt='star' style="vertical-align: middle">
@@ -85,10 +85,10 @@ GS Admin 是一个开源项目，一个开源项目的发展离不开开源社�
 <b>微信群</b>：加个人微信后，拉入  
 备注：<u>gsadmin 无备注不通过</u>
 
-<img src="https://kevn.gitee.io/gsadmindoc/img/wx.jpg" width="50%">
+<img src="https://gsadmindoc.suiyidian.cn/img/wx.jpg" width="50%">
 
 ## ☕ 捐赠
 > <b>提示</b>  
 > 除了贡献代码，「捐赠]」也是一种开源的参与形式。 非常感谢每一位对开源项目作出捐赠的朋友;您的捐赠将统一公示，主要用于本项目的推动
 
-<img src="https://kevn.gitee.io/gsadmindoc/img/ds.jpg" alt="赏杯咖啡">
+<img src="https://gsadmindoc.suiyidian.cn/img/ds.jpg" alt="赏杯咖啡">
