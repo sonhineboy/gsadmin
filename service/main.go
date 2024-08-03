@@ -15,7 +15,6 @@ func main() {
 	}
 	global.GAD_APP_PATH = dir + "/"
 	app.Start()
-
 	//自动迁移开始
 	db, _ := global.Db.DB()
 	defer func() { _ = db.Close() }()

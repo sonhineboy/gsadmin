@@ -226,4 +226,19 @@ tool.validate = {
 	}
 }
 
+
+
+tool.SwapArr = function (array, oldIndex, newIndex) {
+	if (oldIndex < 0 || oldIndex >= array.length || newIndex < 0 || newIndex >= array.length) {
+		throw new Error('Index out of bounds');
+	}
+
+	// 将旧索引处的元素移除
+	const element = array.splice(oldIndex, 1)[0];
+	// 将移除的元素插入到新索引处
+	array.splice(newIndex, 0, element);
+
+	return array;
+}
+
 export default tool

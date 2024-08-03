@@ -92,7 +92,12 @@
           </div>
         </el-header>
         <el-main class="nopadding">
-          <el-table :data="tableData" style="width: 100%">
+          <el-table
+            :data="tableData"
+            class="table"
+            style="width: 100%"
+            row-key="id"
+          >
             <el-table-column prop="name" label="字段名"></el-table-column>
             <el-table-column prop="transform" label="翻译"></el-table-column>
             <el-table-column prop="type" label="类型"></el-table-column>
@@ -249,6 +254,8 @@
 
 
 <script>
+import sortTable from "sortablejs";
+
 export default {
   name: "gen",
   data() {
@@ -334,6 +341,35 @@ export default {
     let _that = this;
     this.$API.gen.tables.get().then(function (re) {
       _that.tableNames = re.data;
+    });
+  },
+  mounted() {
+    // 获取el-table DOM
+    const el = document.querySelector(".el-table__body-wrapper  table tbody");
+
+    let _that = this;
+    //
+    sortTable.create(el, {
+      animation: 300,
+      //拖动结束
+      onEnd: function (evt) {
+        console.log("new-->", evt.newIndex, "old-->", evt.oldIndex, "evt", evt);
+
+        let old = _that.tableData[evt.oldIndex];
+
+        _that.tableData.splice(evt.oldIndex, 1);
+
+        _that.tableData.splice(evt.newIndex, 0, old);
+        // _that.tableData = newArr;
+
+        // _that.tableData = _that.$TOOL.SwapArr(
+        //   _that.tableData,
+        //   evt.oldIndex,
+        //   evt.newIndex
+        // );
+
+        console.log(_that.tableData);
+      },
     });
   },
   methods: {

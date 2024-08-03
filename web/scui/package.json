@@ -19,7 +19,7 @@
 		"element-plus": "2.2.12",
 		"nprogress": "0.2.0",
 		"qrcodejs2": "0.0.2",
-		"sortablejs": "1.15.0",
+		"sortablejs": "^1.15.0",
 		"tinymce": "6.1.2",
 		"vue": "3.2.37",
 		"vue-i18n": "9.2.2",

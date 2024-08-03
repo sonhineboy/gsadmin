@@ -1,11 +1,12 @@
 package test
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/sonhineboy/gsadmin/service/app/models"
-	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
+	"os"
 	"reflect"
 	"strconv"
 	"sync"
@@ -243,6 +244,35 @@ func TestGenModel(t *testing.T) {
 }
 
 func TestHasSlice(t *testing.T) {
-	c := []string{"hello", "name", "black"}
-	fmt.Println(global.SlicesHasStr(c, "name"))
+	//fmt.Println(dir)
+}
+
+func TestRead(t *testing.T) {
+
+	// 打开文件
+	file, err := os.Open("orm_test.go")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	// 创建一个新的 scanner
+	scanner := bufio.NewScanner(file)
+
+	i := 1
+
+	// 按行读取文件
+	for scanner.Scan() {
+		line := scanner.Text()     // 获取当前行的内容
+		fmt.Println(i, "  ", line) // 打印当前行
+
+		i++
+	}
+
+	// 检查读取过程中是否出现错误
+	if err := scanner.Err(); err != nil {
+		fmt.Println(i, "  ", err)
+
+	}
 }
