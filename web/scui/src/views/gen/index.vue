@@ -356,17 +356,18 @@ export default {
         console.log("new-->", evt.newIndex, "old-->", evt.oldIndex, "evt", evt);
 
         let old = _that.tableData[evt.oldIndex];
+        // _that.tableData[evt.oldIndex] = _that.tableData[evt.newIndex];
+        // _that.tableData[evt.newIndex] = old;
 
         _that.tableData.splice(evt.oldIndex, 1);
-
         _that.tableData.splice(evt.newIndex, 0, old);
-        // _that.tableData = newArr;
 
-        // _that.tableData = _that.$TOOL.SwapArr(
-        //   _that.tableData,
-        //   evt.oldIndex,
-        //   evt.newIndex
-        // );
+        var newArray = _that.tableData.slice(0);
+        _that.tableData = [];
+
+        _that.$nextTick(function () {
+          _that.tableData = newArray;
+        });
 
         console.log(_that.tableData);
       },

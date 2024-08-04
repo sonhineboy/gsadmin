@@ -35,27 +35,19 @@
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column label="#" type="index" width="50"></el-table-column>
         <el-table-column label="ID" prop="id" width="50"></el-table-column>
-        
-			
-			<el-table-column label="标题" prop="title"></el-table-column>
-			
-		
-			
-			<el-table-column label="作者" prop="author"></el-table-column>
-			
-		
-			
-			<el-table-column label="内容" prop="content"></el-table-column>
-			
-		
-			
-					<el-table-column label="缩略图" prop="image">
-						<template #default="scope">
-							<el-image :src="scope.row.image" style="max-width: 50px"></el-image>
-						</template>
-					</el-table-column>
-			
-		
+
+        <el-table-column label="标题" prop="title"></el-table-column>
+
+        <el-table-column label="作者" prop="author"></el-table-column>
+
+        <el-table-column label="内容" prop="content"></el-table-column>
+
+        <el-table-column label="缩略图" prop="image">
+          <template #default="scope">
+            <el-image :src="scope.row.image" style="max-width: 50px"></el-image>
+          </template>
+        </el-table-column>
+
         <el-table-column label="时间" prop="created_at"></el-table-column>
         <el-table-column label="操作" fixed="right" width="100">
           <template #default="scope">
@@ -141,12 +133,16 @@ export default {
       this.selection.forEach((v) => {
         ids.unshift(v.id);
       });
-      this.$confirm("确定删除选中的"+this.selection.length+"项吗？", "提示", {
-        type: "warning",
-      })
+      this.$confirm(
+        "确定删除选中的" + this.selection.length + "项吗？",
+        "提示",
+        {
+          type: "warning",
+        }
+      )
         .then(async () => {
           _that.loading = true;
-          let res = await _that.$API.userMember.delete.post({ ids: ids });
+          let res = await _that.$API.news.delete.post({ ids: ids });
           _that.loading = false;
 
           if (res.code === 200) {
