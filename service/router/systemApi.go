@@ -51,6 +51,8 @@ func SystemApiInit(r *gin.RouterGroup) {
 		gen.Use(middleware.EnvCheck()).POST("/genCode", genController.GenCode)
 	}
 
+	//router gen start not delete
+
 	//gen_news
 	News := r.Group("/news")
 	{
@@ -61,5 +63,7 @@ func SystemApiInit(r *gin.RouterGroup) {
 		News.GET("/:id", NewsController.Get)
 		News.POST("/edit/:id", NewsController.Edit)
 	}
+
+	//router gen end not delete
 
 }
