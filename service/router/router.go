@@ -1,14 +1,14 @@
 package router
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/controllers/system"
 	"github.com/sonhineboy/gsadmin/service/app/middleware"
 	"github.com/sonhineboy/gsadmin/service/global"
 )
 
 func RouteInit() {
-
-	global.GAD_R.Use(middleware.Limiter(), middleware.Event())
+	global.GAD_R.Use(gin.Recovery(), middleware.Limiter(), middleware.Event())
 	global.GAD_R.GET("/api/common/captcha/img/:id/:w/:h", ApiControllers.CommonController.CaptchaImage)
 	global.GAD_R.GET("/api/common/captcha/info", ApiControllers.CommonController.CaptchaInfo)
 	global.GAD_R.GET("/api/common/version", ApiControllers.CommonController.GetVersion)
