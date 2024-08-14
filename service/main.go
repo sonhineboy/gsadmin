@@ -12,12 +12,13 @@ import (
 func main() {
 	dir, err := os.Getwd()
 	if err != nil {
+		panic(fmt.Sprintf("GetWd err:%v", err))
 	}
-	global.GAD_APP_PATH = dir + "/"
+	global.GAD_APP_PATH = dir + string(os.PathSeparator)
 	app.Start()
 	//自动迁移开始
 	db, _ := global.Db.DB()
-	defer func() { _ = db.Close() }()
+
 	amErr := global.Db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
 		&models.AdminUser{},
 		&models.AdminMenu{},
@@ -35,4 +36,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	defer func() {
+		_ = db.Close()
+	}()
 }

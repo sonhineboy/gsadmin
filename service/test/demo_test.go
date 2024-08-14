@@ -6,6 +6,7 @@ import (
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
+	"go.uber.org/zap/zapcore"
 	"os"
 	"reflect"
 	"strconv"
@@ -276,53 +277,7 @@ func TestRead(t *testing.T) {
 
 }
 
-func TestReadWrite(t *testing.T) {
+func TestZap(t *testing.T) {
 
-	file, err := os.Open("./a.text")
-
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	defer file.Close()
-
-	linnes := make([]string, 300)
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-
-		fmt.Println(scanner.Text())
-		linnes = append(linnes, scanner.Text()+"\n")
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
-	}
-
-	linnes = append(linnes, "sdfsdf"+"\n")
-
-	aa, err := os.Create("./a.text")
-
-	defer aa.Close()
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	_, _ = aa.WriteString("asfasdfsa")
-	writer := bufio.NewWriter(aa)
-
-	for i, _ := range linnes {
-		_, err := writer.Write([]byte(linnes[i]))
-		if err != nil {
-			t.Fatalf("writer %v", err)
-		}
-	}
-
-	err = writer.Flush()
-	if err != nil {
-		panic(err)
-	}
-
+	zapcore.NewTee()
 }

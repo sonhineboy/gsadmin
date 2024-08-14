@@ -12,7 +12,7 @@ require (
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be
 	golang.org/x/time v0.2.0
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/datatypes v1.0.7
+	gorm.io/datatypes v1.0.5
 	gorm.io/driver/mysql v1.4.1
 	gorm.io/gorm v1.23.10
 )
@@ -32,6 +32,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
+	go.uber.org/zap v1.1.0 // indirect
 	golang.org/x/net v0.0.0-20220927171203-f486391704dc // indirect
 	golang.org/x/sys v0.0.0-20220928140112-f11e5e49a4ec // indirect
 	golang.org/x/text v0.3.7 // indirect
