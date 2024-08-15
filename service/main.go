@@ -19,9 +19,6 @@ func main() {
 	defer func() {
 		app.DiyDefer()
 	}()
-
-	global.Logger.Error("sss")
-	global.Logger.Info("Info Info Info Info Info")
 	err = global.GAD_R.Run(global.Config.App.Port)
 	if err != nil {
 		panic(err)
