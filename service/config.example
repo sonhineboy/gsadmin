@@ -20,3 +20,8 @@ app:
 rate: #限流配置
   limit: 15
   burst: 15
+logger:
+  drive: "zap" # 日志记录驱动
+  path: "logs" # 日志存放路径
+  size: 10 # 日志大小
+  maxAge: 3 #日志保留天数

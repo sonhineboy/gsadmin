@@ -30,4 +30,10 @@ type Config struct {
 		Limit rate.Limit `yaml:"limit"`
 		Burst int        `yaml:"burst"`
 	}
+	Logger struct {
+		Drive  string `yaml:"drive"`
+		Path   string `yaml:"path"`
+		Size   int    `yaml:"size"`
+		MaxAge int    `yaml:"maxAge"`
+	}
 }

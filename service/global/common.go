@@ -9,6 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/sonhineboy/gsadmin/service/config"
 	"github.com/sonhineboy/gsadmin/service/src"
+	"go.uber.org/zap"
 	"golang.org/x/time/rate"
 	"gorm.io/gorm"
 	"net/http"
@@ -24,6 +25,7 @@ var (
 	SuperAdmin      string
 	EventDispatcher src.EventDispatcher
 	Limiter         *rate.Limiter
+	Logger          *zap.SugaredLogger
 	ormTrans        = map[string]string{
 		"record not found": "数据不存在",
 	}

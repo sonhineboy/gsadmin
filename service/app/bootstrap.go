@@ -28,7 +28,13 @@ func TestLoad() {
 
 func loadObject() {
 	global.Db = initialize.DbInit(global.Config)
+	initialize.AutoMigrate(global.Db)
 	global.EventDispatcher = initialize.EventInit()
 	global.Limiter = rate.NewLimiter(global.Config.Rate.Limit, global.Config.Rate.Burst)
+	global.Logger = initialize.ZapInit(global.Config)
+}
 
+func DiyDefer() {
+	initialize.DbClose(global.Db)
+	initialize.ZapSync(global.Logger)
 }
