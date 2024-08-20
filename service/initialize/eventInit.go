@@ -3,12 +3,12 @@ package initialize
 import (
 	"github.com/sonhineboy/gsadmin/service/app/event"
 	"github.com/sonhineboy/gsadmin/service/app/listener"
-	"github.com/sonhineboy/gsadmin/service/src"
+	event2 "github.com/sonhineboy/gsadmin/service/pkg/event"
 )
 
-func EventInit() src.EventDispatcher {
+func EventInit() event2.EventDispatcher {
 
-	EventDispatcher := src.NewDispatcher()
+	EventDispatcher := event2.NewDispatcher()
 	EventDispatcher.Register(event.TestEvent{}.GetEventName(), listener.NewTestListener())
 	EventDispatcher.Register(event.LoginEvent{}.GetEventName(), listener.NewTestListener())
 	return EventDispatcher

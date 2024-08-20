@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/sonhineboy/gsadmin/service/config"
-	"github.com/sonhineboy/gsadmin/service/src"
+	"github.com/sonhineboy/gsadmin/service/pkg/event"
 	"go.uber.org/zap"
 	"golang.org/x/time/rate"
 	"gorm.io/gorm"
@@ -23,7 +23,7 @@ var (
 	Config          *config.Config
 	Db              *gorm.DB
 	SuperAdmin      string
-	EventDispatcher src.EventDispatcher
+	EventDispatcher event.EventDispatcher
 	Limiter         *rate.Limiter
 	Logger          *zap.SugaredLogger
 	ormTrans        = map[string]string{
@@ -111,7 +111,7 @@ func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, 
 	return nil
 }
 
-func GetEventDispatcher(c *gin.Context) *src.EventDispatcher {
+func GetEventDispatcher(c *gin.Context) *event.EventDispatcher {
 
 	v, ok := c.Get("e")
 
@@ -120,7 +120,7 @@ func GetEventDispatcher(c *gin.Context) *src.EventDispatcher {
 		return nil
 	}
 
-	e, ok := v.(src.EventDispatcher)
+	e, ok := v.(event.EventDispatcher)
 
 	if ok == false {
 		fmt.Print("类型不正确")
