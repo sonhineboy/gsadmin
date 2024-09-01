@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestStringTo(t *testing.T) {
@@ -280,4 +281,24 @@ func TestRead(t *testing.T) {
 func TestZap(t *testing.T) {
 
 	zapcore.NewTee()
+}
+
+func TestFor(t *testing.T) {
+
+	ints := make(map[int]int)
+
+	for i := 0; i < 3; i++ {
+		ints[i] = i
+	}
+
+	for i2, i3 := range ints {
+		c := i2
+		d := i3
+		go func() {
+			fmt.Println(c, d)
+		}()
+	}
+
+	time.Sleep(5 * time.Second)
+
 }

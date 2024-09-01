@@ -75,6 +75,7 @@
                   label="生成前端模板"
                   value="genRepository"
                 ></el-checkbox>
+                <el-checkbox label="生成数据库" value="genDb"></el-checkbox>
               </el-checkbox-group>
             </el-col>
           </el-row>
