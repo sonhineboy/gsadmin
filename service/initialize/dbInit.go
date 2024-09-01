@@ -33,13 +33,14 @@ func DbInit(c *config.Config) *gorm.DB {
 func AutoMigrate(db *gorm.DB) {
 
 	err := db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
-		//slot not delete
+		//slot start not delete
 		&models.AdminUser{},
 		&models.AdminMenu{},
 		&models.MenuApiList{},
 		&models.Role{},
 		&models.OperationLog{},
 		&models.News{},
+		//slot end not delete
 	)
 
 	if err != nil {
