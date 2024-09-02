@@ -25,3 +25,4 @@ logger:
   path: "logs" # 日志存放路径
   size: 10 # 日志大小
   maxAge: 3 #日志保留天数
+  stdOut: true #控制台输出

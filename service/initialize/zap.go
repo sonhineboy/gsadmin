@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"os"
 	"time"
 )
 
@@ -40,5 +41,10 @@ func ws(c *config.Config) zapcore.WriteSyncer {
 		MaxAge:   c.Logger.MaxAge,
 		Compress: false,
 	}
-	return zapcore.AddSync(lumberjackLogger)
+
+	if c.Logger.StdOut {
+		return zapcore.NewMultiWriteSyncer(zapcore.AddSync(lumberjackLogger), zapcore.AddSync(os.Stdout))
+	} else {
+		return zapcore.AddSync(lumberjackLogger)
+	}
 }

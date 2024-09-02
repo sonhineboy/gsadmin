@@ -1,6 +1,9 @@
 package models
 
-import "github.com/sonhineboy/gsadmin/service/global"
+import (
+	"fmt"
+	"github.com/sonhineboy/gsadmin/service/global"
+)
 
 type Article struct {
 	Title        string `gorm:"column:title;type:varchar(100);NOT NULL" json:"title"`
@@ -14,5 +17,5 @@ type Article struct {
 }
 
 func (m *Article) TableName() string {
-	return "article"
+	return fmt.Sprint(global.Config.Db.TablePrefix, "article")
 }

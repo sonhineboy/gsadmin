@@ -7,6 +7,7 @@ import (
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
 	"gorm.io/gorm"
+	"strings"
 )
 
 type GenRepository struct {
@@ -130,19 +131,57 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 	}
 
 	if global.SlicesHasStr(data.Checkbox, "生成前端模板") {
-		err = gsadminGen.GenIndex("./web/view/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"index.vue", v)
+		err = gsadminGen.GenIndex(`../web/scui/src/views/`+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"index.vue", v)
 		if err != nil {
 			return err
 		}
 
-		err = gsadminGen.GenForm("./web/view/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"form.vue", v)
+		err = gsadminGen.GenForm("../web/scui/src/views/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"form.vue", v)
 		if err != nil {
 			return err
 		}
-		err = gsadminGen.GenApi("./web/js/model/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".js", v)
+		err = gsadminGen.GenApi("../web/scui/src/api/model/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".js", v)
 		if err != nil {
 			return err
 		}
 	}
+
+	if global.SlicesHasStr(data.Checkbox, "生成路由") {
+
+		routerWriter := pkg.NewWriterRouter(fmt.Sprint(global.GAD_APP_PATH, "router/systemApi.go"), "//router gen start not delete", data.ControllerPackage)
+
+		err = routerWriter.Write([]string{
+			"",
+			fmt.Sprint("\t", "//gen_", gsadminGen.UnderToConvertSoreLow(v.Name)),
+			fmt.Sprint("\t", gsadminGen.UnderToConvertSoreLow(v.Name), " :=", " r.Group(\"", gsadminGen.UnderToConvertSoreLow(v.Name), "\")"),
+			fmt.Sprint("\t", "{"),
+			fmt.Sprint("\t\t", "var ", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", " ", data.ControllerPackage, ".", strings.Title(gsadminGen.UnderToConvertSoreLow(v.Name)), "Controller"),
+			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".GET(\"/index\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Index)"),
+			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/save\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Save)"),
+			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/delete\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Delete)"),
+			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/:id\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Get)"),
+			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/edit/:id\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Edit)"),
+			fmt.Sprint("\t", "}"),
+			"",
+		})
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if global.SlicesHasStr(data.Checkbox, "生成数据库") {
+
+		dbTableWriter := pkg.NewWriterAutoModel(fmt.Sprint(global.GAD_APP_PATH, "initialize/dbInit.go"), "//slot start not delete")
+
+		err = dbTableWriter.Write([]string{
+			fmt.Sprint("\t\t&models.", strings.Title(gsadminGen.UnderToConvertSoreLow(v.Name)), "{},"),
+		})
+
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }

@@ -50,32 +50,25 @@
           <el-row>
             <el-col :span="24">
               <el-checkbox-group v-model="form.checkbox">
+                <el-checkbox label="生成Model" value="genModel"></el-checkbox>
                 <el-checkbox
-                  checked
-                  label="生成Model"
-                  value="genModel"
-                ></el-checkbox>
-                <el-checkbox
-                  checked
                   label="生成Request"
                   value="genRequest"
                 ></el-checkbox>
                 <el-checkbox
-                  checked
                   label="生成Controller"
                   value="genController"
                 ></el-checkbox>
                 <el-checkbox
-                  checked
                   label="生成Repository"
                   value="genRepository"
                 ></el-checkbox>
                 <el-checkbox
-                  checked
                   label="生成前端模板"
                   value="genRepository"
                 ></el-checkbox>
                 <el-checkbox label="生成数据库" value="genDb"></el-checkbox>
+                <el-checkbox label="生成路由" value="genRouter"></el-checkbox>
               </el-checkbox-group>
             </el-col>
           </el-row>

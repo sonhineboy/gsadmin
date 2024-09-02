@@ -2,6 +2,7 @@ package system
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"github.com/sonhineboy/gsadmin/service/app/requests"
 	"github.com/sonhineboy/gsadmin/service/global"
@@ -73,9 +74,10 @@ func (gen *GenController) GenCode(ctx *gin.Context) {
 		re   = repositorys.NewGenRepository()
 	)
 
-	err := ctx.ShouldBind(&data)
+	err := ctx.ShouldBindBodyWith(&data, binding.JSON)
 	if err != nil {
-		response.Failed(ctx, global.GetError(err, data))
+		global.Logger.Errorf("参数绑定错误：%v", err)
+		response.Failed(ctx, global.GetError(err, data)+"xxxx")
 		return
 	}
 

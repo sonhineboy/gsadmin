@@ -35,5 +35,6 @@ type Config struct {
 		Path   string `yaml:"path"`
 		Size   int    `yaml:"size"`
 		MaxAge int    `yaml:"maxAge"`
+		StdOut bool   `yaml:"stdOut"`
 	}
 }

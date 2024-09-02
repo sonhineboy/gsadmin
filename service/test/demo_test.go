@@ -3,7 +3,9 @@ package test
 import (
 	"bufio"
 	"fmt"
+	"github.com/sonhineboy/gsadmin/service/app"
 	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
 	"go.uber.org/zap/zapcore"
@@ -301,4 +303,10 @@ func TestFor(t *testing.T) {
 
 	time.Sleep(5 * time.Second)
 
+}
+
+func TestConfig(t *testing.T) {
+
+	app.TestLoad()
+	fmt.Println(global.Config.Db.TablePrefix)
 }
