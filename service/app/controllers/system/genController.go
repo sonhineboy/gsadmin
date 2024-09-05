@@ -77,7 +77,12 @@ func (gen *GenController) GenCode(ctx *gin.Context) {
 	err := ctx.ShouldBindBodyWith(&data, binding.JSON)
 	if err != nil {
 		global.Logger.Errorf("参数绑定错误：%v", err)
-		response.Failed(ctx, global.GetError(err, data)+"xxxx")
+		response.Failed(ctx, global.GetError(err, data))
+		return
+	}
+
+	if global.SlicesHasStr(data.Checkbox, "生成菜单") && len(data.MenuName) <= 0 {
+		response.Failed(ctx, "菜单名称必须填写")
 		return
 	}
 

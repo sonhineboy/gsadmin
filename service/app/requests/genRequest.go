@@ -13,4 +13,5 @@ type GenCode struct {
 	Checkbox          []string    `json:"checkbox" binding:"required"`
 	ControllerPackage string      `json:"controllerPackage" binding:"required"`
 	TableDiyName      string      `json:"tableDiyName" binding:"required"`
+	MenuName          string      `json:"menuName"`
 }

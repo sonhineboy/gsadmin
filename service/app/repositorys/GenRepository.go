@@ -2,6 +2,7 @@ package repositorys
 
 import (
 	"fmt"
+	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/requests"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadminGen"
@@ -20,6 +21,13 @@ func NewGenRepository() *GenRepository {
 	}
 }
 
+//
+// GetTables
+//  @Description: 获取数据表
+//  @receiver     r *GenRepository
+//  @return       tableSlice
+//  @return       err
+//
 func (r *GenRepository) GetTables() (tableSlice []map[string]string, err error) {
 	tableSlice = make([]map[string]string, 0, 10)
 	tables, err := r.Db.Migrator().GetTables()
@@ -32,6 +40,15 @@ func (r *GenRepository) GetTables() (tableSlice []map[string]string, err error) 
 	return
 }
 
+//
+// TableField
+//  @Description: 表字段
+//  @receiver     r *GenRepository
+//  @param        name string
+//  @param        function func(fieldsSlices []map[string]interface{}, columnType gorm.ColumnType, r *GenRepository) []map[string]interface{}
+//  @return       []map[string]interface{}
+//  @return       error
+//
 func (r *GenRepository) TableField(name string, function func(fieldsSlices []map[string]interface{}, columnType gorm.ColumnType, r *GenRepository) []map[string]interface{}) ([]map[string]interface{}, error) {
 
 	column, err := r.Db.Migrator().ColumnTypes(name)
@@ -55,6 +72,14 @@ func (r *GenRepository) TableField(name string, function func(fieldsSlices []map
 	return fieldsSlices, nil
 }
 
+//
+// GetIndexType
+//  @Description: 获取索引类型
+//  @receiver     r *GenRepository
+//  @param        column string
+//  @param        Indexes map[string]map[string]interface{}
+//  @return       string
+//
 func (r *GenRepository) GetIndexType(column string, Indexes map[string]map[string]interface{}) string {
 
 	v, ok := Indexes[column]
@@ -70,6 +95,13 @@ func (r *GenRepository) GetIndexType(column string, Indexes map[string]map[strin
 	return "Null"
 }
 
+//
+// GetTablesIndexes
+//  @Description: 获取索引
+//  @receiver     r *GenRepository
+//  @param        tables string
+//  @return       indexMap
+//
 func (r *GenRepository) GetTablesIndexes(tables string) (indexMap map[string]map[string]interface{}) {
 	var indexes []map[string]interface{}
 	r.Db.Raw(fmt.Sprint("show Index from ", tables)).Scan(&indexes)
@@ -88,6 +120,12 @@ func (r *GenRepository) GetTablesIndexes(tables string) (indexMap map[string]map
 	return
 }
 
+//
+// getIgnoreField
+//  @Description: 获取忽略字段
+//  @receiver     r *GenRepository
+//  @return       map[string]string
+//
 func (r *GenRepository) getIgnoreField() map[string]string {
 	return map[string]string{
 		"id":         "true",
@@ -97,12 +135,20 @@ func (r *GenRepository) getIgnoreField() map[string]string {
 	}
 }
 
+//
+// GenCode
+//  @Description: 根据数据生成业务代码
+//  @receiver     r *GenRepository
+//  @param        data requests.GenCode
+//  @return       error
+//
 func (r *GenRepository) GenCode(data requests.GenCode) error {
 
 	v := pkg.TableModal{
 		Name:   data.TableDiyName,
 		Fields: data.Fields,
 	}
+
 	var err error
 
 	if global.SlicesHasStr(data.Checkbox, "生成Controller") {
@@ -131,16 +177,7 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 	}
 
 	if global.SlicesHasStr(data.Checkbox, "生成前端模板") {
-		err = gsadminGen.GenIndex(`../web/scui/src/views/`+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"index.vue", v)
-		if err != nil {
-			return err
-		}
-
-		err = gsadminGen.GenForm("../web/scui/src/views/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"form.vue", v)
-		if err != nil {
-			return err
-		}
-		err = gsadminGen.GenApi("../web/scui/src/api/model/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".js", v)
+		err = r.genWebTemp(v)
 		if err != nil {
 			return err
 		}
@@ -149,21 +186,7 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 	if global.SlicesHasStr(data.Checkbox, "生成路由") {
 
 		routerWriter := pkg.NewWriterRouter(fmt.Sprint(global.GAD_APP_PATH, "router/systemApi.go"), "//router gen start not delete", data.ControllerPackage)
-
-		err = routerWriter.Write([]string{
-			"",
-			fmt.Sprint("\t", "//gen_", gsadminGen.UnderToConvertSoreLow(v.Name)),
-			fmt.Sprint("\t", gsadminGen.UnderToConvertSoreLow(v.Name), " :=", " r.Group(\"", gsadminGen.UnderToConvertSoreLow(v.Name), "\")"),
-			fmt.Sprint("\t", "{"),
-			fmt.Sprint("\t\t", "var ", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", " ", data.ControllerPackage, ".", strings.Title(gsadminGen.UnderToConvertSoreLow(v.Name)), "Controller"),
-			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".GET(\"/index\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Index)"),
-			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/save\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Save)"),
-			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/delete\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Delete)"),
-			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/:id\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Get)"),
-			fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/edit/:id\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Edit)"),
-			fmt.Sprint("\t", "}"),
-			"",
-		})
+		err = routerWriter.Write(r.getRouters(v, data))
 		if err != nil {
 			return err
 		}
@@ -173,7 +196,6 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 	if global.SlicesHasStr(data.Checkbox, "生成数据库") {
 
 		dbTableWriter := pkg.NewWriterAutoModel(fmt.Sprint(global.GAD_APP_PATH, "initialize/dbInit.go"), "//slot start not delete")
-
 		err = dbTableWriter.Write([]string{
 			fmt.Sprint("\t\t&models.", strings.Title(gsadminGen.UnderToConvertSoreLow(v.Name)), "{},"),
 		})
@@ -183,5 +205,167 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 		}
 	}
 
+	if global.SlicesHasStr(data.Checkbox, "生成菜单") {
+		err := r.genMenu(v, data)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+//
+// genWebTemp
+//  @Description: 生成前台模板
+//  @receiver     r *GenRepository
+//  @param        v pkg.TableModal
+//  @return       err
+//
+func (r *GenRepository) genWebTemp(v pkg.TableModal) error {
+	err := gsadminGen.GenIndex(`../web/scui/src/views/`+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"index.vue", v)
+	if err != nil {
+		return fmt.Errorf("genWebTemp Index Err %v", err)
+	}
+
+	err = gsadminGen.GenForm("../web/scui/src/views/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"form.vue", v)
+	if err != nil {
+		return fmt.Errorf("genWebTemp Form Err %v", err)
+	}
+	err = gsadminGen.GenApi("../web/scui/src/api/model/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".js", v) //
+	if err != nil {
+		return fmt.Errorf("genWebTemp Api Err %v", err)
+	}
+	return nil
+}
+
+//
+// getRouters
+//  @Description: 获取要生成路由的数据
+//  @receiver     r
+//  @param        v pkg.TableModal
+//  @param        data requests.GenCode
+//  @return       []string
+//
+func (r *GenRepository) getRouters(v pkg.TableModal, data requests.GenCode) []string {
+
+	return []string{
+		"",
+		fmt.Sprint("\t", "//gen_", gsadminGen.UnderToConvertSoreLow(v.Name)),
+		fmt.Sprint("\t", gsadminGen.UnderToConvertSoreLow(v.Name), " :=", " r.Group(\"", gsadminGen.UnderToConvertSoreLow(v.Name), "\")"),
+		fmt.Sprint("\t", "{"),
+		fmt.Sprint("\t\t", "var ", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", " ", data.ControllerPackage, ".", strings.Title(gsadminGen.UnderToConvertSoreLow(v.Name)), "Controller"),
+		fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".GET(\"/index\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Index)"),
+		fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/save\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Save)"),
+		fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/delete\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Delete)"),
+		fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".GET(\"/:id\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Get)"),
+		fmt.Sprint("\t\t", gsadminGen.UnderToConvertSoreLow(v.Name), ".POST(\"/edit/:id\",", gsadminGen.UnderToConvertSoreLow(v.Name), "Controller", ".Edit)"),
+		fmt.Sprint("\t", "}"),
+		"",
+	}
+}
+
+//
+// getMenus
+//  @Description: 获取要生成路由的数据
+//  @receiver     r
+//  @param        v pkg.TableModal
+//  @param        data requests.GenCode
+//  @return       []requests.MenuPost
+//
+func (r *GenRepository) getMenus(v pkg.TableModal, data requests.GenCode) []requests.MenuPost {
+
+	return []requests.MenuPost{
+		{
+			Component: gsadminGen.UnderToConvertSoreLow(v.Name),
+			Name:      gsadminGen.UnderToConvertSoreLow(v.Name),
+			ParentId:  0,
+			Path:      fmt.Sprint("/", gsadminGen.UnderToConvertSoreLow(v.Name)),
+			Meta: map[string]interface{}{
+				"icon":  "el-icon-menu",
+				"type":  "menu",
+				"title": data.MenuName,
+			},
+			ApiList: []map[string]string{
+				{"url": fmt.Sprint("/api/", gsadminGen.UnderToConvertSoreLow(v.Name), "/index"), "code": "get"},
+			},
+			Sort: 0,
+		},
+		{
+			Name: fmt.Sprint(gsadminGen.UnderToConvertSoreLow(v.Name), ".save"),
+			Meta: map[string]interface{}{
+				"icon":  "el-icon-menu",
+				"type":  "button",
+				"title": "新增",
+			},
+			ApiList: []map[string]string{
+				{"url": fmt.Sprint("/api/", gsadminGen.UnderToConvertSoreLow(v.Name), "/save"), "code": "post"},
+			},
+			Sort: 1,
+		},
+		{
+			Name: fmt.Sprint(gsadminGen.UnderToConvertSoreLow(v.Name), ".del"),
+			Meta: map[string]interface{}{
+				"icon":  "el-icon-menu",
+				"type":  "button",
+				"title": "删除",
+			},
+			ApiList: []map[string]string{
+				{"url": fmt.Sprint("/api/", gsadminGen.UnderToConvertSoreLow(v.Name), "/delete"), "code": "post"},
+			},
+			Sort: 2,
+		},
+	}
+
+}
+
+//
+// genMenu
+//  @Description: 生成数据库菜单
+//  @receiver     r *GenRepository
+//  @param        v pkg.TableModal
+//  @param        data requests.GenCode
+//  @return       error
+//
+func (r *GenRepository) genMenu(v pkg.TableModal, data requests.GenCode) error {
+
+	var err error
+	menuRe := &SystemMenuRepository{MenuModel: models.AdminMenu{}}
+
+	menuPosts := r.getMenus(v, data)
+
+	transactionAddMenus := func() error {
+		defer func() {
+			if recover() != nil || err != nil {
+				global.Db.Rollback()
+			} else {
+				global.Db.Commit()
+			}
+		}()
+		global.Db.Begin()
+		var (
+			tx       *gorm.DB
+			menuData models.AdminMenu
+		)
+
+		for i, post := range menuPosts {
+			if i >= 1 {
+				post.ParentId = menuData.ID
+				tx, _ = menuRe.Add(post)
+			} else {
+				tx, menuData = menuRe.Add(post)
+			}
+
+			if tx.Error != nil {
+				err = tx.Error
+				break
+			}
+		}
+		return err
+	}
+	err = transactionAddMenus()
+	if err != nil {
+		return fmt.Errorf("gen Menu Err: %v", err)
+	}
 	return nil
 }

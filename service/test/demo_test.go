@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/sonhineboy/gsadmin/service/app"
 	"github.com/sonhineboy/gsadmin/service/app/models"
+	"github.com/sonhineboy/gsadmin/service/app/repositorys"
+	"github.com/sonhineboy/gsadmin/service/app/requests"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
@@ -309,4 +311,30 @@ func TestConfig(t *testing.T) {
 
 	app.TestLoad()
 	fmt.Println(global.Config.Db.TablePrefix)
+}
+
+func TestAddMenu(t *testing.T) {
+
+	app.TestLoad()
+	re := &repositorys.SystemMenuRepository{MenuModel: models.AdminMenu{}}
+	// {"icon": "el-icon-menu", "type": "menu", "title": "生成模块"}
+	db, _ := re.Add(requests.MenuPost{
+		Component: "demo",
+		Name:      "demo", //别名，权限判断唯一标识
+		ParentId:  0,
+		Path:      "/demo",
+		Meta: map[string]interface{}{
+			"icon":  "el-icon-menu",
+			"type":  "menu",
+			"title": "演示菜单",
+		},
+		ApiList: []map[string]string{
+			{"code": "get", "url": "/api/demo/index"},
+		},
+	})
+
+	if db.Error != nil {
+		t.Errorf("db-->%v", db.Error)
+	}
+
 }

@@ -39,12 +39,28 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="控制器包名">
+              <el-form-item label="包名">
                 <el-input
                   v-model="form.controllerPackage"
                   placeholder="默认system"
                 ></el-input>
               </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="菜单">
+                <el-input
+                  v-model="form.menuName"
+                  placeholder="菜单名称"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10">
+              <p style="color: red; line-height: 33px; text-indent: 6px">
+                <el-icon><el-icon-WarningFilled /></el-icon
+                >&nbsp;如果生成菜单，必填项！
+              </p>
             </el-col>
           </el-row>
           <el-row>
@@ -69,6 +85,7 @@
                 ></el-checkbox>
                 <el-checkbox label="生成数据库" value="genDb"></el-checkbox>
                 <el-checkbox label="生成路由" value="genRouter"></el-checkbox>
+                <el-checkbox label="生成菜单" value="genRouter"></el-checkbox>
               </el-checkbox-group>
             </el-col>
           </el-row>
@@ -304,6 +321,7 @@ export default {
         tableName: "",
         tableDiyName: "",
         controllerPackage: "system",
+        menuName: "",
       },
       tableNames: [],
       formField: {
