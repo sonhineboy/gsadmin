@@ -18,6 +18,11 @@ type AdminMenu struct {
 	ApiList   []MenuApiList     `gorm:"foreignKey:MenuId;references:ID" json:"apiList"`
 }
 
+type TreeMenu struct {
+	AdminMenu
+	Children []*TreeMenu `json:"children"`
+}
+
 func (a AdminMenu) Test() {
 
 	fmt.Println("test-------")

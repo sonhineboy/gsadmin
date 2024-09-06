@@ -8,17 +8,20 @@ import (
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
 	"gorm.io/gorm"
+	"regexp"
 	"strings"
 )
 
+//
+// GenRepository
+//  @Description: 代码生成核心业务罗杰
+//
 type GenRepository struct {
-	Db *gorm.DB
+	BaseRepository
 }
 
 func NewGenRepository() *GenRepository {
-	return &GenRepository{
-		Db: global.Db,
-	}
+	return &GenRepository{}
 }
 
 //
@@ -30,7 +33,7 @@ func NewGenRepository() *GenRepository {
 //
 func (r *GenRepository) GetTables() (tableSlice []map[string]string, err error) {
 	tableSlice = make([]map[string]string, 0, 10)
-	tables, err := r.Db.Migrator().GetTables()
+	tables, err := r.getDb().Migrator().GetTables()
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +54,7 @@ func (r *GenRepository) GetTables() (tableSlice []map[string]string, err error) 
 //
 func (r *GenRepository) TableField(name string, function func(fieldsSlices []map[string]interface{}, columnType gorm.ColumnType, r *GenRepository) []map[string]interface{}) ([]map[string]interface{}, error) {
 
-	column, err := r.Db.Migrator().ColumnTypes(name)
+	column, err := r.getDb().Migrator().ColumnTypes(name)
 
 	if err != nil {
 		return nil, err
@@ -104,7 +107,7 @@ func (r *GenRepository) GetIndexType(column string, Indexes map[string]map[strin
 //
 func (r *GenRepository) GetTablesIndexes(tables string) (indexMap map[string]map[string]interface{}) {
 	var indexes []map[string]interface{}
-	r.Db.Raw(fmt.Sprint("show Index from ", tables)).Scan(&indexes)
+	r.getDb().Raw(fmt.Sprint("show Index from ", tables)).Scan(&indexes)
 	indexMap = make(map[string]map[string]interface{}, 20)
 	for _, v := range indexes {
 		columnName, _ := v["Column_name"]
@@ -144,6 +147,10 @@ func (r *GenRepository) getIgnoreField() map[string]string {
 //
 func (r *GenRepository) GenCode(data requests.GenCode) error {
 
+	// 如果有表前缀去掉
+	prefixReg := regexp.MustCompile(fmt.Sprint("^", global.Config.Db.TablePrefix))
+	data.TableDiyName = prefixReg.ReplaceAllString(data.TableDiyName, "")
+
 	v := pkg.TableModal{
 		Name:   data.TableDiyName,
 		Fields: data.Fields,
@@ -153,33 +160,33 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 
 	if global.SlicesHasStr(data.Checkbox, "生成Controller") {
 		if err = gsadminGen.GenController("./app/controllers/"+data.ControllerPackage+"/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Controller.go", v, data.ControllerPackage); err != nil {
-			return err
+			return fmt.Errorf("genCode err： %v ", err)
 		}
 	}
 
 	if global.SlicesHasStr(data.Checkbox, "生成Model") {
 		if err = gsadminGen.GenModel("./app/models/"+gsadminGen.UnderToConvertSoreLow(v.Name)+".go", v); err != nil {
-			return err
+			return fmt.Errorf("genCode err： %v ", err)
 		}
 	}
 
 	if global.SlicesHasStr(data.Checkbox, "生成Request") {
 		if err = gsadminGen.GenRequest("./app/requests/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Request.go", v); err != nil {
-			return err
+			return fmt.Errorf("genCode err： %v ", err)
 		}
 	}
 
 	if global.SlicesHasStr(data.Checkbox, "生成Repository") {
 		err = gsadminGen.GenRepository("./app/repositorys/"+gsadminGen.UnderToConvertSoreLow(v.Name)+"Repository.go", v)
 		if err != nil {
-			return err
+			return fmt.Errorf("genCode err： %v ", err)
 		}
 	}
 
 	if global.SlicesHasStr(data.Checkbox, "生成前端模板") {
 		err = r.genWebTemp(v)
 		if err != nil {
-			return err
+			return fmt.Errorf("genCode err： %v ", err)
 		}
 	}
 
@@ -188,7 +195,7 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 		routerWriter := pkg.NewWriterRouter(fmt.Sprint(global.GAD_APP_PATH, "router/systemApi.go"), "//router gen start not delete", data.ControllerPackage)
 		err = routerWriter.Write(r.getRouters(v, data))
 		if err != nil {
-			return err
+			return fmt.Errorf("genCode err： %v ", err)
 		}
 
 	}
@@ -201,14 +208,14 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 		})
 
 		if err != nil {
-			return err
+			return fmt.Errorf("genCode err： %v ", err)
 		}
 	}
 
 	if global.SlicesHasStr(data.Checkbox, "生成菜单") {
 		err := r.genMenu(v, data)
 		if err != nil {
-			return err
+			return fmt.Errorf("genCode err： %v ", err)
 		}
 	}
 
@@ -315,6 +322,30 @@ func (r *GenRepository) getMenus(v pkg.TableModal, data requests.GenCode) []requ
 			},
 			Sort: 2,
 		},
+		{
+			Name: fmt.Sprint(gsadminGen.UnderToConvertSoreLow(v.Name), ".get"),
+			Meta: map[string]interface{}{
+				"icon":  "el-icon-menu",
+				"type":  "button",
+				"title": "查看",
+			},
+			ApiList: []map[string]string{
+				{"url": fmt.Sprint("/api/", gsadminGen.UnderToConvertSoreLow(v.Name), "/:id"), "code": "get"},
+			},
+			Sort: 3,
+		},
+		{
+			Name: fmt.Sprint(gsadminGen.UnderToConvertSoreLow(v.Name), ".edit"),
+			Meta: map[string]interface{}{
+				"icon":  "el-icon-menu",
+				"type":  "button",
+				"title": "编辑",
+			},
+			ApiList: []map[string]string{
+				{"url": fmt.Sprint("/api/", gsadminGen.UnderToConvertSoreLow(v.Name), "/edit/:id"), "code": "post"},
+			},
+			Sort: 4,
+		},
 	}
 
 }
@@ -330,42 +361,34 @@ func (r *GenRepository) getMenus(v pkg.TableModal, data requests.GenCode) []requ
 func (r *GenRepository) genMenu(v pkg.TableModal, data requests.GenCode) error {
 
 	var err error
-	menuRe := &SystemMenuRepository{MenuModel: models.AdminMenu{}}
+	menuRe := &SystemMenuRepository{}
 
-	menuPosts := r.getMenus(v, data)
+	menus := r.getMenus(v, data)
 
-	transactionAddMenus := func() error {
-		defer func() {
-			if recover() != nil || err != nil {
-				global.Db.Rollback()
-			} else {
-				global.Db.Commit()
-			}
-		}()
-		global.Db.Begin()
+	err = r.getDb().Transaction(func(tx *gorm.DB) error {
+
+		menuRe.SetDb(tx)
+
 		var (
-			tx       *gorm.DB
-			menuData models.AdminMenu
+			model  models.AdminMenu
+			result *gorm.DB
 		)
-
-		for i, post := range menuPosts {
-			if i >= 1 {
-				post.ParentId = menuData.ID
-				tx, _ = menuRe.Add(post)
+		for i, menu := range menus {
+			//每次需要清空值，否则会有问题
+			menuRe.MenuModel = models.AdminMenu{}
+			if i == 0 {
+				result, model = menuRe.Add(menu)
 			} else {
-				tx, menuData = menuRe.Add(post)
+				menu.ParentId = model.ID
+				result, _ = menuRe.Add(menu)
 			}
 
-			if tx.Error != nil {
-				err = tx.Error
-				break
+			if result.Error != nil {
+				return result.Error
 			}
+
 		}
-		return err
-	}
-	err = transactionAddMenus()
-	if err != nil {
-		return fmt.Errorf("gen Menu Err: %v", err)
-	}
-	return nil
+		return nil
+	})
+	return err
 }

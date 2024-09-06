@@ -4,18 +4,15 @@ import (
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/requests"
 	"github.com/sonhineboy/gsadmin/service/global"
-	"gorm.io/gorm"
 )
 
 type NewsRepository struct {
-	db *gorm.DB
+	BaseRepository
 }
 
 // NewNewsRepository 实例化
 func NewNewsRepository() *NewsRepository {
-	return &NewsRepository{
-		db: global.Db,
-	}
+	return &NewsRepository{}
 }
 
 //FindById 根据id 查询信息
@@ -23,7 +20,7 @@ func (re *NewsRepository) FindById(id int) (models.News, error) {
 	var (
 		model models.News
 	)
-	tx := re.db.First(&model, id)
+	tx := re.getDb().First(&model, id)
 
 	return model, global.GormTans(tx.Error)
 }
@@ -33,16 +30,15 @@ func (re *NewsRepository) UpdateById(id int, data requests.NewsRequest) (int64, 
 	var (
 		model models.News
 	)
-	tx := re.db.Model(&model).Where("id = ?", id).Updates(models.News{
-		
-		Title:	data.Title,
-		
-		Author:	data.Author,
-		
-		Content:	data.Content,
-		
-		Image:	data.Image,
-		
+	tx := re.getDb().Model(&model).Where("id = ?", id).Updates(models.News{
+
+		Title: data.Title,
+
+		Author: data.Author,
+
+		Content: data.Content,
+
+		Image: data.Image,
 	})
 	return tx.RowsAffected, tx.Error
 }
@@ -52,7 +48,7 @@ func (re *NewsRepository) DelByIds(ids []int) (int64, error) {
 	var (
 		model models.News
 	)
-	tx := re.db.Delete(&model, ids)
+	tx := re.getDb().Delete(&model, ids)
 	return tx.RowsAffected, tx.Error
 }
 
@@ -89,14 +85,13 @@ func (re *NewsRepository) Page(where map[string]interface{}, page int, pageSize 
 func (re *NewsRepository) Insert(data requests.NewsRequest) (model models.News, err error) {
 
 	model = models.News{
-		Title:	data.Title,
-		Author:	data.Author,
-		Content:	data.Content,
-		Image:	data.Image,
-		
+		Title:   data.Title,
+		Author:  data.Author,
+		Content: data.Content,
+		Image:   data.Image,
 	}
 
-	result := re.db.Create(&model)
+	result := re.getDb().Create(&model)
 	err = result.Error
 	return model, err
 }

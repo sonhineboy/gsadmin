@@ -338,3 +338,18 @@ func TestAddMenu(t *testing.T) {
 	}
 
 }
+
+func TestDb(t *testing.T) {
+	app.TestLoad()
+
+	var db *gorm.DB
+
+	fmt.Println(db == nil)
+
+}
+
+func TestReg(t *testing.T) {
+	reg := regexp.MustCompile("^gc_")
+
+	fmt.Println(reg.ReplaceAllString("gc_gcaa", ""))
+}

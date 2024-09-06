@@ -53,6 +53,17 @@ func SystemApiInit(r *gin.RouterGroup) {
 
 	//router gen start not delete
 
+	//gen_demo2
+	demo2 := r.Group("demo2")
+	{
+		var demo2Controller system.Demo2Controller
+		demo2.GET("/index", demo2Controller.Index)
+		demo2.POST("/save", demo2Controller.Save)
+		demo2.POST("/delete", demo2Controller.Delete)
+		demo2.GET("/:id", demo2Controller.Get)
+		demo2.POST("/edit/:id", demo2Controller.Edit)
+	}
+
 	//gen_news
 	News := r.Group("/news")
 	{

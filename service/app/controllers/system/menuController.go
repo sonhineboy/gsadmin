@@ -38,7 +38,7 @@ func (m *MenuController) Update(c *gin.Context) {
 		response.Failed(c, bindErr.Error())
 		return
 	}
-
+	global.Logger.Infof("%+v", postData)
 	err, model := menuRepository.Update(postData)
 
 	if err == nil {
@@ -73,7 +73,7 @@ func (m *MenuController) Del(c *gin.Context) {
 
 func (m *MenuController) MenuPermissions(c *gin.Context) {
 	var (
-		myMenus        []map[string]interface{}
+		myMenus        []*models.TreeMenu
 		menus          []models.AdminMenu
 		adminUser      models.AdminUser
 		menuRepository repositorys.SystemMenuRepository

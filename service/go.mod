@@ -51,4 +51,4 @@ require (
 	gorm.io/driver/sqlserver v1.4.0 // indirect
 )
 
-//replace github.com/sonhineboy/gsadminGen => ../../gsadminGen
+replace github.com/sonhineboy/gsadminGen => ../../gsadminGen

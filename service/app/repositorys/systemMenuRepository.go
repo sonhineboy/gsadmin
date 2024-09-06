@@ -2,6 +2,7 @@ package repositorys
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/requests"
@@ -12,9 +13,16 @@ import (
 
 type SystemMenuRepository struct {
 	MenuModel models.AdminMenu
+	BaseRepository
 }
 
-//Add 添加菜单
+// Add
+//  @Description: 添加菜单
+//  @receiver     menu *SystemMenuRepository
+//  @param        post requests.MenuPost
+//  @return       *gorm.DB
+//  @return       models.AdminMenu
+//
 func (menu *SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.AdminMenu) {
 	menu.MenuModel.Name = post.Name
 	menu.MenuModel.Component = post.Component
@@ -29,7 +37,7 @@ func (menu *SystemMenuRepository) Add(post requests.MenuPost) (*gorm.DB, models.
 		})
 	}
 
-	return global.Db.Create(&menu.MenuModel), menu.MenuModel
+	return menu.getDb().Create(&menu.MenuModel), menu.MenuModel
 }
 
 //Update 更新菜单
@@ -89,46 +97,68 @@ func (menu *SystemMenuRepository) Update(post requests.MenuPost) (error, models.
 		if syncDb.Error != nil {
 			return syncDb.Error
 		}
-		return sessionDb.Model(&menu.MenuModel).Updates(updateData).Error
+		fmt.Printf("---->%+v", updateData)
+		return sessionDb.Debug().Model(&menu.MenuModel).Select("*").Omit("id").Updates(updateData).Error
 	}), menu.MenuModel
 }
 
-func (menu *SystemMenuRepository) ArrayToTree(arr []models.AdminMenu, pid uint) []map[string]interface{} {
-	var newArr []map[string]interface{}
-	var unique = make(map[uint]bool)
+func (menu *SystemMenuRepository) ArrayToTree(arr []models.AdminMenu, pid uint) []*models.TreeMenu {
 
-	for _, v := range arr {
-		_, ok := unique[v.ID]
+	// 创建一个 map 用来存储所有的节点
+	nodeMap := make(map[uint]*models.TreeMenu)
+	rootNodes := make([]*models.TreeMenu, 0)
 
-		if ok {
-			continue
-		}
-		unique[v.ID] = true
-		mapData := make(map[string]interface{})
-		if v.ParentId == pid {
-			children := menu.ArrayToTree(arr, v.ID)
-
-			if children == nil {
-				mapData["children"] = make([]interface{}, 0)
-			} else {
-				mapData["children"] = children
-			}
-			mapData["id"] = v.ID
-			mapData["meta"] = v.Meta
-			mapData["component"] = v.Component
-			mapData["name"] = v.Name
-			mapData["parent_id"] = v.ParentId
-			mapData["path"] = v.Path
-			mapData["sort"] = v.Sort
-			mapData["redirect"] = v.Redirect
-			mapData["apiList"] = v.ApiList
-			newArr = append(newArr, mapData)
+	// 遍历节点列表，将每个节点放入 map 中
+	for _, menu := range arr {
+		menuCopy := menu // 创建副本，避免引用原始数据
+		nodeMap[menuCopy.ID] = &models.TreeMenu{
+			AdminMenu: menuCopy,
 		}
 	}
-	return newArr
+
+	// 遍历节点列表，建立父子关系
+	for _, menu := range arr {
+		if parentId, exists := nodeMap[menu.ParentId]; exists {
+			parentId.Children = append(parentId.Children, nodeMap[menu.ID])
+		} else {
+			// 如果找不到父节点，则认为这是一个根节点
+			rootNodes = append(rootNodes, nodeMap[menu.ID])
+		}
+	}
+	//var unique = make(map[uint]bool)
+	//
+	//for _, v := range arr {
+	//	_, ok := unique[v.ID]
+	//
+	//	if ok {
+	//		continue
+	//	}
+	//	unique[v.ID] = true
+	//	mapData := make(map[string]interface{})
+	//	if v.ParentId == pid {
+	//		children := menu.ArrayToTree(arr, v.ID)
+	//
+	//		if children == nil {
+	//			mapData["children"] = make([]interface{}, 0)
+	//		} else {
+	//			mapData["children"] = children
+	//		}
+	//		mapData["id"] = v.ID
+	//		mapData["meta"] = v.Meta
+	//		mapData["component"] = v.Component
+	//		mapData["name"] = v.Name
+	//		mapData["parent_id"] = v.ParentId
+	//		mapData["path"] = v.Path
+	//		mapData["sort"] = v.Sort
+	//		mapData["redirect"] = v.Redirect
+	//		mapData["apiList"] = v.ApiList
+	//		newArr = append(newArr, mapData)
+	//	}
+	//}
+	return rootNodes
 }
 
-func (menu *SystemMenuRepository) MenuTree() []map[string]interface{} {
+func (menu *SystemMenuRepository) MenuTree() interface{} {
 	var all []models.AdminMenu
 	global.Db.Preload("ApiList").Order("sort desc").Find(&all)
 
