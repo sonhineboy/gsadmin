@@ -34,7 +34,6 @@
               :show-all-levels="false"
               placeholder="顶级菜单"
               clearable
-              disabled
             ></el-cascader>
           </el-form-item>
           <el-form-item label="类型" prop="meta.type">
@@ -179,6 +178,7 @@ export default {
           affix: false,
         },
         apiList: [],
+        menuCopy: {},
       },
       menuOptions: [],
       menuProps: {
@@ -203,6 +203,7 @@ export default {
         url: "",
       },
       loading: false,
+      originData: {},
     };
   },
   watch: {
@@ -254,12 +255,20 @@ export default {
         delete copyForm.children;
       }
 
+      if (typeof copyForm.parentId == "object") {
+        if (copyForm.parentId && copyForm.parentId.length > 0) {
+          copyForm.parentId = copyForm.parentId[copyForm.parentId.length - 1];
+        } else {
+          copyForm.parentId = 0;
+        }
+      }
       var res = await this.$API.system.menu.updata.post(copyForm);
       this.loading = false;
 
       if (res.code == 200) {
         this.form.apiList = res.data.apiList;
 
+        this.$emit("saved", copyForm, this.originData);
         this.$message.success("保存成功");
       } else {
         this.$message.warning(res.message);
@@ -269,7 +278,8 @@ export default {
     setData(data, pid) {
       this.form = data;
       this.form.apiList = data.apiList || [];
-      this.form.parentId = pid;
+      this.form.parentId = pid == undefined ? 0 : pid;
+      this.originData = tool.objCopy(this.form);
     },
   },
 };

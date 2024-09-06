@@ -57,7 +57,7 @@
     </el-aside>
     <el-container>
       <el-main class="nopadding" style="padding: 20px" ref="main">
-        <save ref="save" :menu="menuList"></save>
+        <save ref="save" :menu="menuList" @saved="saved"></save>
       </el-main>
     </el-container>
   </el-container>
@@ -93,6 +93,11 @@ export default {
     this.getMenu();
   },
   methods: {
+    saved(saved, origin) {
+      if (saved.parentId !== origin.parentId) {
+        this.getMenu();
+      }
+    },
     //加载树数据
     async getMenu() {
       this.menuloading = true;
@@ -169,7 +174,7 @@ export default {
       if (res.code == 200) {
         CheckedNodes.forEach((item) => {
           var node = this.$refs.menu.getNode(item);
-          if (node.isCurrent) {
+          if (node && node.isCurrent) {
             this.$refs.save.setData({});
           }
           this.$refs.menu.remove(item);
