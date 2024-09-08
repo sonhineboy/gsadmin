@@ -1,6 +1,6 @@
 import config from "@/config"
 import http from "@/utils/request"
-
+import tool from "@/utils/tool";
 export default {
 	menu: {
 		myMenus: {
@@ -8,6 +8,16 @@ export default {
 			name: "获取我的菜单",
 			get: async function () {
 				return await http.get(this.url);
+			},
+			reLoad: async function () {
+				var menu = await this.get()
+				if (menu.code == 200) {
+					if (menu.data.menu.length == 0) {
+						return false;
+					}
+					tool.data.set("MENU", menu.data.menu);
+					tool.data.set("PERMISSIONS", menu.data.permissions);
+				}
 			}
 		},
 		list: {

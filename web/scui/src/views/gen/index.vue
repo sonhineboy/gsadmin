@@ -415,6 +415,7 @@ export default {
           _that.$message.error(re.msg);
         } else {
           _that.$message.success(re.msg);
+          _that.$API.system.menu.myMenus.reLoad();
         }
       });
     },
