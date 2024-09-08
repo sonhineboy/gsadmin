@@ -2,7 +2,7 @@ package global
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"github.com/sonhineboy/gsadmin/service/global/response"
 )
 
 type Response struct {
@@ -14,18 +14,11 @@ type Response struct {
 
 // Success disabled
 func (r Response) Success(c *gin.Context, msg string, data interface{}) {
-	r.Code = 200
-	r.Msg = msg
-	r.Message = msg
-	r.Data = data
-	c.JSON(http.StatusOK, r)
+
+	response.Success(c, msg, data)
 }
 
-// Failed disabled
+// Failed Deprecated
 func (r Response) Failed(c *gin.Context, err string) {
-	r.Code = 422
-	r.Msg = err
-	r.Message = err
-	r.Data = []string{}
-	c.JSON(http.StatusOK, r)
+	response.Failed(c, err)
 }

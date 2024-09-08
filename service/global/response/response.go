@@ -22,6 +22,7 @@ func Success(c *gin.Context, msg string, data interface{}) {
 	c.JSON(http.StatusOK, r)
 }
 
+// Failed Deprecated
 func Failed(c *gin.Context, err string) {
 	r := Response{
 		Code:    422,
