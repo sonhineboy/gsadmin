@@ -6,10 +6,10 @@ const DEFAULT_CONFIG = {
 	DASHBOARD_URL: "/dashboard",
 
 	//版本号
-	APP_VER: "1.5.0",
+	APP_VER: "1.5.2",
 
 	//内核版本号
-	CORE_VER: "1.5.0",
+	CORE_VER: "1.5.2",
 
 	//接口地址
 	API_URL: process.env.NODE_ENV === 'development' && process.env.VUE_APP_PROXY === 'true' ? "/api" : process.env.VUE_APP_API_BASEURL,
