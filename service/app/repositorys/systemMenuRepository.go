@@ -98,7 +98,7 @@ func (menu *SystemMenuRepository) Update(post requests.MenuPost) (error, models.
 			return syncDb.Error
 		}
 		fmt.Printf("---->%+v", updateData)
-		return sessionDb.Debug().Model(&menu.MenuModel).Select("*").Omit("id").Updates(updateData).Error
+		return sessionDb.Model(&menu.MenuModel).Select("*").Omit("id", "created_at", "deleted_at", "updated_at").Updates(updateData).Error
 	}), menu.MenuModel
 }
 
