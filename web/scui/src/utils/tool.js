@@ -241,4 +241,16 @@ tool.SwapArr = function (array, oldIndex, newIndex) {
 	return array;
 }
 
+tool.SetCookieWithExpiration = function (name, value, daysToExpire) {
+	var date = new Date();
+	date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000)); // 设置过期时间为指定的天数之后  
+	var expires = "; expires=" + date.toUTCString(); // 转换为GMT格式的字符串  
+	document.cookie = name + "=" + (value || "") + expires + "; path=/"; // 设置cookie  
+}
+
+tool.GetCookie = function (name) {
+	const value = `; ${document.cookie}`;
+	const parts = value.split(`; ${name}=`);
+	if (parts.length === 2) return parts.pop().split(';').shift();
+}
 export default tool

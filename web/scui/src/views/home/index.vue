@@ -33,7 +33,18 @@ export default {
   created() {
     this.dashboard = this.$TOOL.data.get("USER_INFO").dashboard || "0";
   },
-  mounted() {},
+  mounted() {
+    if (!this.$TOOL.GetCookie("star")) {
+      this.$alert("开源不易，点点 🧡 Star!就是对我们最大的支持。", "支持一下", {
+        confirmButtonText: "去点击",
+        callback: (action) => {
+          action;
+          window.open("https://gitee.com/kevn/gsadmin", "_blank");
+          this.$TOOL.SetCookieWithExpiration("star", "1day", 1);
+        },
+      });
+    }
+  },
   methods: {
     onMounted() {
       this.pageLoading = false;
