@@ -108,6 +108,8 @@ github.com/satori/go.uuid v1.2.0/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdh
 github.com/sonhineboy/gsadminGen v0.9.9-0.20240902074829-b56db2211f9e/go.mod h1:io2IqGaiJr5YnGrXjsmqvjRPSGyIGGnjtusgTApbvBs=
 github.com/sonhineboy/gsadminGen v0.9.9-0.20240905080647-89e77d675ab0 h1:iSMLXynY32rSyGM+jJr9LJtO9h7xasUEkEJ9RHQiOm4=
 github.com/sonhineboy/gsadminGen v0.9.9-0.20240905080647-89e77d675ab0/go.mod h1:io2IqGaiJr5YnGrXjsmqvjRPSGyIGGnjtusgTApbvBs=
+github.com/sonhineboy/gsadminGen v0.9.9-0.20240911081537-22e84b72521f h1:ftokt9HIfWP0ZHZiYqSljT/UDkU2R65QWh6kqnUXSq8=
+github.com/sonhineboy/gsadminGen v0.9.9-0.20240911081537-22e84b72521f/go.mod h1:io2IqGaiJr5YnGrXjsmqvjRPSGyIGGnjtusgTApbvBs=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/objx v0.5.0/go.mod h1:Yh+to48EsGEfYuaHDzXPcE3xhTkx73EhmCGUpEOglKo=
