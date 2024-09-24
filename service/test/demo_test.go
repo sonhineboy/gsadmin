@@ -11,8 +11,10 @@ import (
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
 	"go.uber.org/zap/zapcore"
+	"gorm.io/gorm"
 	"os"
 	"reflect"
+	"regexp"
 	"strconv"
 	"sync"
 	"testing"
@@ -352,4 +354,9 @@ func TestReg(t *testing.T) {
 	reg := regexp.MustCompile("^gc_")
 
 	fmt.Println(reg.ReplaceAllString("gc_gcaa", ""))
+}
+
+func TestViper(t *testing.T) {
+
+	fmt.Printf("xxx %s", "asfs")
 }

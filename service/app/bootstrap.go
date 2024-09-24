@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadmin/service/initialize"
@@ -20,6 +21,7 @@ func Start() {
 func TestLoad() {
 	dir, err := os.Getwd()
 	if err != nil {
+		panic(fmt.Errorf("test Load getwd err %w", err))
 	}
 	global.GsAppPath = dir + "/../"
 	global.Config = initialize.ConfigInit(global.GsAppPath)
