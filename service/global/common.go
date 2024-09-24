@@ -18,15 +18,23 @@ import (
 )
 
 var (
-	GAD_R           *gin.Engine
-	GAD_APP_PATH    string
-	Config          *config.Config
-	Db              *gorm.DB
-	SuperAdmin      string
-	EventDispatcher event.EventDispatcher
-	Limiter         *rate.Limiter
-	Logger          *zap.SugaredLogger
-	ormTrans        = map[string]string{
+	// GsR 全局web 引擎
+	GsR *gin.Engine
+	// GsAppPath 项目路径
+	GsAppPath string
+	// Config 全局配置
+	Config *config.Config
+	// Db 全局数据库
+	Db *gorm.DB
+	// SuperAdmin 超级管理员标识
+	SuperAdmin string
+	// EventDispatcher 事件分发器
+	EventDispatcher *event.Dispatcher
+	// Limiter 限流器
+	Limiter *rate.Limiter
+	// Logger 日志工具
+	Logger   *zap.SugaredLogger
+	ormTrans = map[string]string{
 		"record not found": "数据不存在",
 	}
 )
@@ -111,7 +119,7 @@ func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, 
 	return nil
 }
 
-func GetEventDispatcher(c *gin.Context) *event.EventDispatcher {
+func GetEventDispatcher(c *gin.Context) *event.Dispatcher {
 
 	v, ok := c.Get("e")
 
@@ -120,7 +128,7 @@ func GetEventDispatcher(c *gin.Context) *event.EventDispatcher {
 		return nil
 	}
 
-	e, ok := v.(event.EventDispatcher)
+	e, ok := v.(event.Dispatcher)
 
 	if ok == false {
 		fmt.Print("类型不正确")

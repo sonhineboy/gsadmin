@@ -13,13 +13,13 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("GetWd err:%v", err))
 	}
-	global.GAD_APP_PATH = dir + string(os.PathSeparator)
+	global.GsAppPath = dir + string(os.PathSeparator)
 	app.Start()
 
 	defer func() {
 		app.DiyDefer()
 	}()
-	err = global.GAD_R.Run(global.Config.App.Port)
+	err = global.GsR.Run(global.Config.App.Port)
 	if err != nil {
 		panic(err)
 	}

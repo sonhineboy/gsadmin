@@ -192,7 +192,7 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 
 	if global.SlicesHasStr(data.Checkbox, "生成路由") {
 
-		routerWriter := pkg.NewWriterRouter(fmt.Sprint(global.GAD_APP_PATH, "router/systemApi.go"), "//router gen start not delete", data.ControllerPackage)
+		routerWriter := pkg.NewWriterRouter(fmt.Sprint(global.GsAppPath, "router/systemApi.go"), "//router gen start not delete", data.ControllerPackage)
 		err = routerWriter.Write(r.getRouters(v, data))
 		if err != nil {
 			return fmt.Errorf("genCode err： %v ", err)
@@ -202,7 +202,7 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 
 	if global.SlicesHasStr(data.Checkbox, "生成数据库") {
 
-		dbTableWriter := pkg.NewWriterAutoModel(fmt.Sprint(global.GAD_APP_PATH, "initialize/dbInit.go"), "//slot start not delete")
+		dbTableWriter := pkg.NewWriterAutoModel(fmt.Sprint(global.GsAppPath, "initialize/dbInit.go"), "//slot start not delete")
 		err = dbTableWriter.Write([]string{
 			fmt.Sprint("\t\t&models.", strings.Title(gsadminGen.UnderToConvertSoreLow(v.Name)), "{},"),
 		})
