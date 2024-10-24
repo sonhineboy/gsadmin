@@ -5,5 +5,5 @@ type Login struct {
 	PassWord string `form:"password" binding:"required" msg:"密码不能为空" json:"password"`
 
 	CaptchaId    string `json:"captchaId" binding:"required"`
-	CaptchaValue string `json:"captchaValue" binding:"required"`
+	CaptchaValue string `json:"captchaValue" binding:"required,cacheCode=CaptchaId"`
 }

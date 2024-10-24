@@ -1,7 +1,6 @@
 package system
 
 import (
-	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/repositorys"
@@ -26,11 +25,6 @@ func (u *UserController) Login(c *gin.Context) {
 	err := c.ShouldBind(&LoginForm)
 	if err != nil {
 		response.Failed(c, global.GetError(err, LoginForm))
-		return
-	}
-
-	if !captcha.VerifyString(LoginForm.CaptchaId, LoginForm.CaptchaValue) {
-		response.Failed(c, "验证码错误")
 		return
 	}
 

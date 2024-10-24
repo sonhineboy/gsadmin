@@ -32,6 +32,7 @@ func loadObject() {
 	global.EventDispatcher = initialize.EventInit()
 	global.Limiter = rate.NewLimiter(global.Config.Rate.Limit, global.Config.Rate.Burst)
 	global.Logger = initialize.ZapInit(global.Config)
+	global.ValidatorManager = initialize.InitValidator()
 }
 
 func DiyDefer() {

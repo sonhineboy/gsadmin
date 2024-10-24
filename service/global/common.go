@@ -9,6 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/sonhineboy/gsadmin/service/config"
 	"github.com/sonhineboy/gsadmin/service/pkg/event"
+	"github.com/sonhineboy/gsadminValidator/ginValidator"
 	"go.uber.org/zap"
 	"golang.org/x/time/rate"
 	"gorm.io/gorm"
@@ -18,15 +19,16 @@ import (
 )
 
 var (
-	GAD_R           *gin.Engine
-	GAD_APP_PATH    string
-	Config          *config.Config
-	Db              *gorm.DB
-	SuperAdmin      string
-	EventDispatcher event.EventDispatcher
-	Limiter         *rate.Limiter
-	Logger          *zap.SugaredLogger
-	ormTrans        = map[string]string{
+	GAD_R            *gin.Engine
+	GAD_APP_PATH     string
+	Config           *config.Config
+	Db               *gorm.DB
+	SuperAdmin       string
+	EventDispatcher  event.EventDispatcher
+	Limiter          *rate.Limiter
+	Logger           *zap.SugaredLogger
+	ValidatorManager *ginValidator.CustomValidatorManager
+	ormTrans         = map[string]string{
 		"record not found": "数据不存在",
 	}
 )
@@ -44,6 +46,13 @@ func GetError(errs error, r interface{}) string {
 }
 
 func getValidateMsg(errs validator.ValidationErrors, r interface{}) string {
+
+	if ValidatorManager != nil {
+		for _, err := range errs {
+			return err.Translate(ValidatorManager.GetTrans())
+		}
+	}
+
 	s := reflect.TypeOf(r)
 	for _, fieldError := range errs {
 		filed, _ := s.FieldByName(fieldError.Field())
