@@ -18,6 +18,7 @@ func ConfigInit(path string) *config.Config {
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
+
 	err = myViper.Unmarshal(&c, func(decoderConfig *mapstructure.DecoderConfig) {
 		decoderConfig.TagName = "yaml"
 	})

@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadmin/service/initialize"
+	"github.com/sonhineboy/gsadmin/service/pkg/ctx"
 	"github.com/sonhineboy/gsadmin/service/router"
 	"golang.org/x/time/rate"
 	"os"
@@ -16,6 +17,8 @@ func Start() {
 	global.Config = initialize.ConfigInit(global.GsAppPath)
 	loadObject()
 	router.RouteInit(global.GsR)
+	initialize.PluginInit(ctx.NewDefaultAppCtx())
+
 }
 
 func TestLoad() {
