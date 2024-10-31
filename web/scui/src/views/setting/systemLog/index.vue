@@ -1,9 +1,6 @@
 <template>
   <el-container>
     <el-container>
-      <el-header style="height: 150px">
-        <scEcharts height="100%" :option="logsChartOption"></scEcharts>
-      </el-header>
       <el-header>
         <div class="left-panel"></div>
         <div class="right-panel">
@@ -82,73 +79,6 @@ export default {
       search: {
         user_name: null,
         date: null,
-      },
-      logsChartOption: {
-        title: {
-          text: "近24小时访问",
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        calculable: true,
-        xAxis: [
-          {
-            type: "category",
-            boundaryGap: false,
-            axisLine: {
-              show: false,
-            },
-            data: [
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-            ],
-          },
-        ],
-        yAxis: [
-          {
-            type: "value",
-            // axisLabel: {
-            //   formatter: "{value} °C",
-          },
-        ],
-        series: [
-          {
-            name: "访问量",
-            type: "line",
-            axisLabel: {
-              show: false,
-            },
-            splitLine: {
-              show: false,
-            },
-            axisLine: {
-              show: false,
-            },
-            data: ["0", "23", "1000"],
-          },
-        ],
       },
     };
   },
