@@ -9,7 +9,7 @@ require (
 	github.com/go-playground/validator/v10 v10.22.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/sonhineboy/gsadminGen v0.9.9-0.20240911081537-22e84b72521f
-	github.com/sonhineboy/gsadminValidator v1.0.0
+	github.com/sonhineboy/gsadminValidator v1.0.1
 	go.uber.org/zap v1.1.0
 	golang.org/x/crypto v0.28.0
 	golang.org/x/time v0.2.0
