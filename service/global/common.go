@@ -24,7 +24,7 @@ var (
 	Config           *config.Config
 	Db               *gorm.DB
 	SuperAdmin       string
-	EventDispatcher  event.EventDispatcher
+	EventDispatcher  event.DispatcherEvent
 	Limiter          *rate.Limiter
 	Logger           *zap.SugaredLogger
 	ValidatorManager *ginValidator.CustomValidatorManager
@@ -120,7 +120,7 @@ func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, 
 	return nil
 }
 
-func GetEventDispatcher(c *gin.Context) *event.EventDispatcher {
+func GetEventDispatcher(c *gin.Context) *event.DispatcherEvent {
 
 	v, ok := c.Get("e")
 
@@ -129,7 +129,7 @@ func GetEventDispatcher(c *gin.Context) *event.EventDispatcher {
 		return nil
 	}
 
-	e, ok := v.(event.EventDispatcher)
+	e, ok := v.(event.DispatcherEvent)
 
 	if ok == false {
 		fmt.Print("类型不正确")
