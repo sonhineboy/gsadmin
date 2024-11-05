@@ -9,6 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/sonhineboy/gsadmin/service/config"
 	"github.com/sonhineboy/gsadmin/service/pkg/event"
+	"github.com/sonhineboy/gsadminValidator/ginValidator"
 	"go.uber.org/zap"
 	"golang.org/x/time/rate"
 	"gorm.io/gorm"
@@ -18,23 +19,16 @@ import (
 )
 
 var (
-	// GsR 全局web 引擎
-	GsR *gin.Engine
-	// GsAppPath 项目路径
-	GsAppPath string
-	// Config 全局配置
-	Config *config.Config
-	// Db 全局数据库
-	Db *gorm.DB
-	// SuperAdmin 超级管理员标识
-	SuperAdmin string
-	// EventDispatcher 事件分发器
-	EventDispatcher *event.Dispatcher
-	// Limiter 限流器
-	Limiter *rate.Limiter
-	// Logger 日志工具
-	Logger   *zap.SugaredLogger
-	ormTrans = map[string]string{
+	GAD_R            *gin.Engine
+	GAD_APP_PATH     string
+	Config           *config.Config
+	Db               *gorm.DB
+	SuperAdmin       string
+	EventDispatcher  event.DispatcherEvent
+	Limiter          *rate.Limiter
+	Logger           *zap.SugaredLogger
+	ValidatorManager *ginValidator.CustomValidatorManager
+	ormTrans         = map[string]string{
 		"record not found": "数据不存在",
 	}
 )
@@ -52,6 +46,13 @@ func GetError(errs error, r interface{}) string {
 }
 
 func getValidateMsg(errs validator.ValidationErrors, r interface{}) string {
+
+	if ValidatorManager != nil {
+		for _, err := range errs {
+			return err.Translate(ValidatorManager.GetTrans())
+		}
+	}
+
 	s := reflect.TypeOf(r)
 	for _, fieldError := range errs {
 		filed, _ := s.FieldByName(fieldError.Field())
@@ -119,7 +120,7 @@ func CaptchaServe(w http.ResponseWriter, r *http.Request, id, ext, lang string, 
 	return nil
 }
 
-func GetEventDispatcher(c *gin.Context) *event.Dispatcher {
+func GetEventDispatcher(c *gin.Context) *event.DispatcherEvent {
 
 	v, ok := c.Get("e")
 
@@ -128,7 +129,7 @@ func GetEventDispatcher(c *gin.Context) *event.Dispatcher {
 		return nil
 	}
 
-	e, ok := v.(event.Dispatcher)
+	e, ok := v.(event.DispatcherEvent)
 
 	if ok == false {
 		fmt.Print("类型不正确")
