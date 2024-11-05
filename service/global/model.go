@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type GAD_MODEL struct {
+type GsModel struct {
 	ID        uint           `gorm:"primarykey;autoIncrement" json:"id"` // 主键ID
 	CreatedAt *LocalTime     `json:"created_at" gorm:"type:datetime(3)"` // 创建时间
 	UpdatedAt *LocalTime     `json:"updated_at" gorm:"type:datetime(3)"` // 更新时间

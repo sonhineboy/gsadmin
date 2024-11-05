@@ -11,8 +11,10 @@ import (
 	"github.com/sonhineboy/gsadminGen"
 	"github.com/sonhineboy/gsadminGen/pkg"
 	"go.uber.org/zap/zapcore"
+	"gorm.io/gorm"
 	"os"
 	"reflect"
+	"regexp"
 	"strconv"
 	"sync"
 	"testing"
@@ -65,7 +67,7 @@ func TestP(t *testing.T) {
 	fmt.Println(a, "---", c)
 
 	//model.ID = 45
-	model, _ := reflect.TypeOf(role).FieldByName("GAD_MODEL")
+	model, _ := reflect.TypeOf(role).FieldByName("GsModel")
 
 	f := model.Type.Field(0)
 

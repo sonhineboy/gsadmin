@@ -3,7 +3,7 @@ package models
 import "github.com/sonhineboy/gsadmin/service/global"
 
 type OperationLog struct {
-	global.GAD_MODEL
+	global.GsModel
 	UserId   uint   `gorm:"column:user_id;type:int(11);comment:用户ID" json:"user_id"`
 	UrlPath  string `gorm:"column:user_path;type:varchar(100);comment:访问路径" json:"url_path"`
 	Ip       string `gorm:"column:ip;type:varchar(50);comment:IP" json:"ip"`
