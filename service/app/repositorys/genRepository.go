@@ -12,10 +12,9 @@ import (
 	"strings"
 )
 
-//
 // GenRepository
-//  @Description: 代码生成核心业务罗杰
 //
+//	@Description: 代码生成核心业务罗杰
 type GenRepository struct {
 	BaseRepository
 }
@@ -24,13 +23,12 @@ func NewGenRepository() *GenRepository {
 	return &GenRepository{}
 }
 
-//
 // GetTables
-//  @Description: 获取数据表
-//  @receiver     r *GenRepository
-//  @return       tableSlice
-//  @return       err
 //
+//	@Description: 获取数据表
+//	@receiver     r *GenRepository
+//	@return       tableSlice
+//	@return       err
 func (r *GenRepository) GetTables() (tableSlice []map[string]string, err error) {
 	tableSlice = make([]map[string]string, 0, 10)
 	tables, err := r.getDb().Migrator().GetTables()
@@ -43,15 +41,14 @@ func (r *GenRepository) GetTables() (tableSlice []map[string]string, err error) 
 	return
 }
 
-//
 // TableField
-//  @Description: 表字段
-//  @receiver     r *GenRepository
-//  @param        name string
-//  @param        function func(fieldsSlices []map[string]interface{}, columnType gorm.ColumnType, r *GenRepository) []map[string]interface{}
-//  @return       []map[string]interface{}
-//  @return       error
 //
+//	@Description: 表字段
+//	@receiver     r *GenRepository
+//	@param        name string
+//	@param        function func(fieldsSlices []map[string]interface{}, columnType gorm.ColumnType, r *GenRepository) []map[string]interface{}
+//	@return       []map[string]interface{}
+//	@return       error
 func (r *GenRepository) TableField(name string, function func(fieldsSlices []map[string]interface{}, columnType gorm.ColumnType, r *GenRepository) []map[string]interface{}) ([]map[string]interface{}, error) {
 
 	column, err := r.getDb().Migrator().ColumnTypes(name)
@@ -75,14 +72,13 @@ func (r *GenRepository) TableField(name string, function func(fieldsSlices []map
 	return fieldsSlices, nil
 }
 
-//
 // GetIndexType
-//  @Description: 获取索引类型
-//  @receiver     r *GenRepository
-//  @param        column string
-//  @param        Indexes map[string]map[string]interface{}
-//  @return       string
 //
+//	@Description: 获取索引类型
+//	@receiver     r *GenRepository
+//	@param        column string
+//	@param        Indexes map[string]map[string]interface{}
+//	@return       string
 func (r *GenRepository) GetIndexType(column string, Indexes map[string]map[string]interface{}) string {
 
 	v, ok := Indexes[column]
@@ -98,13 +94,12 @@ func (r *GenRepository) GetIndexType(column string, Indexes map[string]map[strin
 	return "Null"
 }
 
-//
 // GetTablesIndexes
-//  @Description: 获取索引
-//  @receiver     r *GenRepository
-//  @param        tables string
-//  @return       indexMap
 //
+//	@Description: 获取索引
+//	@receiver     r *GenRepository
+//	@param        tables string
+//	@return       indexMap
 func (r *GenRepository) GetTablesIndexes(tables string) (indexMap map[string]map[string]interface{}) {
 	var indexes []map[string]interface{}
 	r.getDb().Raw(fmt.Sprint("show Index from ", tables)).Scan(&indexes)
@@ -123,12 +118,11 @@ func (r *GenRepository) GetTablesIndexes(tables string) (indexMap map[string]map
 	return
 }
 
-//
 // getIgnoreField
-//  @Description: 获取忽略字段
-//  @receiver     r *GenRepository
-//  @return       map[string]string
 //
+//	@Description: 获取忽略字段
+//	@receiver     r *GenRepository
+//	@return       map[string]string
 func (r *GenRepository) getIgnoreField() map[string]string {
 	return map[string]string{
 		"id":         "true",
@@ -138,13 +132,12 @@ func (r *GenRepository) getIgnoreField() map[string]string {
 	}
 }
 
-//
 // GenCode
-//  @Description: 根据数据生成业务代码
-//  @receiver     r *GenRepository
-//  @param        data requests.GenCode
-//  @return       error
 //
+//	@Description: 根据数据生成业务代码
+//	@receiver     r *GenRepository
+//	@param        data requests.GenCode
+//	@return       error
 func (r *GenRepository) GenCode(data requests.GenCode) error {
 
 	// 如果有表前缀去掉
@@ -192,7 +185,7 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 
 	if global.SlicesHasStr(data.Checkbox, "生成路由") {
 
-		routerWriter := pkg.NewWriterRouter(fmt.Sprint(global.GAD_APP_PATH, "router/systemApi.go"), "//router gen start not delete", data.ControllerPackage)
+		routerWriter := pkg.NewWriterRouter(fmt.Sprint(global.GsAppPath, "router/systemApi.go"), "//router gen start not delete", data.ControllerPackage)
 		err = routerWriter.Write(r.getRouters(v, data))
 		if err != nil {
 			return fmt.Errorf("genCode err： %v ", err)
@@ -202,7 +195,7 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 
 	if global.SlicesHasStr(data.Checkbox, "生成数据库") {
 
-		dbTableWriter := pkg.NewWriterAutoModel(fmt.Sprint(global.GAD_APP_PATH, "initialize/dbInit.go"), "//slot start not delete")
+		dbTableWriter := pkg.NewWriterAutoModel(fmt.Sprint(global.GsAppPath, "initialize/dbInit.go"), "//slot start not delete")
 		err = dbTableWriter.Write([]string{
 			fmt.Sprint("\t\t&models.", strings.Title(gsadminGen.UnderToConvertSoreLow(v.Name)), "{},"),
 		})
@@ -222,13 +215,12 @@ func (r *GenRepository) GenCode(data requests.GenCode) error {
 	return nil
 }
 
-//
 // genWebTemp
-//  @Description: 生成前台模板
-//  @receiver     r *GenRepository
-//  @param        v pkg.TableModal
-//  @return       err
 //
+//	@Description: 生成前台模板
+//	@receiver     r *GenRepository
+//	@param        v pkg.TableModal
+//	@return       err
 func (r *GenRepository) genWebTemp(v pkg.TableModal) error {
 	err := gsadminGen.GenIndex(`../web/scui/src/views/`+gsadminGen.UnderToConvertSoreLow(v.Name)+"/"+"index.vue", v)
 	if err != nil {
@@ -246,14 +238,13 @@ func (r *GenRepository) genWebTemp(v pkg.TableModal) error {
 	return nil
 }
 
-//
 // getRouters
-//  @Description: 获取要生成路由的数据
-//  @receiver     r
-//  @param        v pkg.TableModal
-//  @param        data requests.GenCode
-//  @return       []string
 //
+//	@Description: 获取要生成路由的数据
+//	@receiver     r
+//	@param        v pkg.TableModal
+//	@param        data requests.GenCode
+//	@return       []string
 func (r *GenRepository) getRouters(v pkg.TableModal, data requests.GenCode) []string {
 
 	return []string{
@@ -272,14 +263,13 @@ func (r *GenRepository) getRouters(v pkg.TableModal, data requests.GenCode) []st
 	}
 }
 
-//
 // getMenus
-//  @Description: 获取要生成路由的数据
-//  @receiver     r
-//  @param        v pkg.TableModal
-//  @param        data requests.GenCode
-//  @return       []requests.MenuPost
 //
+//	@Description: 获取要生成路由的数据
+//	@receiver     r
+//	@param        v pkg.TableModal
+//	@param        data requests.GenCode
+//	@return       []requests.MenuPost
 func (r *GenRepository) getMenus(v pkg.TableModal, data requests.GenCode) []requests.MenuPost {
 
 	return []requests.MenuPost{
@@ -350,14 +340,13 @@ func (r *GenRepository) getMenus(v pkg.TableModal, data requests.GenCode) []requ
 
 }
 
-//
 // genMenu
-//  @Description: 生成数据库菜单
-//  @receiver     r *GenRepository
-//  @param        v pkg.TableModal
-//  @param        data requests.GenCode
-//  @return       error
 //
+//	@Description: 生成数据库菜单
+//	@receiver     r *GenRepository
+//	@param        v pkg.TableModal
+//	@param        data requests.GenCode
+//	@return       error
 func (r *GenRepository) genMenu(v pkg.TableModal, data requests.GenCode) error {
 
 	var err error

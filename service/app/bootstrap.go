@@ -11,18 +11,18 @@ import (
 
 func Start() {
 	global.SuperAdmin = "administrator"
-	global.GAD_R = gin.Default()
-	global.Config = initialize.ConfigInit(global.GAD_APP_PATH)
+	global.GsE = gin.Default()
+	global.Config = initialize.ConfigInit(global.GsAppPath)
 	loadObject()
-	router.RouteInit(global.GAD_R)
+	router.RouteInit(global.GsE)
 }
 
 func TestLoad() {
 	dir, err := os.Getwd()
 	if err != nil {
 	}
-	global.GAD_APP_PATH = dir + "/../"
-	global.Config = initialize.ConfigInit(global.GAD_APP_PATH)
+	global.GsAppPath = dir + "/../"
+	global.Config = initialize.ConfigInit(global.GsAppPath)
 	loadObject()
 }
 
