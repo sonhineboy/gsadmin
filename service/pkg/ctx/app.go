@@ -29,7 +29,7 @@ type AppCtx struct {
 	SuperAdmin string
 
 	// EventDispatcher 事件分发器
-	EventDispatcher *event.Dispatcher
+	EventDispatcher *event.DispatcherEvent
 
 	// Limiter 限流器
 	Limiter *rate.Limiter
@@ -41,10 +41,10 @@ type AppCtx struct {
 func NewDefaultAppCtx(options ...WithOption) *AppCtx {
 	appCtx := new(AppCtx)
 
-	appCtx.GsR = global.GsR
+	appCtx.GsR = global.GsE
 	appCtx.Logger = global.Logger
 	appCtx.Limiter = global.Limiter
-	appCtx.EventDispatcher = global.EventDispatcher
+	appCtx.EventDispatcher = &global.EventDispatcher
 	appCtx.Db = global.Db
 	appCtx.GsAppPath = global.GsAppPath
 	appCtx.SuperAdmin = global.SuperAdmin
