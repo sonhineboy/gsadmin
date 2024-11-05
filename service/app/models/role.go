@@ -3,7 +3,7 @@ package models
 import "github.com/sonhineboy/gsadmin/service/global"
 
 type Role struct {
-	global.GAD_MODEL
+	global.GsModel
 	Alias  string      `gorm:"type:varchar(50);column:alias;" json:"alias"`
 	Label  string      `gorm:"type:varchar(100);column:label;" json:"label"`
 	Remark string      `gorm:"type:varchar(255);column:remark" json:"remark"`

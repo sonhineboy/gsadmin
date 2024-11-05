@@ -40,7 +40,6 @@ type AppCtx struct {
 
 func NewDefaultAppCtx(options ...WithOption) *AppCtx {
 	appCtx := new(AppCtx)
-
 	appCtx.GsR = global.GsE
 	appCtx.Logger = global.Logger
 	appCtx.Limiter = global.Limiter
@@ -53,7 +52,5 @@ func NewDefaultAppCtx(options ...WithOption) *AppCtx {
 	for _, option := range options {
 		option(appCtx)
 	}
-
 	return appCtx
-
 }

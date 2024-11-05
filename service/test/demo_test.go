@@ -67,7 +67,7 @@ func TestP(t *testing.T) {
 	fmt.Println(a, "---", c)
 
 	//model.ID = 45
-	model, _ := reflect.TypeOf(role).FieldByName("GAD_MODEL")
+	model, _ := reflect.TypeOf(role).FieldByName("GsModel")
 
 	f := model.Type.Field(0)
 

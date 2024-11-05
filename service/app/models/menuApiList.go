@@ -5,7 +5,7 @@ import (
 )
 
 type MenuApiList struct {
-	global.GAD_MODEL
+	global.GsModel
 	Code   string    `gorm:"column:code;type:varchar(100);comment:关键字" json:"code"`
 	Url    string    `gorm:"column:url;type:varchar(100);comment:地址" json:"url"`
 	MenuId uint      `gorm:"column:menu_id;type:int;" json:"menu_id"`
