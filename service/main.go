@@ -18,7 +18,7 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("GetWd err:%v", err))
 	}
-	global.GAD_APP_PATH = dir + string(os.PathSeparator)
+	global.GsAppPath = dir + string(os.PathSeparator)
 	app.Start()
 	defer func() {
 		app.DiyDefer()
@@ -31,7 +31,7 @@ func main() {
 func run() {
 	svr := &http.Server{
 		Addr:    global.Config.App.Port,
-		Handler: global.GAD_R,
+		Handler: global.GsE,
 	}
 
 	go func() {

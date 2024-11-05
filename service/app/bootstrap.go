@@ -1,11 +1,9 @@
 package app
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/global"
 	"github.com/sonhineboy/gsadmin/service/initialize"
-	"github.com/sonhineboy/gsadmin/service/pkg/ctx"
 	"github.com/sonhineboy/gsadmin/service/router"
 	"golang.org/x/time/rate"
 	"os"
@@ -13,18 +11,15 @@ import (
 
 func Start() {
 	global.SuperAdmin = "administrator"
-	global.GsR = gin.Default()
+	global.GsE = gin.Default()
 	global.Config = initialize.ConfigInit(global.GsAppPath)
 	loadObject()
-	router.RouteInit(global.GsR)
-	initialize.PluginInit(ctx.NewDefaultAppCtx())
-
+	router.RouteInit(global.GsE)
 }
 
 func TestLoad() {
 	dir, err := os.Getwd()
 	if err != nil {
-		panic(fmt.Errorf("test Load getwd err %w", err))
 	}
 	global.GsAppPath = dir + "/../"
 	global.Config = initialize.ConfigInit(global.GsAppPath)

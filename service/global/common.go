@@ -19,8 +19,8 @@ import (
 )
 
 var (
-	GAD_R            *gin.Engine
-	GAD_APP_PATH     string
+	GsE              *gin.Engine
+	GsAppPath        string
 	Config           *config.Config
 	Db               *gorm.DB
 	SuperAdmin       string
