@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/config"
+	"github.com/sonhineboy/gsadmin/service/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -65,7 +66,10 @@ func initSqlite(c *config.Config) *gorm.DB {
 
 func AutoMigrate(db *gorm.DB) {
 
-	err := db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
+	if global.Config.Db.Type == "mysql" {
+		db.Set("gorm:table_options", "ENGINE=InnoDB")
+	}
+	err := db.AutoMigrate(
 		//slot start not delete
 		&models.AdminUser{},
 		&models.AdminMenu{},
@@ -75,7 +79,6 @@ func AutoMigrate(db *gorm.DB) {
 		&models.News{},
 		//slot end not delete
 	)
-
 	if err != nil {
 		panic(err)
 	}
