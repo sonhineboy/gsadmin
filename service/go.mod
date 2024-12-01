@@ -6,6 +6,7 @@ require (
 	github.com/dchest/captcha v1.0.0
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/gin-gonic/gin v1.10.0
+	github.com/go-playground/assert/v2 v2.2.0
 	github.com/go-playground/validator/v10 v10.22.1
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/pkg/errors v0.9.1
