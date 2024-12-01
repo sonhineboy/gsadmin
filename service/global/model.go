@@ -23,14 +23,16 @@ func (t *LocalTime) MarshalJSON() ([]byte, error) {
 
 // Scan @ignore waring
 func (t *LocalTime) Scan(v interface{}) error {
-
 	switch v := v.(type) {
 	case string:
 		ct, err := time.Parse("2006-01-02 15:04:05.999", v)
 		*t = LocalTime(ct)
 		return err
+	case time.Time:
+		*t = LocalTime(v)
+		return nil
 	default:
-		return fmt.Errorf("unsupported type for CustomTime: %T", v)
+		return fmt.Errorf("unsupported type for LocalTime: %T", v)
 	}
 }
 
