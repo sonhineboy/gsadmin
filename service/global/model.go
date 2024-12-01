@@ -23,11 +23,7 @@ func (t *LocalTime) MarshalJSON() ([]byte, error) {
 
 // Scan @ignore waring
 func (t *LocalTime) Scan(v interface{}) error {
-	//if value, ok := v.(time.Time); ok {
-	//	fmt.Println("--------------------")
-	//	*t = LocalTime(value)
-	//	return nil
-	//}
+
 	switch v := v.(type) {
 	case string:
 		ct, err := time.Parse("2006-01-02 15:04:05.999", v)
