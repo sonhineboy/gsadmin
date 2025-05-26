@@ -24,6 +24,7 @@ func TestLoad() {
 	global.GsAppPath = dir + "/../"
 	global.Config = initialize.ConfigInit(global.GsAppPath)
 	loadObject()
+
 }
 
 func loadObject() {

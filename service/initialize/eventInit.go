@@ -6,7 +6,7 @@ import (
 	event2 "github.com/sonhineboy/gsadmin/service/pkg/event"
 )
 
-func EventInit() event2.DispatcherEvent {
+func EventInit() *event2.DispatcherEvent {
 
 	EventDispatcher := event2.NewDispatcher()
 	EventDispatcher.Register(event.TestEvent{}.GetEventName(), listener.NewTestListener())
