@@ -2,6 +2,7 @@ package repositorys
 
 import (
 	"errors"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 )
@@ -33,7 +34,7 @@ func GetCustomClaims(c *gin.Context) (*models.CustomClaims, bool) {
 	if ok && err {
 		return claims, true
 	} else {
-		return &models.CustomClaims{}, false
+		return nil, false
 	}
 }
 
@@ -57,7 +58,7 @@ func (p *PermissionRepository) IsRole(role string) bool {
 	return false
 }
 
-//判断是否纯在否个权限
+// 判断是否纯在否个权限
 func (p *PermissionRepository) isHasPermission(permission string) bool {
 	for _, v := range p.CustomClaims.Permission {
 		if v == permission {
@@ -67,7 +68,7 @@ func (p *PermissionRepository) isHasPermission(permission string) bool {
 	return false
 }
 
-//判断是有api权限
+// 判断是有api权限
 func (p *PermissionRepository) isApi(url string, code string) bool {
 
 	v, ok := p.CustomClaims.ApiList[url]
