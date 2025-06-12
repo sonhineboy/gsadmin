@@ -1,6 +1,8 @@
 package models
 
-import "github.com/sonhineboy/gsadmin/service/global"
+import (
+	"github.com/sonhineboy/gsadmin/service/global"
+)
 
 type AdminUser struct {
 	global.GsModel
@@ -11,4 +13,5 @@ type AdminUser struct {
 	Name     string `gorm:"uniqueIndex;type:varchar(100);default:" json:"name"`
 	Avatar   string `gorm:"column:avatar;type:varchar(255);default:''" json:"avatar"`
 	Roles    []Role `json:"group" gorm:"many2many:user_role"`
+	Version  int    `gorm:"column:version;type:int(11);default:1" json:"version"`
 }

@@ -1,21 +1,29 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/controllers/genExample"
 	"github.com/sonhineboy/gsadmin/service/app/controllers/system"
 	"github.com/sonhineboy/gsadmin/service/app/middleware"
-	"net/http"
 )
 
 func SystemApiInit(r *gin.RouterGroup) {
 
-	r.Use(middleware.JWTAuth(), middleware.Permission(), middleware.OperationLog())
+	// 只验证token
+	r.Use(middleware.JWTAuth(), middleware.OperationLog())
+	{
+		r.POST("/user/logout", ApiControllers.UserController.Logout)
+	}
+	// 查权限
+	r.Use(middleware.Permission())
 	rUser := r.Group("/user")
 	{
 		rUser.POST("/add", ApiControllers.UserController.Add)
 		rUser.POST("/update", ApiControllers.UserController.Up)
 		rUser.POST("/del", ApiControllers.UserController.Del)
+
 	}
 
 	rSystem := r.Group("/system")

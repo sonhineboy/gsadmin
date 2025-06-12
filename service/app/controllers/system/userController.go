@@ -45,6 +45,7 @@ func (u *UserController) Login(c *gin.Context) {
 			roles,
 			apiList,
 			permission,
+			user.Version,
 		), global.Config.MyJwt.Secret)
 		response.Success(c, "登陆成功", gin.H{
 			"token":    token,
@@ -54,6 +55,20 @@ func (u *UserController) Login(c *gin.Context) {
 		response.Failed(c, "用户名或密码错误")
 	}
 
+}
+
+func (u *UserController) Logout(c *gin.Context) {
+	CustomClaims, ok := repositorys.GetCustomClaims(c)
+	if !ok {
+		response.Failed(c, "当前未获取可退出的用户")
+	} else {
+		repository := repositorys.UserRepository{}
+		if err := repository.IncVersion(CustomClaims.Id, 1); err != nil {
+			response.Failed(c, "用户退出失败")
+		} else {
+			response.Success(c, "用户退出成功", nil)
+		}
+	}
 }
 
 // Add 注册用户

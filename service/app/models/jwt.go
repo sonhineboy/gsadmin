@@ -3,14 +3,16 @@ package models
 import (
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/dgrijalva/jwt-go/v4"
 	"github.com/sonhineboy/gsadmin/service/global"
-	"time"
 )
 
 type JwtUser struct {
 	Id         uint
 	Name       string
+	Version    int
 	Roles      []string
 	ApiList    map[string]string
 	Permission []string
@@ -21,13 +23,14 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-func (c JwtUser) NewJwtUser(id uint, name string, roles []string, apiList map[string]string, permission []string) JwtUser {
+func (c JwtUser) NewJwtUser(id uint, name string, roles []string, apiList map[string]string, permission []string, version int) JwtUser {
 	return JwtUser{
 		Id:         id,
 		Name:       name,
 		Roles:      roles,
 		ApiList:    apiList,
 		Permission: permission,
+		Version:    version,
 	}
 }
 
@@ -45,7 +48,7 @@ func GenToken(user JwtUser, Secret string) (string, error) {
 	return token.SignedString(MySecret)
 }
 
-// 解析 token
+// ParseToken 解析 token
 func ParseToken(tokenStr string, Secret string) (*CustomClaims, error) {
 	MySecret := []byte(Secret)
 	token, err := jwt.ParseWithClaims(tokenStr, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
@@ -55,13 +58,22 @@ func ParseToken(tokenStr string, Secret string) (*CustomClaims, error) {
 		fmt.Println(" token parse err:", err)
 		return nil, err
 	}
-	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
-		return claims, nil
+
+	claims, ok := token.Claims.(*CustomClaims)
+	if !ok || !token.Valid {
+		return nil, errors.New("invalid token")
 	}
-	return nil, errors.New("invalid token")
+
+	var dbVersion int
+	err = global.Db.Model(&AdminUser{}).Select("version").Where("id = ?", claims.Id).Scan(&dbVersion).Error
+	if err != nil || dbVersion != claims.Version {
+		return nil, errors.New("invalid version")
+	}
+
+	return claims, nil
 }
 
-// 刷新 Token
+// RefreshToken 刷新 Token
 func RefreshToken(tokenStr string, Secret string) (string, error) {
 	MySecret := []byte(Secret)
 

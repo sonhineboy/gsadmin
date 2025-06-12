@@ -1,12 +1,13 @@
 package middleware
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/models"
 	"github.com/sonhineboy/gsadmin/service/app/repositorys"
 	"github.com/sonhineboy/gsadmin/service/global"
-	"net/http"
-	"strings"
 )
 
 // JWTAuth 中间件，检查token
@@ -42,6 +43,5 @@ func JWTAuth() gin.HandlerFunc {
 		ctx.Set("claims", claims)
 		ctx.Set("permission", repositorys.NewPermissionRepository(claims))
 		ctx.Next() // 后续的处理函数可以用过ctx.Get("claims")来获取当前请求的用户信息
-
 	}
 }

@@ -2,6 +2,7 @@ package repositorys
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sonhineboy/gsadmin/service/app/event"
 	"github.com/sonhineboy/gsadmin/service/app/models"
@@ -96,4 +97,16 @@ func (u *UserRepository) List(page int, pageSize int, sortField string) map[stri
 	db.Preload("Roles").Limit(pageSize).Order(sortField + " desc" + ",id desc").Offset(offSet)
 	db.Find(&data)
 	return global.Pages(page, pageSize, int(total), data)
+}
+
+// IncVersion 更新token版本号
+func (u *UserRepository) IncVersion(id uint, num int) error {
+	return global.Db.Model(&u.AdminUserModel).Where("id = ?", id).UpdateColumn("version", gorm.Expr("version + ?", num)).Error
+}
+
+// GetVersion 获取token版本号
+func (u *UserRepository) GetVersion(id uint) (int, error) {
+	var version int
+	err := global.Db.Model(&u.AdminUserModel).Where("id = ?", id).Scan(&version).Error
+	return version, err
 }
